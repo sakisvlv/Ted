@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ted.Model
+namespace Ted.Bll
 {
     public class Class1
     {

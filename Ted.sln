@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ted.Api", "Ted.Api\Ted.Api.csproj", "{2ECEC70D-DC37-429A-BF32-39D27193A2B5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ted.Api", "Ted.Api\Ted.Api.csproj", "{2ECEC70D-DC37-429A-BF32-39D27193A2B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ted.Dal", "Ted.Dal\Ted.Dal.csproj", "{83BC233D-2032-4896-A00B-BADF6794185B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ted.Dal", "Ted.Dal\Ted.Dal.csproj", "{83BC233D-2032-4896-A00B-BADF6794185B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ted.Model", "Ted.Model\Ted.Model.csproj", "{776D31C9-3881-4D80-A951-1456FB2CAAED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ted.Model", "Ted.Model\Ted.Model.csproj", "{776D31C9-3881-4D80-A951-1456FB2CAAED}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Ted.Client", "Ted.Client\", "{8251B319-EBA5-4510-BFD5-385014758A12}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -27,8 +27,11 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Ted.Client", "Ted.Client\",
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "58712"
+		SlnRelativePath = "Ted.Client\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ted.Bll", "Ted.Bll\Ted.Bll.csproj", "{8DBA4E6F-BE2C-4263-A60B-2D5D0CBC225B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,6 +55,10 @@ Global
 		{8251B319-EBA5-4510-BFD5-385014758A12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8251B319-EBA5-4510-BFD5-385014758A12}.Release|Any CPU.ActiveCfg = Debug|Any CPU
 		{8251B319-EBA5-4510-BFD5-385014758A12}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{8DBA4E6F-BE2C-4263-A60B-2D5D0CBC225B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DBA4E6F-BE2C-4263-A60B-2D5D0CBC225B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DBA4E6F-BE2C-4263-A60B-2D5D0CBC225B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DBA4E6F-BE2C-4263-A60B-2D5D0CBC225B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
