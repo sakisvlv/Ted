@@ -1,0 +1,26 @@
+<pagination-template #api="paginationApi" (pageChange)="pageChange($event)">
+
+  <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+    <button [disabled]="api.isFirstPage()" (click)="api.previous()" class="pagination-previous">Previous</button>
+    <button [disabled]="api.isLastPage() " (click)="api.next()" class="pagination-next">Next</button>
+    <ul class="pagination-list">
+      <li>
+        <a *ngIf="api.getCurrent() > 2" class="pagination-link" (click)="api.setCurrent(1)">1</a>
+      </li>
+      <li>
+        <span *ngIf="api.getCurrent() > 2" class="pagination-ellipsis ">&hellip;</span>
+      </li>
+      <li *ngFor="let page of api.pages">
+        <a *ngIf="(api.getCurrent()-1) <= (page.value) && (api.getCurrent()+1) >= (page.value)" (click)="api.setCurrent(page.value)"
+          [ngClass]="{'is-current': api.getCurrent() === page.value}" class="pagination-link">{{ page.label }}</a>
+      </li>
+      <li>
+        <span *ngIf="api.getCurrent() < api.getLastPage() - 1" class="pagination-ellipsis ">&hellip;</span>
+      </li>
+      <li>
+        <a *ngIf="api.getCurrent() < api.getLastPage() - 1" class="pagination-link" (click)="api.setCurrent(api.getLastPage())">{{api.getLastPage()}}</a>
+      </li>
+    </ul>
+  </nav>
+
+</pagination-template>

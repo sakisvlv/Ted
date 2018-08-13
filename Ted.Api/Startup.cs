@@ -28,38 +28,7 @@ namespace Ted.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
-            //DI
-            services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.Configure<JWTSettings>(Configuration.GetSection("JWTSettings"));
-            // services.AddTransient<IWheelService, WheelService>();
-
-
-            //Authentication
-            services.Configure<IdentityOptions>(options =>
-            {
-                // Password settings
-                options.Password = StartupHelper.GetPasswordOptions();
-
-                // Lockout settings
-                options.Lockout = StartupHelper.GetLockoutOptions();
-
-                // User settings
-                options.User.RequireUniqueEmail = true;
-            });
-
-            services.AddIdentity<User, Role>().AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = StartupHelper.GetTokenValidationParameters(Configuration);
-            });
-            services.AddAuthorization(options =>
-            {
-                options.DefaultPolicy = new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build();
-            });
-
-            services.AddCors();
-            services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver())
+            ServicesConfiguration.ConfigureServices(services, Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -69,6 +38,7 @@ namespace Ted.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
             app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
             app.UseAuthentication();
             app.UseMvc();

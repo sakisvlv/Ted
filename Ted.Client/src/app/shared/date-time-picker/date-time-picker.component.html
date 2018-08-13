@@ -1,0 +1,21 @@
+<div class="columns">
+    <div class="column">
+        <div class="buttons">
+            <span class="picker-z-index">
+                <ng-datepicker [(ngModel)]="date" [headless]="true" [isOpened]="isDatePickerOpened" [options]="options"></ng-datepicker>
+            </span>
+            <a class="button" (click)="isDatePickerOpened = !isDatePickerOpened">
+                <span class="icon is-small">
+                    <fa-icon icon="calendar-alt"></fa-icon>
+                </span>
+                <span>{{showDate | date: 'dd/MM/yyyy'}}</span>
+            </a>
+            <a class="button" (click)="openTimePicker()">
+                <span class="icon is-small">
+                    <fa-icon icon="clock"></fa-icon>
+                </span>
+                <span>{{showDate | date: 'HH:mm'}}</span>
+            </a>
+        </div>
+    </div>
+</div>

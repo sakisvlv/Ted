@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Ted.Model.Auth
 {
-    public class JWTSettings
+    public class JwtSettings
     {
         public string SecretKey { get; set; }
         public string Issuer { get; set; }

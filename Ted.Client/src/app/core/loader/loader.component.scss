@@ -1,0 +1,16 @@
+.loaderPosition{
+    margin-top: 20%;
+    margin-left: 60%
+}
+
+.loaderDiv{
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 98;
+}
+
+.loader-medium {
+    transform: scale(1.5, 1.5);
+  }

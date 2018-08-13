@@ -1,0 +1,40 @@
+<section class="hero ">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <div class="column is-6 is-offset-2">
+        <h3 class="title has-text-grey">Be great at what you do</h3>
+        <p class="subtitle has-text-grey">Get started - it's free</p>
+        <div class="box">
+          <form>
+            <div class="field">
+              <div class="control">
+                <input class="input is-large" type="text" placeholder="First Name" name="FirstName" [(ngModel)]="registerData.FirstName" autofocus="">
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <input class="input is-large" type="text" placeholder="Last Name" name="LastName" [(ngModel)]="registerData.LastName">
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <input class="input is-large" type="email" placeholder="Email" name="Email" [(ngModel)]="registerData.Email">
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <input class="input is-large" type="password" placeholder="Password" name="Password" [(ngModel)]="registerData.Password">
+              </div>
+            </div>
+            <div class="field">
+              <div class="control">
+                <input class="input is-large" type="password" placeholder="Repeat Password" name="RepeatPassword" [(ngModel)]="repeatPassword">
+              </div>
+            </div>
+            <button class="button is-block is-primary is-large is-fullwidth" (click)="validate()">Register</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
