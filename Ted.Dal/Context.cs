@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
 using Ted.Model;
 using Ted.Model.Auth;
 
@@ -10,7 +12,6 @@ namespace Ted.Dal
     {
         public Context(DbContextOptions<Context> options) : base(options)
         {
-
         }
 
 
@@ -21,8 +22,8 @@ namespace Ted.Dal
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.HasDefaultSchema("Ted");
-
             //Models
+            //modelBuilder.Entity<UserInfo>().ToTable("UserInfo");
         }
     }
 }
