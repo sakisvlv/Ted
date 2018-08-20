@@ -14,7 +14,7 @@ import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class RoleGuard implements CanActivate {
   constructor(
     private authService: AuthService,
     private router: Router) { }
@@ -27,7 +27,7 @@ export class AuthGuard implements CanActivate {
   }
 
   checkLogin(url: string): boolean {
-    if (this.authService.isAuthenticated() && this.authService.getRole()=="User") {
+    if (this.authService.isAuthenticated() && this.authService.getRole()=="Admin") {
       return true;
     }
 

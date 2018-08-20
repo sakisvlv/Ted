@@ -2,9 +2,6 @@ import { NgModule, Optional, SkipSelf, ModuleWithProviders } from '@angular/core
 import { RouterModule } from '@angular/router';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-
 import { ToastrModule } from 'ngx-toastr';
 
 import { AuthModule } from './auth/auth.module';
@@ -14,6 +11,7 @@ import { LoaderService } from './loader/loader.service';
 
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoaderComponent } from './loader/loader.component';
+import { ProfileComponent } from './profile/profile.component';
 
 
 @NgModule({
@@ -22,7 +20,6 @@ import { LoaderComponent } from './loader/loader.component';
     AuthModule,
     RouterModule,
     BrowserAnimationsModule, // required animations module
-    LeafletModule.forRoot(),
     ToastrModule.forRoot({
       closeButton: true,
       positionClass: 'toast-bottom-right',
@@ -31,7 +28,8 @@ import { LoaderComponent } from './loader/loader.component';
   ],
   declarations: [
     NavbarComponent,
-    LoaderComponent
+    LoaderComponent,
+    ProfileComponent
   ],
   exports: [
     NavbarComponent,

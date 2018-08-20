@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgDatepickerModule } from 'ng2-datepicker';
@@ -24,11 +23,11 @@ import {
 
 import { PaginationComponent } from './pagination/pagination.component';
 import { DateTimePickerComponent } from './date-time-picker/date-time-picker.component';
+import { ProfileImageDirective } from './profile-image.directive';
 
 @NgModule({
   imports: [
     CommonModule,
-    LeafletModule,
     FontAwesomeModule,
     NgDatepickerModule,
     NgxPaginationModule,
@@ -36,12 +35,12 @@ import { DateTimePickerComponent } from './date-time-picker/date-time-picker.com
   ],
   declarations: [
     PaginationComponent,
-    DateTimePickerComponent
+    DateTimePickerComponent,
+    ProfileImageDirective
   ],
   exports: [
     FormsModule,
     CommonModule,
-    LeafletModule,
     FontAwesomeModule,
     NgxPaginationModule,
     PaginationComponent,

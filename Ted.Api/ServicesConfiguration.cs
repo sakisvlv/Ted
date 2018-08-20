@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ted.Bll.Interfaces;
+using Ted.Bll.Services;
 using Ted.Dal;
 using Ted.Model.Auth;
 
@@ -22,9 +24,7 @@ namespace Ted.Api
             services.AddDbContext<Context>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             //DI
-            //services.AddTransient<IDeviceContext, DeviceContext>();
-            //services.AddTransient<IAccountService, AccountService>();
-            //services.AddTransient<IDeviceService, DeviceService>();
+            services.AddTransient<IAccountService, AccountService>();
             
 
             //Authentication

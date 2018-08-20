@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +45,7 @@ namespace Ted.Api.Controllers
                     var user = await _userManager.FindByEmailAsync(loginData.Email);
                     return new JsonResult(new Dictionary<string, object>
                     {
-                        { "access_token", _accountService.GetToken(user) }
+                        { "access_token", await _accountService.GetToken(user) }
                     });
                 }
 
@@ -61,15 +63,16 @@ namespace Ted.Api.Controllers
         {
             try
             {
-                var user = new User { UserName = regData.Email, Email = regData.Email, FirstName = regData.FirstName, LastName = regData.LastName };
+                var user = new User { UserName = regData.Email, Email = regData.Email, FirstName = regData.FirstName, LastName = regData.LastName, PhoneNumber = regData.PhoneNumber };
 
                 var result = await _userManager.CreateAsync(user, regData.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, "User");
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     return new JsonResult(new Dictionary<string, object>
                     {
-                        { "access_token", _accountService.GetToken(user) }
+                        { "access_token", await _accountService.GetToken(user) }
                     });
                 }
                 return _accountService.Error("Registration Failed");
@@ -79,5 +82,6 @@ namespace Ted.Api.Controllers
                 return BadRequest("System Error, Registration Failed");
             }
         }
+
     }
 }

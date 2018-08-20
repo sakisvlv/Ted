@@ -19,7 +19,7 @@ export class AuthService {
 
   private apiUrl: string = environment.apiUri + "Account/";
 
-  fullName: string;
+  private fullName: string;
   isLoggedIn: boolean;
   redirectUrl: string;
 
@@ -87,6 +87,13 @@ export class AuthService {
       return false;
     }
     return !this.jwtHelper.isTokenExpired(token);
+  }
+
+  public getRole(): string {
+    if (this.isLoggedIn) {
+      return this.jwtHelper.decodeToken(this.getToken()).role;
+    }
+    this.logout();
   }
 
   setFullName(token: string) {

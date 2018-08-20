@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using Ted.Model.Auth;
 
 namespace Ted.Bll.Interfaces
 {
     public interface IAccountService
     {
-        string GetToken(User user);
+        Task<string> GetToken(User user);
         JsonResult Error(string message);
     }
 }

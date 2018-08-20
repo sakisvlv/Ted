@@ -14,4 +14,5 @@ export class RegisterData {
     Password: string;
     FirstName: string;
     LastName: string;
+    PhoneNumber: string;
 }

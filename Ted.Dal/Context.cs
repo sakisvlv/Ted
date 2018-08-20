@@ -10,10 +10,11 @@ namespace Ted.Dal
 {
     public class Context : IdentityDbContext<User, Role, Guid>
     {
+        public DbSet<Photo> Photos { get; set; }
+
         public Context(DbContextOptions<Context> options) : base(options)
         {
         }
-
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,7 +24,7 @@ namespace Ted.Dal
 
             modelBuilder.HasDefaultSchema("Ted");
             //Models
-            //modelBuilder.Entity<UserInfo>().ToTable("UserInfo");
+            modelBuilder.Entity<Photo>().ToTable("Photos");
         }
     }
 }

@@ -14,44 +14,44 @@
     <div id="nod-nav-menu" class="navbar-menu" [ngClass]="{'is-active': burgerOpen}">
 
       <div class="navbar-start">
-        <a class="navbar-item" routerLink="/dashboard">
+        <a class="navbar-item" routerLink="/dashboard" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
           <fa-icon icon="home"></fa-icon> &nbsp; Home
         </a>
       </div>
 
       <div class="navbar-end">
 
-        <!-- <div class="navbar-item has-dropdown is-hoverable has-shadow">
+        <div class="navbar-item has-dropdown is-hoverable has-shadow" *ngIf="authService.isAuthenticated()">
           <a class="navbar-link">
             <fa-icon icon="user"></fa-icon> &nbsp; {{ authService.fullName }}
           </a>
           <div class="navbar-dropdown is-boxed is-right">
-            <a class="navbar-item">
-              <fa-icon icon="cog"></fa-icon> &nbsp;Settings
+            <a class="navbar-item" *ngIf="authService.getRole() == 'User'" routerLink="/profile">
+              <fa-icon icon="cog"></fa-icon> &nbsp;Profile
             </a>
             <hr class="navbar-divider">
             <a class="navbar-item" (click)="authService.logout()">
               <fa-icon icon="sign-out-alt"></fa-icon> &nbsp; Log out
             </a>
           </div>
-        </div> -->
+        </div>
 
-        <div class="field is-horizontal">
+        <div class="field is-horizontal" *ngIf="!authService.isAuthenticated()">
           <div class="field-body">
             <div class="field">
-              <input type="text" class="input" placeholder="Email">
+              <input type="text" class="input" placeholder="Email" [(ngModel)]="loginData.Email">
             </div>
             <div class="field">
-              <input type="password" class="input" placeholder="Password">
+              <input type="password" class="input" placeholder="Password" [(ngModel)]="loginData.Password">
             </div>
             <div class="field">
-              <a class="button is-dark is-inverted is-outlined">Sign In</a>
+              <a class="button is-dark is-inverted is-outlined" (click)="authService.login(loginData)">Sign In</a>
             </div>
           </div>
         </div>
 
 
-        <div class="field is-horizontal">
+        <div class="field is-horizontal" *ngIf="!authService.isAuthenticated()">
           <div class="field-body">
             <div class="field">
               <a class="navbar-item" routerLink="/login">
