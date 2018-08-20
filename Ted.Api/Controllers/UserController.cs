@@ -23,10 +23,11 @@ namespace Ted.Api.Controllers
 
         [HttpPost]
         [Route("UploadPhoto")]
-        public async Task<IActionResult> UploadPhoto(IFormFile file)
+        public async Task<IActionResult> UploadPhoto()
         {
             try
             {
+                var file = Request.Form.Files.FirstOrDefault();
                 var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
                 MemoryStream memoryStream = new MemoryStream();
                 file.OpenReadStream().CopyTo(memoryStream);

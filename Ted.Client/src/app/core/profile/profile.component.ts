@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 
 import { environment } from '../../../environments/environment';
 
+import { AuthService } from '../auth/services/auth.service';
+import { ProfileDataService } from './profile-data.service';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -9,21 +12,21 @@ import { environment } from '../../../environments/environment';
 })
 export class ProfileComponent implements OnInit {
 
-  private apiUrl: string = environment.apiUri + "User/";
+  private uploadUrl: string = environment.apiUri + "User/UploadPhoto";
+  private downloadUrl: string = environment.apiUri + "User/DownloadPhoto";
 
+  myHeaders: { [name: string]: any } = {
+    'Authorization': "Bearer " + this.authService.getToken()
+  };
 
-  constructor() { }
+  constructor(
+    private authService: AuthService,
+    private profileDataService: ProfileDataService
+  ) { }
 
   ngOnInit() {
-    
+
   }
 
-
-//   var reader = new FileReader();
-//  reader.readAsDataURL(blob); 
-//  reader.onloadend = function() {
-//      base64data = reader.result;                
-//      console.log(base64data);
-//  }
 
 }

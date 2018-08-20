@@ -13,6 +13,11 @@ export class ProfileDataService {
 
   constructor(private http: HttpClient) { }
 
+  sendToServer(uploadedFIle: File){
+    console.log(uploadedFIle);
+    return this.http.post(this.apiUrl + "UploadPhoto", uploadedFIle);
+  }
+
 
   // getDevices() {
   //   return this.http.get<Device[]>(this.apiUrl + "Devices");

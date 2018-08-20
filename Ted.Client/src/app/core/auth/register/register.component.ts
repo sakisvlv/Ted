@@ -26,7 +26,8 @@ export class RegisterComponent implements OnInit {
     if (!this.registerData.Email ||
       !this.registerData.FirstName ||
       !this.registerData.LastName ||
-      !this.registerData.Password) {
+      !this.registerData.Password ||
+      !this.registerData.PhoneNumber) {
       this.toastrService.error("Όλα τα παιδία είναι υποχρεωτικά", "Σφάλμα");
       return;
     }

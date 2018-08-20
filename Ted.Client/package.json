@@ -25,6 +25,7 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.2",
     "@fortawesome/free-solid-svg-icons": "^5.2.0",
     "amazing-time-picker": "^1.5.3",
+    "angular2-image-upload": "^1.0.0-rc.1",
     "bulma": "^0.7.1",
     "bulmaswatch": "^0.7.1",
     "core-js": "^2.5.4",
