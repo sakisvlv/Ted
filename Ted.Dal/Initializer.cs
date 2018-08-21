@@ -33,6 +33,7 @@ namespace Ted.Dal
                 u.UserName = u.Email;
                 u.FirstName = "User" + i;
                 u.LastName = "Userovic" + i;
+                u.PhoneNumber = "6981234567";
                 var result = await userManager.CreateAsync(u, "1");
             }
             var users = context.Users.Where(x => true).ToList();
@@ -43,7 +44,6 @@ namespace Ted.Dal
                 {
                     await userManager.AddToRoleAsync(users[i], "Admin");
                 }
-                await userManager.AddToRoleAsync(users[i],"User");
             }
             context.SaveChanges();
 

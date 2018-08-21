@@ -1,0 +1,52 @@
+<section class="hero is-primary welcome is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h1 class="title">
+        Hello, Admin.
+      </h1>
+      <h2 class="subtitle">
+        I hope you are having a great day!
+      </h2>
+    </div>
+  </div>
+</section>
+<section class="info-tiles">
+  <div class="tile is-ancestor has-text-centered">
+    <div class="tile is-parent cursor-hand" (click)="redirect('users')">
+      <article class="tile is-child box">
+        <div *ngIf="counts != undefined">
+          <p class="title">{{counts.Users}}</p>
+        </div>
+        <div *ngIf="counts == undefined" class="loader"></div>
+        <p class="subtitle">Users</p>
+      </article>
+    </div>
+    <div class="tile is-parent">
+      <article class="tile is-child box">
+        <div *ngIf="counts != undefined">
+          <p class="title">{{counts.Posts}}</p>
+        </div>
+        <div *ngIf="counts == undefined" class="loader"></div>
+        <p class="subtitle">Posts</p>
+      </article>
+    </div>
+    <div class="tile is-parent">
+      <article class="tile is-child box">
+        <div *ngIf="counts != undefined">
+          <p class="title">{{counts.Ads}}</p>
+        </div>
+        <div *ngIf="counts == undefined" class="loader"></div>
+        <p class="subtitle">Ads</p>
+      </article>
+    </div>
+    <div class="tile is-parent">
+      <article class="tile is-child box">
+        <div *ngIf="counts != undefined">
+          <p class="title">{{counts.Notifications}}</p>
+        </div>
+        <div *ngIf="counts == undefined" class="loader"></div>
+        <p class="subtitle">Notifications</p>
+      </article>
+    </div>
+  </div>
+</section>

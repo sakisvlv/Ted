@@ -4,6 +4,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DatePipe } from '@angular/common'
 
 import { CoreModule } from './core/core.module';
+import { AdminModule } from './admin/admin.module';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -20,7 +21,8 @@ import { HomeComponent } from './home/home.component';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    CoreModule
+    CoreModule,
+    AdminModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

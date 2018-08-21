@@ -14,8 +14,11 @@
     <div id="nod-nav-menu" class="navbar-menu" [ngClass]="{'is-active': burgerOpen}">
 
       <div class="navbar-start">
-        <a class="navbar-item" routerLink="/dashboard" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
+        <a class="navbar-item" routerLink="/home" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
           <fa-icon icon="home"></fa-icon> &nbsp; Home
+        </a>
+        <a class="navbar-item" routerLink="/dashboard" *ngIf="authService.isAuthenticated() && authService.getRole() == 'Admin'">
+          <fa-icon icon="tachometer-alt"></fa-icon> &nbsp; Dashboard
         </a>
       </div>
 
@@ -27,7 +30,7 @@
           </a>
           <div class="navbar-dropdown is-boxed is-right">
             <a class="navbar-item" *ngIf="authService.getRole() == 'User'" routerLink="/profile">
-              <fa-icon icon="cog"></fa-icon> &nbsp;Profile
+              <fa-icon icon="user-circle"></fa-icon> &nbsp;Profile
             </a>
             <hr class="navbar-divider">
             <a class="navbar-item" (click)="authService.logout()">

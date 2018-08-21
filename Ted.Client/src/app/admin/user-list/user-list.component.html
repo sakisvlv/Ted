@@ -1,0 +1,32 @@
+<div>
+  <button class="button is-primary">Export Selected As XML</button>
+</div>
+<br>
+<div class="table-container">
+  <table class="table is-fullwidth is-hoverable">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Id</th>
+        <th>FirstName</th>
+        <th>LastName</th>
+        <th>Phone Number</th>
+        <th>Email</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users | paginate: { itemsPerPage: 20, currentPage: page }; let i = index;">
+        <td><input class="checkbox" type="checkbox" [checked]="isChecked(user.Id)" (change)="onCheck(user.Id)"></td>
+        <td>{{user.Id}}</td>
+        <td>{{user.FirstName}}</td>
+        <td>{{user.LastName}}</td>
+        <td>{{user.PhoneNumber}}</td>
+        <td>{{user.Email}}</td>
+        <td><button class="button is-link"><fa-icon icon="info-circle"></fa-icon> &nbsp; Details</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<pagination (onPageChange)="onPageChange($event)"></pagination>

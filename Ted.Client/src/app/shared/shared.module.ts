@@ -18,7 +18,10 @@ import {
   faTabletAlt,
   faCalendarAlt,
   faClock,
-  faCloudDownloadAlt
+  faCloudDownloadAlt,
+  faUserCircle,
+  faTachometerAlt,
+  faInfoCircle
 } from '@fortawesome/free-solid-svg-icons';
 
 import { PaginationComponent } from './pagination/pagination.component';
@@ -45,7 +48,8 @@ import { ProfileImageDirective } from './profile-image.directive';
     NgxPaginationModule,
     PaginationComponent,
     DateTimePickerComponent,
-    AmazingTimePickerModule
+    AmazingTimePickerModule,
+    ProfileImageDirective
   ],
   providers: []
 })
@@ -67,7 +71,10 @@ export class SharedModule {
       faTabletAlt,
       faCalendarAlt,
       faClock,
-      faCloudDownloadAlt
+      faCloudDownloadAlt,
+      faUserCircle,
+      faTachometerAlt,
+      faInfoCircle
     );
   }
 }

@@ -8,7 +8,7 @@ namespace Ted.Bll.Interfaces
 {
     public interface IUserService
     {
-        Task<Result<string>> GetPhoto(string userId);
+        Task<Result<byte[]>> GetPhoto(string userId);
         Task<Result<string>> InsertPhoto(string userId, byte[] PhotoByteArray);
     }
 }

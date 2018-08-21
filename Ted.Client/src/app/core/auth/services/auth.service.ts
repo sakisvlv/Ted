@@ -44,7 +44,7 @@ export class AuthService {
         this.setFullName(data.access_token);
         this.isLoggedIn = true;
         this.loaderService.hide();
-        this.router.navigate(['/home']);
+        this.getRole() == "User" ? this.router.navigate(['/home']) : this.router.navigate(['/dashboard']);
       }, error => {
         this.loaderService.hide();
       }
@@ -61,7 +61,7 @@ export class AuthService {
         this.isLoggedIn = true;
         this.toastrService.success("Congratulations! The registration is complete", "Success");
         this.loaderService.hide();
-        this.router.navigate(['/dashboard']);
+        this.getRole() == "User" ? this.router.navigate(['/home']) : this.router.navigate(['/dashboard']);
       }, error => {
         this.toastrService.error(error.error, "Error");
         this.loaderService.hide();

@@ -15,6 +15,9 @@ export class ProfileComponent implements OnInit {
   private uploadUrl: string = environment.apiUri + "User/UploadPhoto";
   private downloadUrl: string = environment.apiUri + "User/DownloadPhoto";
 
+  changed = false;
+  showUploader = false;
+
   myHeaders: { [name: string]: any } = {
     'Authorization': "Bearer " + this.authService.getToken()
   };
@@ -27,6 +30,22 @@ export class ProfileComponent implements OnInit {
   ngOnInit() {
 
   }
+
+  onUploadFinished(event) {
+    this.showUploader = !this.showUploader;
+    this.changed = !this.changed;
+  }
+
+  customStyle = {
+    selectButton: {
+      "color": "white",
+      "background-color": "#2780e3",
+      "width":"100%"
+    },
+    layout: {
+      "font-size": "9px",
+    }
+  };
 
 
 }

@@ -36,7 +36,7 @@ namespace Ted.Bll.Services
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_options.SecretKey);
             var roles = await _userManager.GetRolesAsync(user);
-            var role = roles.FirstOrDefault();
+            var role = roles.LastOrDefault();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

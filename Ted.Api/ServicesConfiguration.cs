@@ -26,6 +26,7 @@ namespace Ted.Api
             //DI
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IAdminService, AdminService>();
 
 
             //Authentication

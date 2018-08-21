@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
@@ -19,11 +20,11 @@ namespace Ted.Bll.Services
         }
         public async Task<Result<string>> InsertPhoto(string userId, byte[] PhotoByteArray)
         {
-            var user = await _context.Users.FindAsync(Guid.Parse(userId));
+            var user = await _context.Users.Include(t => t.Photo).SingleOrDefaultAsync(x => x.Id == Guid.Parse(userId));
             if (user == null)
             {
                 return Result<string>.CreateFailed(
-                    HttpStatusCode.NotFound, "Αδυναμία ανάκτησης υπολοιίου");
+                    HttpStatusCode.NotFound, "User Does Not Exit");
             }
 
             Photo photo = new Photo();
@@ -37,19 +38,19 @@ namespace Ted.Bll.Services
             catch (Exception)
             {
                 return Result<string>.CreateFailed(
-                    HttpStatusCode.InternalServerError, "Αδυναμία Αποθήκευσης Φωτογραφίας");
+                    HttpStatusCode.InternalServerError, "Cound't save the photo");
             }
-            return Result<string>.CreateSuccessful("Η φωτογραφία σας αποθηκεύτηκε επιτυχώς");
+            return Result<string>.CreateSuccessful("Success");
         }
-        public async Task<Result<string>> GetPhoto(string userId)
+        public async Task<Result<byte[]>> GetPhoto(string userId)
         {
-            var photo = await _context.Photos.FindAsync(Guid.Parse(userId));
+            var photo = await _context.Photos.SingleOrDefaultAsync(x=>x.UserId == Guid.Parse(userId));
             if (photo == null)
             {
-                return Result<string>.CreateFailed(
-                   HttpStatusCode.NotFound, "Αδυναμία φόρτωσης φωτογραφίας");
+                return Result<byte[]>.CreateFailed(
+                   HttpStatusCode.NotFound, "Cound't get the photo");
             }
-            return Result<string>.CreateSuccessful(Convert.ToBase64String(photo.File));
+            return Result<byte[]>.CreateSuccessful(photo.File);
         }
     }
 }
