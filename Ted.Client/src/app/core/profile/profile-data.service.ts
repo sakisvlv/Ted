@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { environment } from '../../../environments/environment'
+import { UserInfo } from './profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,9 +15,13 @@ export class ProfileDataService {
   constructor(private http: HttpClient) { }
 
 
-  // getDevices() {
-  //   return this.http.get<Device[]>(this.apiUrl + "Devices");
-  // }
+  getProfile() {
+    return this.http.get<UserInfo>(this.apiUrl + "UserInfo");
+  }
+
+  updateProfile(userInfo: UserInfo) {
+    return this.http.put<UserInfo>(this.apiUrl + "UserInfo", userInfo);
+  }
 
   // getGpsesByDateTime(deviceId: string, startDateTime: Date, endDateTime: Date) {
   //   let dateTimeWindow = new DateTimeWindow();

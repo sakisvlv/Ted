@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
@@ -16,10 +17,19 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private router: Router
   ) { }
 
   ngOnInit() {
+    if (this.authService.isLoggedIn) {
+      if (this.authService.getRole() == "User") {
+        this.router.navigate([`/home`]);
+      }
+      else if (this.authService.getRole() == "Admin") {
+        this.router.navigate([`/dashboard`]);
+      }
+    }
   }
 
   validate() {

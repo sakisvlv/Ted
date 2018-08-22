@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
 import { UserListItem } from '../admin.models';
 
 import { AdminDataService } from '../admin-data.service';
@@ -15,7 +17,8 @@ export class UserListComponent implements OnInit {
   constructor(
     private adminDataService: AdminDataService,
     private loaderService: LoaderService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private router: Router
   ) { }
 
   users: UserListItem[] = [];
@@ -50,4 +53,7 @@ export class UserListComponent implements OnInit {
     return false;
   }
 
+  redirect(id: string) {
+    this.router.navigate([`/user-info`], { queryParams: { id: id } });
+  }
 }

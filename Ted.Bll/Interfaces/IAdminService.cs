@@ -9,7 +9,9 @@ namespace Ted.Bll.Interfaces
 {
     public interface IAdminService
     {
+        Task<Result<UserListItemDTO>> GetUser(string adminId, string userId);
         Task<Result<IEnumerable<UserListItemDTO>>> GetUsers(string userId);
         Task<Result<CountsDTO>> GetCounts(string userId);
+        Task<Result<byte[]>> GetPhoto(string adminId, string userId);
     }
 }

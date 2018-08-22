@@ -73,7 +73,7 @@ export class AuthService {
     if (localStorage.getItem("access_token")) {
       localStorage.removeItem("access_token");
     }
-    this.router.navigate(['/home']);
+    this.router.navigate(['/register']);
 
   }
 

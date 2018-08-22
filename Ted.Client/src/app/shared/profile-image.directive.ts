@@ -14,8 +14,10 @@ import { environment } from '../../environments/environment';
 export class ProfileImageDirective implements OnInit {
 
   private apiUrl: string = environment.apiUri + "User/";
+  private adminApiUrl: string = environment.apiUri + "Admin/";
 
   @Input() changed;
+  @Input() id: string = "";
 
   imageData: any;
   sanitizedImageData: any = "assets/default-user.png";
@@ -24,26 +26,43 @@ export class ProfileImageDirective implements OnInit {
     private sanitizer: DomSanitizer) { }
 
   ngOnInit() {
-    this.getPhoto();
+
   }
 
 
   ngOnChanges(changes: SimpleChanges) {
     // only run when property "data" changed
     if (
-      changes['changed']
+      changes['changed'] ||
+      (changes['id'] && this.id != undefined)
     ) {
       this.getPhoto();
     }
   }
 
   getPhoto() {
-    this.http.get(this.apiUrl + "DownloadPhoto").subscribe(
-      data => {
-        this.imageData = 'data:image/png;base64,' + data;
-        this.sanitizedImageData = this.sanitizer.bypassSecurityTrustUrl(this.imageData);
-      }
-    );
+    if (this.id == "") {
+      this.http.get(this.apiUrl + "DownloadPhoto").subscribe(
+        data => {
+          this.imageData = 'data:image/png;base64,' + data;
+          this.sanitizedImageData = this.sanitizer.bypassSecurityTrustUrl(this.imageData);
+        },
+        error => {
+          this.sanitizedImageData = "assets/default-user.png";
+        }
+      );
+    }
+    else {
+      this.http.get(this.adminApiUrl + "DownloadPhoto/" + this.id).subscribe(
+        data => {
+          this.imageData = 'data:image/png;base64,' + data;
+          this.sanitizedImageData = this.sanitizer.bypassSecurityTrustUrl(this.imageData);
+        },
+        error => {
+          this.sanitizedImageData = "assets/default-user.png";
+        }
+      );
+    }
   }
 
 }

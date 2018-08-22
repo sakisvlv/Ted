@@ -21,7 +21,17 @@ import {
   faCloudDownloadAlt,
   faUserCircle,
   faTachometerAlt,
-  faInfoCircle
+  faInfoCircle,
+  faIdCard,
+  faPhone,
+  faEnvelope,
+  faLock,
+  faUsers,
+  faTable,
+  faComments,
+  faBell,
+  faEdit,
+  faSave
 } from '@fortawesome/free-solid-svg-icons';
 
 import { PaginationComponent } from './pagination/pagination.component';
@@ -74,7 +84,17 @@ export class SharedModule {
       faCloudDownloadAlt,
       faUserCircle,
       faTachometerAlt,
-      faInfoCircle
+      faInfoCircle,
+      faIdCard,
+      faPhone,
+      faEnvelope,
+      faLock,
+      faUsers,
+      faTable,
+      faComments,
+      faBell,
+      faEdit,
+      faSave
     );
   }
 }

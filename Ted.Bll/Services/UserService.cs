@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -7,16 +8,20 @@ using System.Threading.Tasks;
 using Ted.Bll.Interfaces;
 using Ted.Dal;
 using Ted.Model;
+using Ted.Model.Auth;
+using Ted.Model.DTO;
 
 namespace Ted.Bll.Services
 {
     public class UserService : IUserService
     {
         private readonly Context _context;
+        private readonly UserManager<User> _userManager;
 
-        public UserService(Context context)
+        public UserService(Context context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         public async Task<Result<string>> InsertPhoto(string userId, byte[] PhotoByteArray)
         {
@@ -44,13 +49,49 @@ namespace Ted.Bll.Services
         }
         public async Task<Result<byte[]>> GetPhoto(string userId)
         {
-            var photo = await _context.Photos.SingleOrDefaultAsync(x=>x.UserId == Guid.Parse(userId));
+            var photo = await _context.Photos.SingleOrDefaultAsync(x => x.UserId == Guid.Parse(userId));
             if (photo == null)
             {
                 return Result<byte[]>.CreateFailed(
                    HttpStatusCode.NotFound, "Cound't get the photo");
             }
             return Result<byte[]>.CreateSuccessful(photo.File);
+        }
+
+        public async Task<Result<UserInfoDTO>> GetUserInfo(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<UserInfoDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+            return Result<UserInfoDTO>.CreateSuccessful(new UserInfoDTO(user));
+        }
+
+        public async Task<Result<UserInfoDTO>> UpdateUserInfo(string userId, UserInfoDTO userInfoDTO)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<UserInfoDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+            user.PhoneNumber = userInfoDTO.PhoneNumber;
+            user.Email = userInfoDTO.Email;
+            user.UserName = userInfoDTO.Email;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return Result<UserInfoDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "Error Changes are not saved"); ;
+            }
+
+            return Result<UserInfoDTO>.CreateSuccessful(new UserInfoDTO(user));
         }
     }
 }

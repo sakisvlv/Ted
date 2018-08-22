@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ted.Bll.Interfaces;
+using Ted.Model.DTO;
 
 namespace Ted.Api.Controllers
 {
@@ -19,6 +20,48 @@ namespace Ted.Api.Controllers
         public UserController(IUserService userService)
         {
             _userService = userService;
+        }
+
+        [HttpGet]
+        [Route("UserInfo")]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _userService.GetUserInfo(userId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [HttpPut]
+        [Route("UserInfo")]
+        public async Task<IActionResult> UpdateUserInfo([FromBody] UserInfoDTO userInfo)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _userService.UpdateUserInfo(userId, userInfo);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
         }
 
         [HttpPost]
@@ -58,7 +101,7 @@ namespace Ted.Api.Controllers
                 var result = await _userService.GetPhoto(userId);
                 if (!result.IsSuccess())
                 {
-                    return Ok();
+                    return result.ToErrorResponse();
                 }
                 return Ok(result.Data);
             }

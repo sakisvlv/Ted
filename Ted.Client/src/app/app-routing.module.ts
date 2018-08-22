@@ -17,11 +17,11 @@ const routes: Routes = [
   { path: '', redirectTo: '/register', pathMatch: 'full' },
   { path: 'register', component: RegisterComponent },
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'settings', component: ProfileComponent, canActivate: [AuthGuard] },
   //admin section
   { path: 'dashboard', component: DashboardComponent, canActivate: [RoleGuard] },
   { path: 'user-list', component: UserListComponent, canActivate: [RoleGuard] },
-  { path: 'user-info/:Id', component: UserInfoComponent, canActivate: [RoleGuard] }
+  { path: 'user-info', component: UserInfoComponent, canActivate: [RoleGuard] }
 
 ];
 

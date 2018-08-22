@@ -12,12 +12,27 @@
     </div>
 
     <div id="nod-nav-menu" class="navbar-menu" [ngClass]="{'is-active': burgerOpen}">
-
       <div class="navbar-start">
-        <a class="navbar-item" routerLink="/home" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
+
+        <!-- User section -->
+        <a class="navbar-item" routerLink="/home" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
           <fa-icon icon="home"></fa-icon> &nbsp; Home
         </a>
-        <a class="navbar-item" routerLink="/dashboard" *ngIf="authService.isAuthenticated() && authService.getRole() == 'Admin'">
+        <a class="navbar-item" routerLink="/network" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
+          <fa-icon icon="users"></fa-icon> &nbsp; Network
+        </a>
+        <a class="navbar-item" routerLink="/adds" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
+          <fa-icon icon="table"></fa-icon> &nbsp; Adds
+        </a>
+        <a class="navbar-item" routerLink="/conversations" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
+          <fa-icon icon="comments"></fa-icon> &nbsp; Conversations
+        </a>
+        <a class="navbar-item" routerLink="/notifications" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
+          <fa-icon icon="bell"></fa-icon> &nbsp; Notifications
+        </a>
+
+        <!-- Admin section -->
+        <a class="navbar-item" routerLink="/dashboard" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'Admin'">
           <fa-icon icon="tachometer-alt"></fa-icon> &nbsp; Dashboard
         </a>
       </div>
@@ -29,14 +44,18 @@
             <fa-icon icon="user"></fa-icon> &nbsp; {{ authService.fullName }}
           </a>
           <div class="navbar-dropdown is-boxed is-right">
-            <a class="navbar-item" *ngIf="authService.getRole() == 'User'" routerLink="/profile">
+            <a class="navbar-item" *ngIf="authService.getRole() == 'User'" routerLink="/profile" routerLinkActive="is-active">
               <fa-icon icon="user-circle"></fa-icon> &nbsp;Profile
+            </a>
+            <a class="navbar-item" *ngIf="authService.getRole() == 'User'" routerLink="/settings" routerLinkActive="is-active">
+              <fa-icon icon="cog"></fa-icon> &nbsp; Settings
             </a>
             <hr class="navbar-divider">
             <a class="navbar-item" (click)="authService.logout()">
               <fa-icon icon="sign-out-alt"></fa-icon> &nbsp; Log out
             </a>
           </div>
+
         </div>
 
         <div class="field is-horizontal" *ngIf="!authService.isAuthenticated()">

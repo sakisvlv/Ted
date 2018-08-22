@@ -4,6 +4,7 @@ export class UserListItem {
     LastName: string;
     PhoneNumber: string;
     Email: string;
+    Role: string;
 }
 
 export class Counts {

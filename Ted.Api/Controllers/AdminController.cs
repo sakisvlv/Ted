@@ -22,6 +22,28 @@ namespace Ted.Api.Controllers
 
         [Authorize]
         [HttpGet]
+        [Route("User/{userId}")]
+        public async Task<IActionResult> GetUser(string userId)
+        {
+            try
+            {
+                var adminId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _adminService.GetUser(adminId, userId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
         [Route("Users")]
         public async Task<IActionResult> GetUsers()
         {
@@ -62,6 +84,28 @@ namespace Ted.Api.Controllers
             {
                 return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
             }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("DownloadPhoto/{userId}")]
+        public async Task<IActionResult> DownloadPhoto(string userId)
+        {
+            try
+            {
+                var adminId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _adminService.GetPhoto(adminId, userId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+
         }
     }
 }

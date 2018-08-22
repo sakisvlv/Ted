@@ -15,6 +15,9 @@ export class AdminDataService {
 
   constructor(private http: HttpClient) { }
 
+  getUser(id: string) {
+    return this.http.get<UserListItem>(this.apiUrl + "User/" + id);
+  }
 
   getUsers() {
     return this.http.get<UserListItem[]>(this.apiUrl + "Users");

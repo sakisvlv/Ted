@@ -10,8 +10,7 @@
         <th>Id</th>
         <th>FirstName</th>
         <th>LastName</th>
-        <th>Phone Number</th>
-        <th>Email</th>
+        <th>Role</th>
         <th></th>
       </tr>
     </thead>
@@ -21,9 +20,8 @@
         <td>{{user.Id}}</td>
         <td>{{user.FirstName}}</td>
         <td>{{user.LastName}}</td>
-        <td>{{user.PhoneNumber}}</td>
-        <td>{{user.Email}}</td>
-        <td><button class="button is-link"><fa-icon icon="info-circle"></fa-icon> &nbsp; Details</button></td>
+        <td>{{user.Role}}</td>
+        <td><button class="button is-link" (click)="redirect(user.Id)"><fa-icon icon="info-circle"></fa-icon> &nbsp; Details</button></td>
       </tr>
     </tbody>
   </table>
