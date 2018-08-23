@@ -61,12 +61,59 @@
         </div>
         <br>
         <div class="field">
-            <button *ngIf="!canEdit" class="button is-link" (click)="canEdit = !canEdit"><fa-icon icon="edit"></fa-icon>
-                &nbsp; Edit Profile</button>
-            <button *ngIf="canEdit" class="button is-success" (click)="save()"><fa-icon icon="save"></fa-icon> &nbsp; Save</button>
+            <div class="buttons">
+                <button *ngIf="!canEdit" class="button is-link" (click)="canEdit = !canEdit"><fa-icon icon="edit"></fa-icon>
+                    &nbsp; Edit Profile</button>
+                <button *ngIf="canEdit" class="button is-success" (click)="save()"><fa-icon icon="save"></fa-icon> &nbsp;
+                    Save</button>
+                <button *ngIf="!isChangingPassword" class="button is-info" (click)="isChangingPassword = true;"><fa-icon
+                        icon="key"></fa-icon>
+                    &nbsp; Change Password</button>
+            </div>
         </div>
     </div>
+</div>
 
+<div class="columns" *ngIf="isChangingPassword">
+    <div class="column">
+        <div class="field">
 
+            <label class="label">Old Password</label>
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" type="password" [(ngModel)]="changePassword.OldPassword" placeholder="Old Password">
+                <span class="icon is-small is-left">
+                    <fa-icon icon="key"></fa-icon>
+                </span>
+            </div>
 
+        </div>
+        <div class="field">
+
+            <label class="label">New Password</label>
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" [(ngModel)]="changePassword.NewPassword" type="password" placeholder="New Password">
+                <span class="icon is-small is-left">
+                    <fa-icon icon="key"></fa-icon>
+                </span>
+            </div>
+
+        </div>
+
+        <div class="field">
+
+            <label class="label">Confirm New Password</label>
+            <div class="control has-icons-left has-icons-right">
+                <input class="input" [(ngModel)]="confirmPassword" type="password" placeholder="Confirm New Password">
+                <span class="icon is-small is-left">
+                    <fa-icon icon="key"></fa-icon>
+                </span>
+            </div>
+
+        </div>
+
+        <br>
+        <div class="field">
+            <button class="button is-success" (click)="validate()"><fa-icon icon="save"></fa-icon> &nbsp; Change</button>
+        </div>
+    </div>
 </div>

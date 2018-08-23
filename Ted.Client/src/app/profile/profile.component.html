@@ -1,0 +1,171 @@
+<div class="card">
+  <header class="card-header title-max-height">
+    <p class="card-header-title title is-4 title-padding">
+      Experience
+    </p>
+    <a class="link-padding" (click)="openExperienceModal('new')"><fa-icon icon="plus" size="lg"></fa-icon></a>
+  </header>
+  <div class="card-content">
+    <div class="content">
+      <h6 class="subtitle is-5">Title</h6>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="card">
+  <header class="card-header title-max-height">
+    <p class="card-header-title title is-4 title-padding">
+      Education
+    </p>
+    <a class="link-padding" (click)="openEducationModalModal('new') "><fa-icon icon="plus" size="lg"></fa-icon></a>
+  </header>
+  <div class="card-content">
+    <div class="columns">
+      <div class="column">
+        <div class="content">
+          <h6 class="subtitle is-5">Title</h6>
+        </div>
+      </div>
+      <div class="column is-1">
+        <a><fa-icon icon="key"></fa-icon></a>
+        <a><fa-icon icon="key"></fa-icon></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="card">
+  <header class="card-header title-max-height">
+    <p class="card-header-title title is-4 title-padding">
+      Skills
+    </p>
+    <a class="link-padding" (click)="openPersonalSkillsModal('new')"><fa-icon icon="plus" size="lg"></fa-icon></a>
+  </header>
+  <div class="card-content">
+    <div class="content">
+      <h6 class="subtitle is-5">Title</h6>
+    </div>
+  </div>
+</div>
+
+<div class="modal" [ngClass]="{'is-active': experienceModalState != 'closed'}">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Experience</p>
+      <button class="delete" aria-label="close" (click)="experienceModalState = 'closed'"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+      <div class="columns">
+        <div class="column">
+
+          <div class="field">
+            <label class="label">Company</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Company Name">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Title</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Your Title In This Job">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Description</label>
+            <div class="control">
+              <textarea class="textarea" type="text" placeholder="Describe The Job"></textarea>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <label class="label">Start Date</label>
+                <date-picker [(date)]="startDateTime"></date-picker>
+              </div>
+            </div>
+            <div class="column">
+              <div class="field">
+                <label class="label">End Date</label>
+                <date-picker [(date)]="startDateTime"></date-picker>
+              </div>
+            </div>
+            <div class="column">
+              <div class="field">
+                <br>
+                <br>
+                <input id="switchColorDefault" type="checkbox" name="switchColorDefault" class="switch" checked="checked">
+                <label for="switchColorDefault">Still Working There</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Link</label>
+            <div class="control">
+              <textarea class="textarea" type="text" placeholder="Describe the job"></textarea>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field">
+              <input id="switchColorDefault" type="checkbox" name="switchColorDefault" class="switch" checked="checked">
+              <label for="switchColorDefault">Is For Public View</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success">Save changes</button>
+      <button class="button is-primary">Add</button>
+      <button class="button is-warning" (click)="experienceModalState = 'closed'">Cancel</button>
+    </footer>
+  </div>
+</div>
+
+<div class="modal" [ngClass]="{'is-active': educationModalState != 'closed'}">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Education</p>
+      <button class="delete" aria-label="close" (click)="educationModalState = 'closed'"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success">Save changes</button>
+      <button class="button is-primary">Add</button>
+      <button class="button is-warning" (click)="educationModalState = 'closed'">Cancel</button>
+    </footer>
+  </div>
+</div>
+
+<div class="modal" [ngClass]="{'is-active': personalSkillsModalState != 'closed'}">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Skill</p>
+      <button class="delete" aria-label="close" (click)="personalSkillsModalState = 'closed'"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success">Save changes</button>
+      <button class="button is-primary">Add</button>
+      <button class="button is-warning" (click)="personalSkillsModalState = 'closed'">Cancel</button>
+    </footer>
+  </div>
+</div>

@@ -11,6 +11,7 @@ namespace Ted.Bll.Interfaces
     {
         Task<Result<UserInfoDTO>> GetUserInfo(string userId);
         Task<Result<UserInfoDTO>> UpdateUserInfo(string userId, UserInfoDTO userInfo);
+        Task<Result<bool>> UpdatePassword(string userId, ChangePasswordDTO userInfo);
         Task<Result<byte[]>> GetPhoto(string userId);
         Task<Result<string>> InsertPhoto(string userId, byte[] PhotoByteArray);
     }

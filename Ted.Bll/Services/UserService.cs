@@ -93,5 +93,24 @@ namespace Ted.Bll.Services
 
             return Result<UserInfoDTO>.CreateSuccessful(new UserInfoDTO(user));
         }
+
+        public async Task<Result<bool>> UpdatePassword(string userId, ChangePasswordDTO passwords)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<bool>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            var changePassword = await _userManager.ChangePasswordAsync(user, passwords.OldPassword, passwords.NewPassword);
+            if (!changePassword.Succeeded)
+            {
+                return Result<bool>.CreateFailed(
+                   HttpStatusCode.NotFound, "Wrong old password or not proper new password");
+            }
+            
+            return Result<bool>.CreateSuccessful(true);
+        }
     }
 }

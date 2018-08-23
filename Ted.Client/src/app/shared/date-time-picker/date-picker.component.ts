@@ -4,21 +4,19 @@ import { DatePipe } from '@angular/common'
 import { DatepickerOptions } from 'ng2-datepicker';
 import * as en from 'date-fns/locale/en';
 
-import { AmazingTimePickerService, ɵa } from 'amazing-time-picker';
-
 @Component({
-  selector: 'date-time-picker',
-  templateUrl: './date-time-picker.component.html',
-  styleUrls: ['./date-time-picker.component.scss']
+  selector: 'date-picker',
+  templateUrl: './date-picker.component.html',
+  styleUrls: ['./date-picker.component.scss']
 })
-export class DateTimePickerComponent implements OnInit, DoCheck {
+export class DatePickerComponent implements OnInit, DoCheck {
 
   isDatePickerOpened: boolean = false;
 
   options: DatepickerOptions = {
     minYear: 1970,
     maxYear: 2030,
-    displayFormat: 'DD/MM/YYYY',
+    displayFormat: 'MMMM d, y',
     barTitleFormat: 'MMMM YYYY',
     dayNamesFormat: 'dd',
     firstCalendarDay: 1, // 0 - Sunday, 1 - Monday
@@ -55,21 +53,10 @@ export class DateTimePickerComponent implements OnInit, DoCheck {
   @Output() dateChange = new EventEmitter<any>();
 
   constructor(
-    private atp: AmazingTimePickerService,
     private datepipe: DatePipe
   ) { }
 
   ngOnInit() {
-  }
-
-  openTimePicker() {
-    const amazingTimePicker = this.atp.open({
-      time: this.datepipe.transform(this.date, 'HH:mm')
-    });
-    amazingTimePicker.afterClose().subscribe(time => {
-      this._date.setHours(+time.substring(0, 2));
-      this._date.setMinutes(+time.substring(3, 5));
-    });
   }
 
   ngDoCheck() {

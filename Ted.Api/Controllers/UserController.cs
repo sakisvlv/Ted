@@ -64,6 +64,27 @@ namespace Ted.Api.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("ChangePassword")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO passwords)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _userService.UpdatePassword(userId, passwords);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
         [HttpPost]
         [Route("UploadPhoto")]
         public async Task<IActionResult> UploadPhoto()

@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { NgDatepickerModule } from 'ng2-datepicker';
-import { AmazingTimePickerModule } from 'amazing-time-picker';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import {
   faSignInAlt,
@@ -31,11 +30,13 @@ import {
   faComments,
   faBell,
   faEdit,
-  faSave
+  faSave,
+  faKey,
+  faPlus
 } from '@fortawesome/free-solid-svg-icons';
 
 import { PaginationComponent } from './pagination/pagination.component';
-import { DateTimePickerComponent } from './date-time-picker/date-time-picker.component';
+import { DatePickerComponent } from './date-time-picker/date-picker.component';
 import { ProfileImageDirective } from './profile-image.directive';
 
 @NgModule({
@@ -43,12 +44,11 @@ import { ProfileImageDirective } from './profile-image.directive';
     CommonModule,
     FontAwesomeModule,
     NgDatepickerModule,
-    NgxPaginationModule,
-    AmazingTimePickerModule
+    NgxPaginationModule
   ],
   declarations: [
     PaginationComponent,
-    DateTimePickerComponent,
+    DatePickerComponent,
     ProfileImageDirective
   ],
   exports: [
@@ -57,8 +57,7 @@ import { ProfileImageDirective } from './profile-image.directive';
     FontAwesomeModule,
     NgxPaginationModule,
     PaginationComponent,
-    DateTimePickerComponent,
-    AmazingTimePickerModule,
+    DatePickerComponent,
     ProfileImageDirective
   ],
   providers: []
@@ -94,7 +93,9 @@ export class SharedModule {
       faComments,
       faBell,
       faEdit,
-      faSave
+      faSave,
+      faKey,
+      faPlus
     );
   }
 }

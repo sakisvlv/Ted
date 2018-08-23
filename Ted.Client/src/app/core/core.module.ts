@@ -11,7 +11,7 @@ import { LoaderService } from './loader/loader.service';
 
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoaderComponent } from './loader/loader.component';
-import { ProfileComponent } from './profile/profile.component';
+import { SettingsComponent } from './settings/settings.component';
 
 
 @NgModule({
@@ -30,7 +30,7 @@ import { ProfileComponent } from './profile/profile.component';
   declarations: [
     NavbarComponent,
     LoaderComponent,
-    ProfileComponent
+    SettingsComponent
   ],
   exports: [
     NavbarComponent,

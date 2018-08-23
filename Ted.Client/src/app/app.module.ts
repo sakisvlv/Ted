@@ -12,17 +12,21 @@ import { TokenInterceptor } from './core/auth/token.interceptor'
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
+import { ProfileComponent } from './profile/profile.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     CoreModule,
-    AdminModule
+    AdminModule,
+    SharedModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

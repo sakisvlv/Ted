@@ -8,13 +8,7 @@
                 <span class="icon is-small">
                     <fa-icon icon="calendar-alt"></fa-icon>
                 </span>
-                <span>{{showDate | date: 'dd/MM/yyyy'}}</span>
-            </a>
-            <a class="button" (click)="openTimePicker()">
-                <span class="icon is-small">
-                    <fa-icon icon="clock"></fa-icon>
-                </span>
-                <span>{{showDate | date: 'HH:mm'}}</span>
+                <span>{{showDate | date: 'MMMM d, y'}}</span>
             </a>
         </div>
     </div>

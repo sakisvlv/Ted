@@ -3,27 +3,30 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
 import { AuthService } from '../auth/services/auth.service';
-import { ProfileDataService } from './profile-data.service';
-import { UserInfo } from './profile.model';
+import { UserInfo, ChangePassword } from './settings.model';
 import { LoaderService } from '../loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
+import { SettingsDataService } from './settings-data.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.scss']
+  selector: 'app-settings',
+  templateUrl: './settings.component.html',
+  styleUrls: ['./settings.component.scss']
 })
-export class ProfileComponent implements OnInit {
+export class SettingsComponent implements OnInit {
 
   private uploadUrl: string = environment.apiUri + "User/UploadPhoto";
   private downloadUrl: string = environment.apiUri + "User/DownloadPhoto";
 
   canEdit = false;
+  isChangingPassword = false;
 
   changed = false;
   showUploader = false;
 
   user: UserInfo = new UserInfo();
+  changePassword: ChangePassword = new ChangePassword();
+  confirmPassword: string = "";
 
   myHeaders: { [name: string]: any } = {
     'Authorization': "Bearer " + this.authService.getToken()
@@ -31,14 +34,14 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private profileDataService: ProfileDataService,
+    private settingsDataService: SettingsDataService,
     private loaderService: LoaderService,
     private toastrService: ToastrService
   ) { }
 
   ngOnInit() {
     this.loaderService.show();
-    this.profileDataService.getProfile().subscribe(
+    this.settingsDataService.getProfile().subscribe(
       result => {
         this.user = result;
         this.loaderService.hide();
@@ -68,7 +71,7 @@ export class ProfileComponent implements OnInit {
 
   save() {
     this.loaderService.show();
-    this.profileDataService.updateProfile(this.user).subscribe(
+    this.settingsDataService.updateProfile(this.user).subscribe(
       result => {
         this.user = result;
         this.canEdit = false;
@@ -81,6 +84,25 @@ export class ProfileComponent implements OnInit {
         this.toastrService.error(error.error, "Error");
       }
     );
+  }
+
+  validate() {
+    if (this.changePassword.NewPassword != this.confirmPassword) {
+      this.toastrService.error("Οι κωδικοί διαφέρουν", "Σφάλμα");
+      return;
+    }
+    this.settingsDataService.changePassword(this.changePassword).subscribe(
+      result => {
+        this.toastrService.success("Password changed succsessfully", 'Success');
+        this.isChangingPassword = false;
+        this.loaderService.hide();
+      },
+      error => {
+        this.isChangingPassword = false;
+        this.loaderService.hide();
+        this.toastrService.error(error.error, 'Error');
+      }
+    );;
   }
 
 }

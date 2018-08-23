@@ -4,3 +4,8 @@ export class UserInfo {
     PhoneNumber: string;
     Email: string;
 }
+
+export class ChangePassword {
+    OldPassword: string;
+    NewPassword: string;
+}

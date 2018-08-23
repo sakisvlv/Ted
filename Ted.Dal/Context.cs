@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using Ted.Model;
 using Ted.Model.Auth;
+using Ted.Model.PersonalSkills;
 
 namespace Ted.Dal
 {
@@ -25,6 +26,9 @@ namespace Ted.Dal
             modelBuilder.HasDefaultSchema("Ted");
             //Models
             modelBuilder.Entity<Photo>().ToTable("Photos");
+            modelBuilder.Entity<PersonalSkill>().ToTable("PersonalSkills");
+            modelBuilder.Entity<Experience>().ToTable("Experiences");
+            modelBuilder.Entity<Education>().ToTable("Educations");
         }
     }
 }
