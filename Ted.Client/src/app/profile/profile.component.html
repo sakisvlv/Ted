@@ -3,7 +3,7 @@
     <p class="card-header-title title is-4 title-padding">
       Experience
     </p>
-    <a class="link-padding" (click)="openExperienceModal('new')"><fa-icon icon="plus" size="lg"></fa-icon></a>
+    <a class="link-padding" (click)="openExperienceModal(-1)"><fa-icon icon="plus" size="lg"></fa-icon></a>
   </header>
   <div class="card-content">
     <div class="content">
@@ -19,7 +19,7 @@
     <p class="card-header-title title is-4 title-padding">
       Education
     </p>
-    <a class="link-padding" (click)="openEducationModalModal('new') "><fa-icon icon="plus" size="lg"></fa-icon></a>
+    <a class="link-padding" (click)="openEducationModalModal(-1) "><fa-icon icon="plus" size="lg"></fa-icon></a>
   </header>
   <div class="card-content">
     <div class="columns">
@@ -43,7 +43,7 @@
     <p class="card-header-title title is-4 title-padding">
       Skills
     </p>
-    <a class="link-padding" (click)="openPersonalSkillsModal('new')"><fa-icon icon="plus" size="lg"></fa-icon></a>
+    <a class="link-padding" (click)="openPersonalSkillsModal(-1)"><fa-icon icon="plus" size="lg"></fa-icon></a>
   </header>
   <div class="card-content">
     <div class="content">
@@ -67,21 +67,21 @@
           <div class="field">
             <label class="label">Company</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Company Name">
+              <input [(ngModel)]="experience.Company" class="input" type="text" placeholder="Company Name">
             </div>
           </div>
 
           <div class="field">
             <label class="label">Title</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Your Title In This Job">
+              <input [(ngModel)]="experience.Title" class="input" type="text" placeholder="Your Title In This Job">
             </div>
           </div>
 
           <div class="field">
             <label class="label">Description</label>
             <div class="control">
-              <textarea class="textarea" type="text" placeholder="Describe The Job"></textarea>
+              <textarea [(ngModel)]="experience.Description" class="textarea" type="text" placeholder="Describe The Job"></textarea>
             </div>
           </div>
 
@@ -89,21 +89,22 @@
             <div class="column">
               <div class="field">
                 <label class="label">Start Date</label>
-                <date-picker [(date)]="startDateTime"></date-picker>
+                <date-picker [(date)]="experience.StartDate"></date-picker>
               </div>
             </div>
             <div class="column">
-              <div class="field">
+              <div *ngIf="experience.StillThere" class="field">
                 <label class="label">End Date</label>
-                <date-picker [(date)]="startDateTime"></date-picker>
+                <date-picker [(date)]="experience.EndDate"></date-picker>
               </div>
             </div>
             <div class="column">
               <div class="field">
                 <br>
                 <br>
-                <input id="switchColorDefault" type="checkbox" name="switchColorDefault" class="switch" checked="checked">
-                <label for="switchColorDefault">Still Working There</label>
+                <input (change)="experience.StillThere = !experience.StillThere" id="switchColorDefault1" [checked]="experience.StillThere"
+                  type="checkbox" name="switchColorDefault1" class="switch">
+                <label for="switchColorDefault1">Still Working There</label>
               </div>
             </div>
           </div>
@@ -111,14 +112,15 @@
           <div class="field">
             <label class="label">Link</label>
             <div class="control">
-              <textarea class="textarea" type="text" placeholder="Describe the job"></textarea>
+              <input class="input" type="text" placeholder="Describe the job">
             </div>
           </div>
 
           <div class="field">
             <div class="field">
-              <input id="switchColorDefault" type="checkbox" name="switchColorDefault" class="switch" checked="checked">
-              <label for="switchColorDefault">Is For Public View</label>
+              <input (change)="experience.IsPublic = !experience.IsPublic" [checked]="experience.IsPublic" id="switchColorDefault2" type="checkbox"
+                name="switchColorDefault2" class="switch">
+              <label for="switchColorDefault2">Is For Public View</label>
             </div>
           </div>
 
@@ -128,7 +130,6 @@
     </section>
     <footer class="modal-card-foot">
       <button class="button is-success">Save changes</button>
-      <button class="button is-primary">Add</button>
       <button class="button is-warning" (click)="experienceModalState = 'closed'">Cancel</button>
     </footer>
   </div>
@@ -143,10 +144,89 @@
     </header>
     <section class="modal-card-body">
       <!-- Content ... -->
+      <div class="columns">
+        <div class="column">
+
+          <div class="field">
+            <label class="label">Degree</label>
+            <div class="control">
+              <input [(ngModel)]="education.Degree" class="input" type="text" placeholder="Degree">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Feild</label>
+            <div class="control">
+              <input [(ngModel)]="education.Feild" class="input" type="text" placeholder="Feild">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Grade</label>
+            <div class="control">
+              <input [(ngModel)]="education.Grade" class="input" type="number" placeholder="Grade">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Title</label>
+            <div class="control">
+              <input [(ngModel)]="education.Title" class="input" type="text" placeholder="Title">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Description</label>
+            <div class="control">
+              <textarea [(ngModel)]="education.Description" class="textarea" type="text" placeholder="Description"></textarea>
+            </div>
+          </div>
+
+          <div class="columns">
+            <div class="column">
+              <div class="field">
+                <label class="label">Start Date</label>
+                <date-picker [(date)]="education.StartDate"></date-picker>
+              </div>
+            </div>
+            <div class="column">
+              <div *ngIf="education.StillThere" class="field">
+                <label class="label">End Date</label>
+                <date-picker [(date)]="education.EndDate"></date-picker>
+              </div>
+            </div>
+            <div class="column">
+              <div class="field">
+                <br>
+                <br>
+                <input (change)="education.StillThere = !education.StillThere" id="switchColorDefault3" [checked]="education.StillThere"
+                  type="checkbox" name="switchColorDefault3" class="switch">
+                <label for="switchColorDefault3">Still There</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Link</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Describe the job">
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field">
+              <input (change)="education.IsPublic = !education.IsPublic" [checked]="education.IsPublic" id="switchColorDefault4" type="checkbox"
+                name="switchColorDefault4" class="switch">
+              <label for="switchColorDefault4">Is For Public View</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
     </section>
     <footer class="modal-card-foot">
       <button class="button is-success">Save changes</button>
-      <button class="button is-primary">Add</button>
       <button class="button is-warning" (click)="educationModalState = 'closed'">Cancel</button>
     </footer>
   </div>
@@ -161,10 +241,36 @@
     </header>
     <section class="modal-card-body">
       <!-- Content ... -->
+      <div class="columns">
+        <div class="column">
+
+          <div class="field">
+            <label class="label">Title</label>
+            <div class="control">
+              <input [(ngModel)]="personalSkill.Title" class="input" type="text" placeholder="Title of skill">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Description</label>
+            <div class="control">
+              <textarea [(ngModel)]="personalSkill.Description" class="textarea" type="text" placeholder="Describe it"></textarea>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="field">
+              <input (change)="personalSkill.IsPublic = !personalSkill.IsPublic" [checked]="personalSkill.IsPublic" id="switchColorDefault5"
+                type="checkbox" name="switchColorDefault5" class="switch">
+              <label for="switchColorDefault5">Is For Public View</label>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </section>
     <footer class="modal-card-foot">
       <button class="button is-success">Save changes</button>
-      <button class="button is-primary">Add</button>
       <button class="button is-warning" (click)="personalSkillsModalState = 'closed'">Cancel</button>
     </footer>
   </div>

@@ -5,21 +5,29 @@ class Skill {
     IsPublic: boolean;
 }
 
-class PersonalSkill extends Skill {
+export class PersonalSkill extends Skill {
 }
 
-class Experience extends Skill {
+export class Experience extends Skill {
     Company: string;
     StartDate: Date;
     EndDate: Date;
+    StillThere: boolean;
     Link: string;
 }
 
-class Education extends Skill {
+export class Education extends Skill {
     Degree: string;
     Feild: string;
-    Grade: string;
+    Grade: number;
     StartDate: Date;
     EndDate: Date;
+    StillThere: boolean;
     Link: string;
+}
+
+export class Skills {
+    Experiences: Experience[];
+    Educations: Education[];
+    PersonalSkills: PersonalSkill[];
 }

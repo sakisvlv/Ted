@@ -23,6 +23,27 @@ namespace Ted.Api.Controllers
         }
 
         [HttpGet]
+        [Route("Skills")]
+        public async Task<IActionResult> GetUserSkills()
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _userService.GetUserSkills(userId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [HttpGet]
         [Route("UserInfo")]
         public async Task<IActionResult> GetUserInfo()
         {

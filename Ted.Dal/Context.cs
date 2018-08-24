@@ -12,6 +12,9 @@ namespace Ted.Dal
     public class Context : IdentityDbContext<User, Role, Guid>
     {
         public DbSet<Photo> Photos { get; set; }
+        public DbSet<PersonalSkill> PersonalSkills { get; set; }
+        public DbSet<Experience> Experiences { get; set; }
+        public DbSet<Education> Educations { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {

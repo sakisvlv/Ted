@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ted.Bll.Interfaces;
@@ -109,8 +110,24 @@ namespace Ted.Bll.Services
                 return Result<bool>.CreateFailed(
                    HttpStatusCode.NotFound, "Wrong old password or not proper new password");
             }
-            
+
             return Result<bool>.CreateSuccessful(true);
+        }
+
+        public async Task<Result<SkillsDTO>> GetUserSkills(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<SkillsDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            var expiriances = await _context.Experiences.Where(x => x.User == user).ToListAsync();
+            var educations = await _context.Educations.Where(x => x.User == user).ToListAsync();
+            var personalSkills = await _context.PersonalSkills.Where(x => x.User == user).ToListAsync();
+            var a = Result<SkillsDTO>.CreateSuccessful(new SkillsDTO(expiriances, educations, personalSkills));
+            return a;
         }
     }
 }
