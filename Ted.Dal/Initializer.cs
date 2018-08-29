@@ -79,6 +79,7 @@ namespace Ted.Dal
                         education.StillThere = false;
                         education.Title = "X-Mansion";
                         education.IsPublic = true;
+                        education.Field = "Saving the world";
                         education.Link = "https://en.wikipedia.org/wiki/X-Mansion";
                         users[i].Educations.Add(education);
 
@@ -95,8 +96,8 @@ namespace Ted.Dal
 
                         var personalSkill = new PersonalSkill();
                         personalSkill.IsPublic = true;
-                        personalSkill.Title = "Lazer Eyes";
-                        personalSkill.Description = "Shooting lazers out of the eyes";
+                        personalSkill.Title = "Laser Eyes";
+                        personalSkill.Description = "Shooting lasers out of the eyes";
                         users[i].PersonalSkills.Add(personalSkill);
                     }
                 }

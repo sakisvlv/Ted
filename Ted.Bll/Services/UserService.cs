@@ -11,6 +11,7 @@ using Ted.Dal;
 using Ted.Model;
 using Ted.Model.Auth;
 using Ted.Model.DTO;
+using Ted.Model.PersonalSkills;
 
 namespace Ted.Bll.Services
 {
@@ -123,11 +124,84 @@ namespace Ted.Bll.Services
                    HttpStatusCode.NotFound, "User not found");
             }
 
-            var expiriances = await _context.Experiences.Where(x => x.User == user).ToListAsync();
+            var expiriences = await _context.Experiences.Where(x => x.User == user).ToListAsync();
             var educations = await _context.Educations.Where(x => x.User == user).ToListAsync();
             var personalSkills = await _context.PersonalSkills.Where(x => x.User == user).ToListAsync();
-            var a = Result<SkillsDTO>.CreateSuccessful(new SkillsDTO(expiriances, educations, personalSkills));
+            var a = Result<SkillsDTO>.CreateSuccessful(
+                new SkillsDTO(
+                    ExperienceDTO.ToExperienceDTOList(expiriences),
+                    EducationDTO.ToEducationDTOList(educations),
+                    PersonalSkillDTO.ToPersonalSkillDTOList(personalSkills)
+                    ));
             return a;
+        }
+
+        public async Task<Result<ExperienceDTO>> SaveExperience(string userId, ExperienceDTO experienceDTO)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<ExperienceDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            var expirience = await _context.Experiences.Where(x => x.User == user && x.Id == experienceDTO.Id).FirstOrDefaultAsync();
+            if (expirience != null)
+            {
+                expirience.Update(experienceDTO);
+            }
+            else
+            {
+                expirience = new Experience();
+                expirience.Update(experienceDTO);
+                await _context.Experiences.AddAsync(expirience);
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return Result<ExperienceDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "Error Changes are not saved"); ;
+            }
+
+            return Result<ExperienceDTO>.CreateSuccessful(new ExperienceDTO(expirience));
+        }
+
+        public async Task<Result<EducationDTO>> SaveEducationDTO(string userId, EducationDTO educationDTO)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<EducationDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            var education = await _context.Educations.Where(x => x.User == user && x.Id == educationDTO.Id).FirstOrDefaultAsync();
+            if (education != null)
+            {
+                education.Update(educationDTO);
+            }
+            else
+            {
+                education = new Education();
+                education.Update(educationDTO);
+                await _context.Educations.AddAsync(education);
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return Result<EducationDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "Error Changes are not saved"); ;
+            }
+
+            return Result<EducationDTO>.CreateSuccessful(new EducationDTO(education));
         }
     }
 }

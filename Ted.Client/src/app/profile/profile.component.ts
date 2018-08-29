@@ -40,11 +40,9 @@ export class ProfileComponent implements OnInit {
         this.educations = result.Educations;
         this.experiences = result.Experiences;
         this.personalSkills = result.PersonalSkills;
-        console.log(result);
         this.loaderService.hide();
       },
       error => {
-        console.log(error);
         this.loaderService.hide();
         this.toastrService.error(error.error, 'Error');
       }
@@ -71,6 +69,10 @@ export class ProfileComponent implements OnInit {
       this.init();
     }
     this.experienceModalState = 'opened';
+  }
+
+  saveExperience(){
+    
   }
 
   openEducationModalModal(index: number) {

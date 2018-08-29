@@ -18,7 +18,7 @@ export class Experience extends Skill {
 
 export class Education extends Skill {
     Degree: string;
-    Feild: string;
+    Field: string;
     Grade: number;
     StartDate: Date;
     EndDate: Date;

@@ -32,7 +32,9 @@ import {
   faEdit,
   faSave,
   faKey,
-  faPlus
+  faPlus,
+  faPencilAlt,
+  faTimes
 } from '@fortawesome/free-solid-svg-icons';
 
 import { PaginationComponent } from './pagination/pagination.component';
@@ -95,7 +97,9 @@ export class SharedModule {
       faEdit,
       faSave,
       faKey,
-      faPlus
+      faPlus,
+      faPencilAlt,
+      faTimes
     );
   }
 }
