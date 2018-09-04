@@ -50,7 +50,49 @@ namespace Ted.Api.Controllers
             try
             {
                 var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
-                var result = await _userService.GetUserSkills(userId);
+                var result = await _userService.SaveExperience(userId, experience);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [HttpPut]
+        [Route("SaveEducation")]
+        public async Task<IActionResult> SaveEducation(EducationDTO education)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _userService.SaveEducation(userId, education);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [HttpPut]
+        [Route("SavePersonalSkill")]
+        public async Task<IActionResult> SaveExpiriance(PersonalSkillDTO personalSkill)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _userService.SavePersonalSkill(userId, personalSkill);
                 if (!result.IsSuccess())
                 {
                     return result.ToErrorResponse();

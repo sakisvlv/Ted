@@ -3,7 +3,7 @@
     <p class="card-header-title title is-4 title-padding">
       Experience
     </p>
-    <a class="link-padding" (click)="openExperienceModal(-1)"><fa-icon icon="plus" size="lg"></fa-icon></a>
+    <a class="link-padding" (click)="openExperienceModal(null)"><fa-icon icon="plus" size="lg"></fa-icon></a>
   </header>
   <div class="card-content">
     <div class="content">
@@ -12,7 +12,7 @@
           <p class="card-header-title title is-6 title-padding">
             {{experience.Title}}
           </p>
-          <a class="link-padding" (click)="openEducationModalModal(-1) "><fa-icon icon="pencil-alt" size="lg"></fa-icon></a>
+          <a class="link-padding" (click)="openExperienceModal(experience)"><fa-icon icon="pencil-alt" size="lg"></fa-icon></a>
         </header>
         <div class="card-content">
           <div class="columns">
@@ -48,7 +48,7 @@
     <p class="card-header-title title is-4 title-padding">
       Education
     </p>
-    <a class="link-padding" (click)="openEducationModalModal(-1) "><fa-icon icon="plus" size="lg"></fa-icon></a>
+    <a class="link-padding" (click)="openEducationModalModal(null) "><fa-icon icon="plus" size="lg"></fa-icon></a>
   </header>
   <div class="card-content">
     <div class="columns">
@@ -59,7 +59,7 @@
               <p class="card-header-title title is-6 title-padding">
                 {{education.Title}}
               </p>
-              <a class="link-padding" (click)="openEducationModalModal(-1) "><fa-icon icon="pencil-alt" size="lg"></fa-icon></a>
+              <a class="link-padding" (click)="openEducationModalModal(education) "><fa-icon icon="pencil-alt" size="lg"></fa-icon></a>
             </header>
             <div class="card-content">
               <div class="columns">
@@ -97,7 +97,7 @@
     <p class="card-header-title title is-4 title-padding">
       Skills
     </p>
-    <a class="link-padding" (click)="openPersonalSkillsModal(-1)"><fa-icon icon="plus" size="lg"></fa-icon></a>
+    <a class="link-padding" (click)="openPersonalSkillsModal(null)"><fa-icon icon="plus" size="lg"></fa-icon></a>
   </header>
   <div class="card-content">
     <div class="content">
@@ -106,7 +106,7 @@
           <p class="card-header-title title is-6 title-padding">
             {{personalSkill.Title}}
           </p>
-          <a class="link-padding" (click)="openEducationModalModal(-1) "><fa-icon icon="pencil-alt" size="lg"></fa-icon></a>
+          <a class="link-padding" (click)="openPersonalSkillsModal(personalSkill) "><fa-icon icon="pencil-alt" size="lg"></fa-icon></a>
         </header>
         <div class="card-content">
           <div class="columns">
@@ -201,7 +201,7 @@
 
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success">Save changes</button>
+      <button class="button is-success" (click)="saveExperience()">Save changes</button>
       <button class="button is-warning" (click)="experienceModalState = 'closed'">Cancel</button>
     </footer>
   </div>
@@ -298,7 +298,7 @@
 
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success">Save changes</button>
+      <button class="button is-success" (click)="saveEducations()">Save changes</button>
       <button class="button is-warning" (click)="educationModalState = 'closed'">Cancel</button>
     </footer>
   </div>
@@ -342,7 +342,7 @@
       </div>
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success">Save changes</button>
+      <button class="button is-success" (click)="savePersonalSkills()">Save changes</button>
       <button class="button is-warning" (click)="personalSkillsModalState = 'closed'">Cancel</button>
     </footer>
   </div>

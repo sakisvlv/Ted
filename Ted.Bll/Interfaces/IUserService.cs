@@ -15,5 +15,8 @@ namespace Ted.Bll.Interfaces
         Task<Result<byte[]>> GetPhoto(string userId);
         Task<Result<string>> InsertPhoto(string userId, byte[] PhotoByteArray);
         Task<Result<SkillsDTO>> GetUserSkills(string userId);
+        Task<Result<ExperienceDTO>> SaveExperience(string userId, ExperienceDTO experienceDTO);
+        Task<Result<EducationDTO>> SaveEducation(string userId, EducationDTO educationDTO);
+        Task<Result<PersonalSkillDTO>> SavePersonalSkill(string userId, PersonalSkillDTO personalSkillDTO);
     }
 }

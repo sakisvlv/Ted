@@ -64,29 +64,73 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  openExperienceModal(index: number) {
-    if (index == -1) {
+  openExperienceModal(experience: Experience) {
+    if (experience == null) {
       this.init();
+    }
+    else {
+      this.experience = experience;
     }
     this.experienceModalState = 'opened';
   }
 
-  saveExperience(){
-    
-  }
-
-  openEducationModalModal(index: number) {
-    if (index == -1) {
+  openEducationModalModal(education: Education) {
+    if (education == null) {
       this.init();
+    }
+    else {
+      this.education = education;
     }
     this.educationModalState = 'opened';
   }
 
-  openPersonalSkillsModal(index: number) {
-    if (index == -1) {
+  openPersonalSkillsModal(personalSkill: PersonalSkill) {
+    if (personalSkill == null) {
       this.init();
     }
+    else {
+      this.personalSkill = personalSkill;
+    }
     this.personalSkillsModalState = 'opened';
+  }
+
+  saveExperience() {
+    this.profileDataService.saveExpiriance(this.experience).subscribe(
+      result => {
+        this.experience = result;
+        this.loaderService.hide();
+      },
+      error => {
+        this.loaderService.hide();
+        this.toastrService.error(error.error, 'Error');
+      }
+    );
+  }
+
+  saveEducations() {
+    this.profileDataService.saveEducation(this.education).subscribe(
+      result => {
+        this.education = result;
+        this.loaderService.hide();
+      },
+      error => {
+        this.loaderService.hide();
+        this.toastrService.error(error.error, 'Error');
+      }
+    );
+  }
+
+  savePersonalSkills() {
+    this.profileDataService.savePersonalSkill(this.personalSkill).subscribe(
+      result => {
+        this.personalSkill = result;
+        this.loaderService.hide();
+      },
+      error => {
+        this.loaderService.hide();
+        this.toastrService.error(error.error, 'Error');
+      }
+    );
   }
 
 }

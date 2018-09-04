@@ -29,6 +29,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ted.Bll", "Ted.Bll\Ted.Bll.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ted.Api", "Ted.Api\Ted.Api.csproj", "{C0541253-11B3-408F-BBBD-A16E965BEFAF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ted.Dal", "Ted.Dal\Ted.Dal.csproj", "{08E59E9D-6138-4C65-8719-443723653E6F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ted.Model", "Ted.Model\Ted.Model.csproj", "{7CA21FE5-1501-4C2D-88B2-DEE4F480B159}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +51,14 @@ Global
 		{C0541253-11B3-408F-BBBD-A16E965BEFAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0541253-11B3-408F-BBBD-A16E965BEFAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0541253-11B3-408F-BBBD-A16E965BEFAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08E59E9D-6138-4C65-8719-443723653E6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08E59E9D-6138-4C65-8719-443723653E6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08E59E9D-6138-4C65-8719-443723653E6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08E59E9D-6138-4C65-8719-443723653E6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CA21FE5-1501-4C2D-88B2-DEE4F480B159}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CA21FE5-1501-4C2D-88B2-DEE4F480B159}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CA21FE5-1501-4C2D-88B2-DEE4F480B159}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CA21FE5-1501-4C2D-88B2-DEE4F480B159}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
