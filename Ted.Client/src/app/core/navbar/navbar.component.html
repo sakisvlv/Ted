@@ -59,7 +59,7 @@
         </div>
 
         <div class="field is-horizontal" *ngIf="!authService.isAuthenticated()">
-          <div class="field-body">
+          <div class="field-body" (keypress)="onSubmit($event)">
             <div class="field">
               <input type="text" class="input" placeholder="Email" [(ngModel)]="loginData.Email">
             </div>

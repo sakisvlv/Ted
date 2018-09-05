@@ -19,9 +19,9 @@ export class ProfileComponent implements OnInit {
   education: Education;
   personalSkill: PersonalSkill;
 
-  experiences = [];
-  educations = [];
-  personalSkills = [];
+  experiences: Experience[] = [];
+  educations: Education[] = [];
+  personalSkills: PersonalSkill[] = [];
 
   skills: Skills = new Skills();
 
@@ -35,10 +35,17 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit() {
     this.init();
+    this.loaderService.show();
     this.profileDataService.getUserSkills().subscribe(
       result => {
         this.educations = result.Educations;
+        this.educations.forEach(x => x.StartDate = new Date(x.StartDate));
+        this.educations.forEach(x => x.EndDate = new Date(x.EndDate));
+
         this.experiences = result.Experiences;
+        this.experiences.forEach(x => x.StartDate = new Date(x.StartDate));
+        this.experiences.forEach(x => x.EndDate = new Date(x.EndDate));
+
         this.personalSkills = result.PersonalSkills;
         this.loaderService.hide();
       },
@@ -80,6 +87,7 @@ export class ProfileComponent implements OnInit {
     }
     else {
       this.education = education;
+
     }
     this.educationModalState = 'opened';
   }
@@ -97,7 +105,13 @@ export class ProfileComponent implements OnInit {
   saveExperience() {
     this.profileDataService.saveExpiriance(this.experience).subscribe(
       result => {
-        this.experience = result;
+        result.StartDate = new Date(Date.now());
+        result.EndDate = new Date(Date.now());
+        if (this.experience.Id != undefined) {
+          this.experiences.splice(this.experiences.indexOf(this.experiences.find(x => x.Id == this.experience.Id)[0]), 1);
+        }
+        this.experiences.push(result);
+        this.experienceModalState = 'closed';
         this.loaderService.hide();
       },
       error => {
@@ -110,7 +124,13 @@ export class ProfileComponent implements OnInit {
   saveEducations() {
     this.profileDataService.saveEducation(this.education).subscribe(
       result => {
-        this.education = result;
+        result.StartDate = new Date(Date.now());
+        result.EndDate = new Date(Date.now());
+        if (this.experience.Id != undefined) {
+          this.educations.splice(this.educations.indexOf(this.educations.find(x => x.Id == this.education.Id)[0]), 1);
+        }
+        this.educations.push(result);
+        this.educationModalState = 'closed';
         this.loaderService.hide();
       },
       error => {
@@ -123,10 +143,45 @@ export class ProfileComponent implements OnInit {
   savePersonalSkills() {
     this.profileDataService.savePersonalSkill(this.personalSkill).subscribe(
       result => {
-        this.personalSkill = result;
+        if (this.personalSkill.Id != undefined) {
+          this.personalSkills.splice(this.personalSkills.indexOf(this.personalSkills.find(x => x.Id == this.personalSkill.Id)[0]), 1);
+        }
+        this.personalSkills.push(result);
+        this.personalSkillsModalState = 'closed';
         this.loaderService.hide();
       },
       error => {
+        this.loaderService.hide();
+        this.toastrService.error(error.error, 'Error');
+      }
+    );
+  }
+
+  deleteSkill(id: string, type: string) {
+    this.profileDataService.deleteSkill(id, type).subscribe(
+      result => {
+        switch (type) {
+          case "experience":
+            this.experiences.splice(this.experiences.indexOf(this.experiences.find(x => x.Id == id)[0]), 1);
+            this.experienceModalState = 'closed';
+            break;
+          case "education":
+            this.educations.splice(this.educations.indexOf(this.educations.find(x => x.Id == id)[0]), 1);
+            this.educationModalState = 'closed';
+            break;
+          case "personalSkill":
+            this.personalSkills.splice(this.personalSkills.indexOf(this.personalSkills.find(x => x.Id == id)[0]), 1);
+            this.personalSkillsModalState = 'closed';
+            break;
+        }
+        this.loaderService.hide();
+      },
+      error => {
+        console.log(error);
+        
+        this.experienceModalState = 'closed';
+        this.educationModalState = 'closed';
+        this.personalSkillsModalState = 'closed';
         this.loaderService.hide();
         this.toastrService.error(error.error, 'Error');
       }

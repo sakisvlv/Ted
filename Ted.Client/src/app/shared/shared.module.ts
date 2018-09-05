@@ -34,7 +34,10 @@ import {
   faKey,
   faPlus,
   faPencilAlt,
-  faTimes
+  faTimes,
+  faBackspace,
+  faUndoAlt,
+  faTrashAlt
 } from '@fortawesome/free-solid-svg-icons';
 
 import { PaginationComponent } from './pagination/pagination.component';
@@ -99,7 +102,10 @@ export class SharedModule {
       faKey,
       faPlus,
       faPencilAlt,
-      faTimes
+      faTimes,
+      faBackspace,
+      faUndoAlt,
+      faTrashAlt
     );
   }
 }

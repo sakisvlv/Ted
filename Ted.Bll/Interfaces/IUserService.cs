@@ -18,5 +18,6 @@ namespace Ted.Bll.Interfaces
         Task<Result<ExperienceDTO>> SaveExperience(string userId, ExperienceDTO experienceDTO);
         Task<Result<EducationDTO>> SaveEducation(string userId, EducationDTO educationDTO);
         Task<Result<PersonalSkillDTO>> SavePersonalSkill(string userId, PersonalSkillDTO personalSkillDTO);
+        Task<Result<bool>> DeleteSkill(string userId, string type, string id);
     }
 }

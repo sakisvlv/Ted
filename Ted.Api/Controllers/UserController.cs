@@ -43,6 +43,27 @@ namespace Ted.Api.Controllers
             }
         }
 
+        [HttpDelete]
+        [Route("Skill/{id}/{type}")]
+        public async Task<IActionResult> DeleteSkill(string id, string type)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _userService.DeleteSkill(userId, type, id);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
         [HttpPut]
         [Route("SaveExperience")]
         public async Task<IActionResult> SaveExpiriance(ExperienceDTO experience)

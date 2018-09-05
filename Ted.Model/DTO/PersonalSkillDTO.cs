@@ -12,6 +12,9 @@ namespace Ted.Model.DTO
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsPublic { get; set; }
+        public PersonalSkillDTO()
+        {
+        }
 
         public PersonalSkillDTO(PersonalSkill personalSkill)
         {

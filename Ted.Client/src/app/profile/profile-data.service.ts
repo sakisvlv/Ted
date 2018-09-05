@@ -26,8 +26,12 @@ export class ProfileDataService {
     return this.http.put<Education>(this.apiUrl + "SaveEducation", education);
   }
 
-  savePersonalSkill(experience: PersonalSkill) {
-    return this.http.put<PersonalSkill>(this.apiUrl + "SavePersonalSkill", PersonalSkill);
+  savePersonalSkill(personalSkill: PersonalSkill) {
+    return this.http.put<PersonalSkill>(this.apiUrl + "SavePersonalSkill", personalSkill);
+  }
+
+  deleteSkill(id: string, type: string) {
+    return this.http.delete(this.apiUrl + "Skill/" + id + "/" + type);
   }
 
 }

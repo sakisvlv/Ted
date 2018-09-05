@@ -36,6 +36,7 @@
             </div>
           </div>
         </div>
+        <hr>
       </div>
     </div>
   </div>
@@ -83,6 +84,7 @@
                 </div>
               </div>
             </div>
+            <hr>
           </div>
         </div>
       </div>
@@ -119,6 +121,7 @@
             </div>
           </div>
         </div>
+        <hr>
       </div>
     </div>
   </div>
@@ -165,7 +168,7 @@
               </div>
             </div>
             <div class="column">
-              <div *ngIf="experience.StillThere" class="field">
+              <div *ngIf="!experience.StillThere" class="field">
                 <label class="label">End Date</label>
                 <date-picker [(date)]="experience.EndDate"></date-picker>
               </div>
@@ -184,7 +187,7 @@
           <div class="field">
             <label class="label">Link</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Describe the job">
+              <input [(ngModel)]="experience.Link" class="input" type="text" placeholder="Describe the job">
             </div>
           </div>
 
@@ -201,8 +204,11 @@
 
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success" (click)="saveExperience()">Save changes</button>
-      <button class="button is-warning" (click)="experienceModalState = 'closed'">Cancel</button>
+      <button class="button is-success" (click)="saveExperience()"><fa-icon icon="save"></fa-icon> &nbsp; Save changes
+      </button>
+      <button class="button is-warning" (click)="experienceModalState = 'closed'"><fa-icon icon="undo-alt"></fa-icon> &nbsp;Cancel</button>
+      <button class="button is-danger is-pulled-right" (click)="deleteSkill(experience.Id,'experience')"><fa-icon icon="trash-alt"></fa-icon>
+        &nbsp; Delete</button>
     </footer>
   </div>
 </div>
@@ -229,7 +235,7 @@
           <div class="field">
             <label class="label">Feild</label>
             <div class="control">
-              <input [(ngModel)]="education.Feild" class="input" type="text" placeholder="Feild">
+              <input [(ngModel)]="education.Field" class="input" type="text" placeholder="Feild">
             </div>
           </div>
 
@@ -254,7 +260,7 @@
             </div>
           </div>
 
-          <div class="columns">
+          <div class="columns"> 
             <div class="column">
               <div class="field">
                 <label class="label">Start Date</label>
@@ -262,7 +268,7 @@
               </div>
             </div>
             <div class="column">
-              <div *ngIf="education.StillThere" class="field">
+              <div *ngIf="!education.StillThere" class="field">
                 <label class="label">End Date</label>
                 <date-picker [(date)]="education.EndDate"></date-picker>
               </div>
@@ -281,7 +287,7 @@
           <div class="field">
             <label class="label">Link</label>
             <div class="control">
-              <input class="input" type="text" placeholder="Describe the job">
+              <input [(ngModel)]="education.Link" class="input" type="text" placeholder="Describe the job">
             </div>
           </div>
 
@@ -298,8 +304,10 @@
 
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success" (click)="saveEducations()">Save changes</button>
-      <button class="button is-warning" (click)="educationModalState = 'closed'">Cancel</button>
+      <button class="button is-success" (click)="saveEducations()"><fa-icon icon="save"></fa-icon> &nbsp; Save changes</button>
+      <button class="button is-warning" (click)="educationModalState = 'closed'"><fa-icon icon="undo-alt"></fa-icon> &nbsp;Cancel</button>
+      <button class="button is-danger is-pulled-right" (click)="deleteSkill(education.Id,'education')"><fa-icon icon="trash-alt"></fa-icon>
+        &nbsp;Delete</button>
     </footer>
   </div>
 </div>
@@ -342,8 +350,11 @@
       </div>
     </section>
     <footer class="modal-card-foot">
-      <button class="button is-success" (click)="savePersonalSkills()">Save changes</button>
-      <button class="button is-warning" (click)="personalSkillsModalState = 'closed'">Cancel</button>
+      <button class="button is-success" (click)="savePersonalSkills()"><fa-icon icon="save"></fa-icon> &nbsp; Save changes</button>
+      <button class="button is-warning" (click)="personalSkillsModalState = 'closed'"><fa-icon icon="undo-alt"></fa-icon>
+        &nbsp;Cancel</button>
+      <button class="button is-danger is-pulled-right" (click)="deleteSkill(personalSkill.Id,'personalSkill')"><fa-icon icon="trash-alt"></fa-icon>
+        &nbsp;Delete</button>
     </footer>
   </div>
 </div>

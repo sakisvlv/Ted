@@ -154,6 +154,7 @@ namespace Ted.Bll.Services
             {
                 expirience = new Experience();
                 expirience.Update(experienceDTO);
+                expirience.User = user;
                 await _context.Experiences.AddAsync(expirience);
             }
 
@@ -188,6 +189,7 @@ namespace Ted.Bll.Services
             {
                 education = new Education();
                 education.Update(educationDTO);
+                education.User = user;
                 await _context.Educations.AddAsync(education);
             }
 
@@ -202,40 +204,6 @@ namespace Ted.Bll.Services
             }
 
             return Result<EducationDTO>.CreateSuccessful(new EducationDTO(education));
-        }
-
-        public async Task<Result<ExperienceDTO>> SaveEducation(string userId, ExperienceDTO experienceDTO)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                return Result<ExperienceDTO>.CreateFailed(
-                   HttpStatusCode.NotFound, "User not found");
-            }
-
-            var experience = await _context.Experiences.Where(x => x.User == user && x.Id == experienceDTO.Id).FirstOrDefaultAsync();
-            if (experience != null)
-            {
-                experience.Update(experienceDTO);
-            }
-            else
-            {
-                experience = new Experience();
-                experience.Update(experienceDTO);
-                await _context.Experiences.AddAsync(experience);
-            }
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception)
-            {
-                return Result<ExperienceDTO>.CreateFailed(
-                   HttpStatusCode.NotFound, "Error Changes are not saved"); ;
-            }
-
-            return Result<ExperienceDTO>.CreateSuccessful(new ExperienceDTO(experience));
         }
 
         public async Task<Result<PersonalSkillDTO>> SavePersonalSkill(string userId, PersonalSkillDTO personalSkillDTO)
@@ -256,6 +224,7 @@ namespace Ted.Bll.Services
             {
                 personalSkill = new PersonalSkill();
                 personalSkill.Update(personalSkillDTO);
+                personalSkill.User = user;
                 await _context.PersonalSkills.AddAsync(personalSkill);
             }
 
@@ -270,6 +239,44 @@ namespace Ted.Bll.Services
             }
 
             return Result<PersonalSkillDTO>.CreateSuccessful(new PersonalSkillDTO(personalSkill));
+        }
+
+        public async Task<Result<bool>> DeleteSkill(string userId, string type, string id)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<bool>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+            
+            switch (type)
+            {
+                case "experience":
+                    var expToDelete = await _context.Experiences.Where(x => x.Id.ToString() == id).FirstOrDefaultAsync();
+                    _context.Experiences.Remove(expToDelete);
+                    break;
+                case "education":
+                    var edToDelete = await _context.Educations.Where(x => x.Id.ToString() == id).FirstOrDefaultAsync();
+                    _context.Educations.Remove(edToDelete);
+                    break;
+                case "personalSkill":
+                    var pSkToDelete = await _context.PersonalSkills.Where(x => x.Id.ToString() == id).FirstOrDefaultAsync();
+                    _context.PersonalSkills.Remove(pSkToDelete);
+                    break;
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return Result<bool>.CreateFailed(
+                   HttpStatusCode.NotFound, "Error Changes are not saved"); ;
+            }
+
+            return Result<bool>.CreateSuccessful(true);
         }
     }
 }

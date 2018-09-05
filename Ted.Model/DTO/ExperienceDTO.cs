@@ -17,7 +17,11 @@ namespace Ted.Model.DTO
         public DateTime? EndDate { get; set; }
         public string Link { get; set; }
         public bool StillThere { get; set; }
-    
+
+        public ExperienceDTO()
+        {
+        }
+
         public ExperienceDTO(Experience experience)
         {
             Id = experience.Id;

@@ -20,6 +20,10 @@ namespace Ted.Model.DTO
         public string Link { get; set; }
         public bool StillThere { get; set; }
 
+        public EducationDTO()
+        {
+        }
+
         public EducationDTO(Education education)
         {
             Id = education.Id;

@@ -18,4 +18,10 @@ export class NavbarComponent implements OnInit {
   ngOnInit() {
   }
 
+  onSubmit(event) {
+    if (event.key == "Enter") {
+      this.authService.login(this.loginData);
+    }
+  }
+
 }
