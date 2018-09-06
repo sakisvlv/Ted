@@ -88,7 +88,7 @@ namespace Ted.Dal
                         experiance.Link = "https://en.wikipedia.org/wiki/X-Mansion";
                         experiance.StartDate = DateTime.Now.AddYears(-4);
                         experiance.EndDate = DateTime.Now;
-                        experiance.StillThere = false;
+                        experiance.StillThere = true;
                         experiance.Title = "Chief";
                         experiance.Company = "X-men";
                         experiance.Description = "Killing monsters";

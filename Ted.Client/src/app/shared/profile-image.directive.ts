@@ -22,8 +22,11 @@ export class ProfileImageDirective implements OnInit {
   imageData: any;
   sanitizedImageData: any = "assets/default-user.png";
 
-  constructor(private http: HttpClient,
-    private sanitizer: DomSanitizer) { }
+  constructor(
+    private http: HttpClient,
+    private sanitizer: DomSanitizer
+  ) {
+  }
 
   ngOnInit() {
 
@@ -42,10 +45,16 @@ export class ProfileImageDirective implements OnInit {
 
   getPhoto() {
     if (this.id == "") {
+      this.imageData = localStorage.getItem('profileImage');
+      if (this.imageData) {
+        this.sanitizedImageData = this.sanitizer.bypassSecurityTrustResourceUrl(this.imageData);
+        return;
+      }
       this.http.get(this.apiUrl + "DownloadPhoto").subscribe(
         data => {
           this.imageData = 'data:image/png;base64,' + data;
           this.sanitizedImageData = this.sanitizer.bypassSecurityTrustUrl(this.imageData);
+          localStorage.setItem('profileImage', this.imageData);
         },
         error => {
           this.sanitizedImageData = "assets/default-user.png";

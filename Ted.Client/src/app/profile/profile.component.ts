@@ -177,8 +177,6 @@ export class ProfileComponent implements OnInit {
         this.loaderService.hide();
       },
       error => {
-        console.log(error);
-        
         this.experienceModalState = 'closed';
         this.educationModalState = 'closed';
         this.personalSkillsModalState = 'closed';

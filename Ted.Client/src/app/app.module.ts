@@ -8,14 +8,18 @@ import { AdminModule } from './admin/admin.module';
 import { SharedModule } from './shared/shared.module';
 
 import { AppRoutingModule } from './app-routing.module';
+import { RouterModule } from '@angular/router';
 
 import { TokenInterceptor } from './core/auth/token.interceptor'
 
 import { ProfileDataService } from './profile/profile-data.service';
+import { HomeDataService } from './home/home-data.service';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
+
+
 
 
 @NgModule({
@@ -29,7 +33,8 @@ import { ProfileComponent } from './profile/profile.component';
     AppRoutingModule,
     CoreModule,
     AdminModule,
-    SharedModule
+    SharedModule,
+    RouterModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
@@ -37,7 +42,8 @@ import { ProfileComponent } from './profile/profile.component';
     multi: true
   },
     DatePipe,
-    ProfileDataService
+    ProfileDataService,
+    HomeDataService
   ],
   bootstrap: [AppComponent]
 })

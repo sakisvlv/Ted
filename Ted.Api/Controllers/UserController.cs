@@ -22,6 +22,7 @@ namespace Ted.Api.Controllers
             _userService = userService;
         }
 
+        [Authorize]
         [HttpGet]
         [Route("Skills")]
         public async Task<IActionResult> GetUserSkills()
@@ -43,6 +44,7 @@ namespace Ted.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("Skill/{id}/{type}")]
         public async Task<IActionResult> DeleteSkill(string id, string type)
@@ -64,6 +66,7 @@ namespace Ted.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         [Route("SaveExperience")]
         public async Task<IActionResult> SaveExpiriance(ExperienceDTO experience)
@@ -85,6 +88,7 @@ namespace Ted.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         [Route("SaveEducation")]
         public async Task<IActionResult> SaveEducation(EducationDTO education)
@@ -106,6 +110,7 @@ namespace Ted.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         [Route("SavePersonalSkill")]
         public async Task<IActionResult> SaveExpiriance(PersonalSkillDTO personalSkill)
@@ -127,6 +132,7 @@ namespace Ted.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         [Route("UserInfo")]
         public async Task<IActionResult> GetUserInfo()
@@ -148,6 +154,7 @@ namespace Ted.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         [Route("UserInfo")]
         public async Task<IActionResult> UpdateUserInfo([FromBody] UserInfoDTO userInfo)
@@ -169,6 +176,7 @@ namespace Ted.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         [Route("ChangePassword")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDTO passwords)
@@ -190,6 +198,7 @@ namespace Ted.Api.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         [Route("UploadPhoto")]
         public async Task<IActionResult> UploadPhoto()
