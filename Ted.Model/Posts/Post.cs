@@ -11,6 +11,7 @@ namespace Ted.Model.Posts
         public User Owner { get; set; }
         public List<User> Subscribers { get; set; }
         public PostType Type { get; set; }
+        public bool IsPublic { get; set; }
         public byte[] Content { get; set; }
     }
 }
