@@ -11,7 +11,19 @@ namespace Ted.Model.Posts
         public User Owner { get; set; }
         public List<User> Subscribers { get; set; }
         public PostType Type { get; set; }
-        public bool IsPublic { get; set; }
         public byte[] Content { get; set; }
+        public DateTime PostedDate { get; set; }
+
+        public Post(User owner, PostType type, byte[] content, DateTime postedDate)
+        {
+            Owner = owner;
+            Type = type;
+            Content = content;
+            PostedDate = postedDate;
+        }
+
+        public Post()
+        {
+        }
     }
 }

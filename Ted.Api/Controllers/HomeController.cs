@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ted.Bll.Interfaces;
+using Ted.Model.DTO;
 
 namespace Ted.Api.Controllers
 {
@@ -69,5 +70,77 @@ namespace Ted.Api.Controllers
                 return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
             }
         }
+
+        [Authorize]
+        [HttpPost]
+        [Route("UploadVideo")]
+        public async Task<IActionResult> UploadVideo()
+        {
+            try
+            {
+                var file = Request.Form.Files.FirstOrDefault();
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                MemoryStream memoryStream = new MemoryStream();
+                file.OpenReadStream().CopyTo(memoryStream);
+                var byteArray = new byte[file.Length];
+                byteArray = memoryStream.ToArray();
+                var result = await _homeService.InsertVideo(userId, byteArray);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("PostMetadata")]
+        public async Task<IActionResult> AddPostMetadata([FromBody] PostMetadataDTO postMetadata)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.AddPostMetadata(userId, postMetadata.Title, postMetadata.PostId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Posts")]
+        public async Task<IActionResult> GetPost()
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.AddPostMetadata(userId, postMetadata.Title, postMetadata.PostId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
     }
 }

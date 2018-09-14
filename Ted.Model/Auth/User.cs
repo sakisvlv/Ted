@@ -15,6 +15,7 @@ namespace Ted.Model.Auth
         public override Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string CurrentState { get; set; }
         public Photo Photo { get; set; }
         public ICollection<Post> Posts { get; set; }
         public ICollection<Experience> Experiences { get; set; }

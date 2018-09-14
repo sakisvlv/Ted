@@ -6,6 +6,7 @@ using System.Linq;
 using Ted.Model;
 using Ted.Model.Auth;
 using Ted.Model.PersonalSkills;
+using Ted.Model.Posts;
 
 namespace Ted.Dal
 {
@@ -15,6 +16,7 @@ namespace Ted.Dal
         public DbSet<PersonalSkill> PersonalSkills { get; set; }
         public DbSet<Experience> Experiences { get; set; }
         public DbSet<Education> Educations { get; set; }
+        public DbSet<Post> Posts { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
@@ -32,6 +34,7 @@ namespace Ted.Dal
             modelBuilder.Entity<PersonalSkill>().ToTable("PersonalSkills");
             modelBuilder.Entity<Experience>().ToTable("Experiences");
             modelBuilder.Entity<Education>().ToTable("Educations");
+            modelBuilder.Entity<Post>().ToTable("Posts");
         }
     }
 }
