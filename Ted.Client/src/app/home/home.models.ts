@@ -9,3 +9,27 @@ export class Experience {
     StillThere: boolean;
     Link: string;
 }
+
+export class Post {
+    Id: string;
+    Title: string;
+    User: UserSmall;
+    IsPublic: boolean;
+    Subscribers: UserSmall[];
+    Comments: Comment[];
+    Content: any;
+    PostedDate: Date;
+}
+
+export class UserSmall {
+    Id : string;
+    FirstName: string;
+    LastName: string;
+    CurrentState: string;
+}
+
+export class Comment {
+    Id : string;
+    UserId: string;
+    Text: string;
+}

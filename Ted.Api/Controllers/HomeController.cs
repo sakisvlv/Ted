@@ -124,7 +124,7 @@ namespace Ted.Api.Controllers
         [Authorize]
         [HttpGet]
         [Route("Posts")]
-        public async Task<IActionResult> GetPost(string id)
+        public async Task<IActionResult> GetPosts(string id)
         {
             try
             {

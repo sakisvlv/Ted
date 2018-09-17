@@ -105,21 +105,48 @@ namespace Ted.Dal
                         for (int j = 0; j < 5; j++)
                         {
                             var post = new Post();
-                            post.User = users[i];
+                            post.UserPosts = new List<UserPost>();
+                            post.Comments = new List<Comment>();
+                            post.Owner = users[i];
                             if (i > 5)
                             {
-                                post.Subscribers.Add(users[1].Id);
-                                post.Subscribers.Add(users[2].Id);
-                                post.Subscribers.Add(users[3].Id);
+                                var comment1 = new Comment();
+                                var comment2 = new Comment();
+                                var comment3 = new Comment();
+                                comment1.User = users[1];
+                                comment1.Text = "It's truly is!";
+                                comment2.User = users[2];
+                                comment2.Text = "It's truly is!";
+                                comment3.User = users[3];
+                                comment3.Text = "It's truly is!";
+                                post.UserPosts.Add(new UserPost(users[1], post));
+                                post.UserPosts.Add(new UserPost(users[2], post));
+                                post.UserPosts.Add(new UserPost(users[3], post));
+                                post.Comments.Add(comment1);
+                                post.Comments.Add(comment2);
+                                post.Comments.Add(comment3);
                             }
                             else
                             {
-                                post.Subscribers.Add(users[6].Id);
-                                post.Subscribers.Add(users[7].Id);
-                                post.Subscribers.Add(users[8].Id);
+                                var comment1 = new Comment();
+                                var comment2 = new Comment();
+                                var comment3 = new Comment();
+                                comment1.User = users[6];
+                                comment1.Text = "It's truly is!";
+                                comment2.User = users[7];
+                                comment2.Text = "It's truly is!";
+                                comment3.User = users[8];
+                                comment3.Text = "It's truly is!";
+                                post.UserPosts.Add(new UserPost(users[6], post));
+                                post.UserPosts.Add(new UserPost(users[7], post));
+                                post.UserPosts.Add(new UserPost(users[8], post));
+                                post.Comments.Add(comment1);
+                                post.Comments.Add(comment2);
+                                post.Comments.Add(comment3);
                             }
                             post.Title = "A nice day today";
                             post.Type = Model.PostType.Title;
+                            context.Posts.Add(post);
                         }
                     }
                 }

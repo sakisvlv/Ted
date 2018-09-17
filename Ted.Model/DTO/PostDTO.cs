@@ -16,24 +16,25 @@ namespace Ted.Model.DTO
         public PostType Type { get; set; }
         public byte[] Content { get; set; }
         public DateTime PostedDate { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
 
         public PostDTO()
         {
         }
 
-        public PostDTO(Post post, IEnumerable<User> subscribers)
+        public PostDTO(Post post)
         {
             Title = post.Title;
-            User = new UserInfoSmallDTO(post.User);
-            Subscribers = UserInfoSmallDTO.ToUserInfoSmallDTOList(subscribers);
+            User = new UserInfoSmallDTO(post.Owner);
+            Subscribers = UserInfoSmallDTO.ToUserInfoSmallDTOList(post.UserPosts.Select(x=>x.User));
             Type = post.Type;
             Content = post.Content;
             PostedDate = post.PostedDate;
         }
 
-        public static IEnumerable<PostDTO> ToPostDTOList(List<Post> posts, IEnumerable<User> subscribers)
+        public static IEnumerable<PostDTO> ToPostDTOList(List<Post> posts)
         {
-            return posts.Select(x => new PostDTO(x, subscribers.Where(y => x.Subscribers.Contains(y.Id))));
+            return posts.Select(x => new PostDTO(x));
         }
     }
 }

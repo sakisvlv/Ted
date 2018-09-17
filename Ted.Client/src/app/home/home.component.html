@@ -81,5 +81,104 @@
             </footer>
         </div>
 
+        <br>
+
+        <div *ngFor="let post of posts">
+            <article class="media">
+                <figure class="media-left">
+                    <p class="image is-48x48">
+                        <img class="is-rounded" [changed]="changed" profile-image />
+                    </p>
+                </figure>
+                <div class="media-content">
+                    <div class="content">
+                        <p>
+                            <strong>
+                                {{post.User.FirstName + " " + post.User.LastName}}
+                                <p *ngIf="experiance.Title != undefined" class="subtitle is-6 is-size-7">{{post.User.CurrentState}}</p>
+                            </strong>
+                            <br>
+                            {{post.Title}}
+                            <br>
+                            <small><a>{{posts.length}} Likes</a> · <a>Reply</a></small>
+                            <br>
+                            <small><a>Like</a> · <a>Reply</a></small>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <article class="media">
+                <figure class="media-left">
+                    <p class="image is-32x32">
+                        <img class="is-rounded" [changed]="changed" profile-image />
+                    </p>
+                </figure>
+                <div class="media-content">
+                    <div class="field">
+                        <p class="control">
+                            <textarea class="textarea" rows="1" placeholder="Add a comment..."></textarea>
+                        </p>
+                    </div>
+                    <div class="field">
+                        <p class="control">
+                            <button class="button">Post comment</button>
+                        </p>
+                    </div>
+                </div>
+            </article>
+            <br>
+            <br>
+        </div>
+        <!-- <div class="card" *ngFor="let post of posts">
+
+            <div class="card-content">
+                <div class="field">
+                    <label class="label">
+                        <div class="columns">
+                            <div class="column is-narrow">
+                                <div class="field">
+                                    <figure class="image is-32x32">
+                                        <img class="is-rounded" [changed]="changed" profile-image />
+                                    </figure>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <p>{{post.User.FirstName + " " + post.User.LastName}}</p>
+                                <p *ngIf="experiance.Title != undefined" class="subtitle is-6 is-size-7">{{post.User.CurrentState}}</p>
+                            </div>
+                        </div>
+                    </label>
+                    <div class="control" *ngIf="post.Type == 3">
+                        <p>{{post.Title}}</p>
+                    </div>
+                </div>
+            </div>
+            <footer class="card-footer">
+                <div>
+                    <div class="columns">
+                        <div class="column">
+                            <a>
+                                <fa-icon icon="edit"></fa-icon> Write an article
+                            </a>
+                        </div>
+                        <div class="column">
+                            <a>
+                                <fa-icon icon="image"></fa-icon> Images
+                            </a>
+                        </div>
+                        <div class="column">
+                            <a>
+                                <fa-icon icon="video"></fa-icon> Video
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </footer>
+            <hr>
+        </div> -->
+
+
+
     </div>
 </div>

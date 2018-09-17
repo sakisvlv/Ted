@@ -130,10 +130,10 @@ namespace Ted.Bll.Services
             }
 
             var post = await _context.Posts
-                .Include(x => x.User)
-                .Include(x => x.Subscribers)
-                .SingleOrDefaultAsync(x => x.User.Id == Guid.Parse(userId));
-            var postSubscribers = await _context.Users.Where(x => post.Subscribers.Contains(x.Id)).ToListAsync();
+                .Include(x => x.Owner)
+                .Include(x => x.UserPosts)
+                .Include("UserPosts.User")
+                .SingleOrDefaultAsync(x => x.Owner.Id == Guid.Parse(userId));
 
             if (post == null)
             {
@@ -141,7 +141,7 @@ namespace Ted.Bll.Services
                    HttpStatusCode.NotFound, "Cound't get the post");
             }
 
-            return Result<PostDTO>.CreateSuccessful(new PostDTO(post, postSubscribers));
+            return Result<PostDTO>.CreateSuccessful(new PostDTO(post));
         }
 
         public async Task<Result<IEnumerable<PostDTO>>> GetPosts(string userId)
@@ -152,17 +152,16 @@ namespace Ted.Bll.Services
                 return Result<IEnumerable<PostDTO>>.CreateFailed(
                    HttpStatusCode.NotFound, "User not found");
             }
+            var posts = new List<Post>();
 
-            var posts = await _context.Posts
-                .Include(x => x.User)
-                .Include(x => x.Subscribers).ToListAsync();
-            var postSubscribers = new List<User>();
+            posts = await _context.Posts
+            .Include(x => x.Owner)
+            .Include(x => x.UserPosts)
+            .Include("UserPosts.User")
+            .Include(x=>x.Comments)
+            .Where(x => x.Owner.Id == user.Id)
+            .ToListAsync();
 
-            for (int i = 0; i < posts.Count; i++)
-            {
-                postSubscribers.AddRange(
-                    await _context.Users.Where(x => posts[i].Subscribers.Contains(x.Id)).ToListAsync());
-            }
 
             if (posts == null)
             {
@@ -170,7 +169,7 @@ namespace Ted.Bll.Services
                    HttpStatusCode.NotFound, "Cound't get the post");
             }
 
-            return Result<IEnumerable<PostDTO>>.CreateSuccessful(PostDTO.ToPostDTOList(posts, postSubscribers));
+            return Result<IEnumerable<PostDTO>>.CreateSuccessful(PostDTO.ToPostDTOList(posts));
         }
     }
 }
