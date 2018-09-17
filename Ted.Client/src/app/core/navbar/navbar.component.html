@@ -23,7 +23,7 @@
           <fa-icon icon="users"></fa-icon> &nbsp; Network
         </a>
         <a class="navbar-item" routerLink="/adds" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
-          <fa-icon icon="table"></fa-icon> &nbsp; Adds
+          <fa-icon icon="table"></fa-icon> &nbsp; Ads
         </a>
         <a class="navbar-item" routerLink="/conversations" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
           <fa-icon icon="comments"></fa-icon> &nbsp; Conversations
