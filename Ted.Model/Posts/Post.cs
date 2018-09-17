@@ -8,15 +8,15 @@ namespace Ted.Model.Posts
     public class Post : Entity
     {
         public string Title { get; set; }
-        public User Owner { get; set; }
-        public List<User> Subscribers { get; set; }
+        public User User { get; set; }
+        public List<Guid> Subscribers { get; set; }
         public PostType Type { get; set; }
         public byte[] Content { get; set; }
         public DateTime PostedDate { get; set; }
 
         public Post(User owner, PostType type, byte[] content, DateTime postedDate)
         {
-            Owner = owner;
+            User = owner;
             Type = type;
             Content = content;
             PostedDate = postedDate;

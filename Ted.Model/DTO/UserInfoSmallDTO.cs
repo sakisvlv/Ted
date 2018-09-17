@@ -20,7 +20,7 @@ namespace Ted.Model.DTO
             CurrentState = user.CurrentState;
         }
 
-        public static IEnumerable<UserInfoSmallDTO> ToPersonalSkillDTOList(List<User> users)
+        public static IEnumerable<UserInfoSmallDTO> ToUserInfoSmallDTOList(IEnumerable<User> users)
         {
             return users.Select(x => new UserInfoSmallDTO(x));
         }

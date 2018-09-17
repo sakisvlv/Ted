@@ -21,19 +21,19 @@ namespace Ted.Model.DTO
         {
         }
 
-        public PostDTO(Post post, User user, List<User> subscribers)
+        public PostDTO(Post post, IEnumerable<User> subscribers)
         {
             Title = post.Title;
-            User = new UserInfoSmallDTO(user);
-            Subscribers = UserInfoSmallDTO.ToPersonalSkillDTOList(subscribers);
+            User = new UserInfoSmallDTO(post.User);
+            Subscribers = UserInfoSmallDTO.ToUserInfoSmallDTOList(subscribers);
             Type = post.Type;
             Content = post.Content;
             PostedDate = post.PostedDate;
         }
 
-        public static IEnumerable<PostDTO> ToPostDTOList(List<Post> posts)
+        public static IEnumerable<PostDTO> ToPostDTOList(List<Post> posts, IEnumerable<User> subscribers)
         {
-            return posts.Select(x => new PostDTO(x, x.Owner, x.Subscribers));
+            return posts.Select(x => new PostDTO(x, subscribers.Where(y => x.Subscribers.Contains(y.Id))));
         }
     }
 }

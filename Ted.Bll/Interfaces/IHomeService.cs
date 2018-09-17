@@ -14,5 +14,6 @@ namespace Ted.Bll.Interfaces
         Task<Result<string>> InsertVideo(string userId, byte[] videoByteArray);
         Task<Result<string>> AddPostMetadata(string userId, string title, string postId);
         Task<Result<PostDTO>> GetPost(string userId);
+        Task<Result<IEnumerable<PostDTO>>> GetPosts(string userId);
     }
 }

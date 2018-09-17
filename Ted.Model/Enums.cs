@@ -8,6 +8,7 @@ namespace Ted.Model
     {
         Image,
         Video,
-        Article
+        Article,
+        Title
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ted.Bll.Interfaces;
 using Ted.Model.DTO;
 
+
 namespace Ted.Api.Controllers
 {
     [Route("api/[controller]")]
@@ -123,12 +124,12 @@ namespace Ted.Api.Controllers
         [Authorize]
         [HttpGet]
         [Route("Posts")]
-        public async Task<IActionResult> GetPost()
+        public async Task<IActionResult> GetPost(string id)
         {
             try
             {
                 var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
-                var result = await _homeService.AddPostMetadata(userId, postMetadata.Title, postMetadata.PostId);
+                var result = await _homeService.GetPosts(userId);
                 if (!result.IsSuccess())
                 {
                     return result.ToErrorResponse();

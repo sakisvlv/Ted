@@ -130,9 +130,10 @@ namespace Ted.Bll.Services
             }
 
             var post = await _context.Posts
-                .Include(x=>x.Owner)
-                .Include(x=>x.Subscribers)
-                .SingleOrDefaultAsync(x => x.Owner.Id == Guid.Parse(userId));
+                .Include(x => x.User)
+                .Include(x => x.Subscribers)
+                .SingleOrDefaultAsync(x => x.User.Id == Guid.Parse(userId));
+            var postSubscribers = await _context.Users.Where(x => post.Subscribers.Contains(x.Id)).ToListAsync();
 
             if (post == null)
             {
@@ -140,7 +141,7 @@ namespace Ted.Bll.Services
                    HttpStatusCode.NotFound, "Cound't get the post");
             }
 
-            return Result<PostDTO>.CreateSuccessful(new PostDTO(post, post.Owner, post.Subscribers));
+            return Result<PostDTO>.CreateSuccessful(new PostDTO(post, postSubscribers));
         }
 
         public async Task<Result<IEnumerable<PostDTO>>> GetPosts(string userId)
@@ -153,8 +154,15 @@ namespace Ted.Bll.Services
             }
 
             var posts = await _context.Posts
-                .Include(x => x.Owner)
+                .Include(x => x.User)
                 .Include(x => x.Subscribers).ToListAsync();
+            var postSubscribers = new List<User>();
+
+            for (int i = 0; i < posts.Count; i++)
+            {
+                postSubscribers.AddRange(
+                    await _context.Users.Where(x => posts[i].Subscribers.Contains(x.Id)).ToListAsync());
+            }
 
             if (posts == null)
             {
@@ -162,7 +170,7 @@ namespace Ted.Bll.Services
                    HttpStatusCode.NotFound, "Cound't get the post");
             }
 
-            return Result<IEnumerable<PostDTO>>.CreateSuccessful(PostDTO.ToPostDTOList(posts));
+            return Result<IEnumerable<PostDTO>>.CreateSuccessful(PostDTO.ToPostDTOList(posts, postSubscribers));
         }
     }
 }

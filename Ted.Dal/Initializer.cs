@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ted.Model.Auth;
 using Ted.Model.PersonalSkills;
+using Ted.Model.Posts;
 
 namespace Ted.Dal
 {
@@ -53,6 +54,7 @@ namespace Ted.Dal
                     u.FirstName = names[i].Item1;
                     u.LastName = names[i].Item2;
                     u.PhoneNumber = "6981234567";
+                    u.CurrentState = "Chief at X-men";
                     var result = await userManager.CreateAsync(u, "1");
                 }
                 var users = context.Users.Where(x => true)
@@ -99,6 +101,26 @@ namespace Ted.Dal
                         personalSkill.Title = "Laser Eyes";
                         personalSkill.Description = "Shooting lasers out of the eyes";
                         users[i].PersonalSkills.Add(personalSkill);
+
+                        for (int j = 0; j < 5; j++)
+                        {
+                            var post = new Post();
+                            post.User = users[i];
+                            if (i > 5)
+                            {
+                                post.Subscribers.Add(users[1].Id);
+                                post.Subscribers.Add(users[2].Id);
+                                post.Subscribers.Add(users[3].Id);
+                            }
+                            else
+                            {
+                                post.Subscribers.Add(users[6].Id);
+                                post.Subscribers.Add(users[7].Id);
+                                post.Subscribers.Add(users[8].Id);
+                            }
+                            post.Title = "A nice day today";
+                            post.Type = Model.PostType.Title;
+                        }
                     }
                 }
                 context.SaveChanges();
