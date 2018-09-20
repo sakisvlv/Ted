@@ -10,13 +10,14 @@ namespace Ted.Model.DTO
 {
     public class PostDTO
     {
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public UserInfoSmallDTO User { get; set; }
         public IEnumerable<UserInfoSmallDTO> Subscribers { get; set; }
         public PostType Type { get; set; }
         public byte[] Content { get; set; }
         public DateTime PostedDate { get; set; }
-        public IEnumerable<Comment> Comments { get; set; }
+        public IEnumerable<CommentDTO> Comments { get; set; }
 
         public PostDTO()
         {
@@ -24,9 +25,11 @@ namespace Ted.Model.DTO
 
         public PostDTO(Post post)
         {
+            Id = post.Id;
             Title = post.Title;
             User = new UserInfoSmallDTO(post.Owner);
-            Subscribers = UserInfoSmallDTO.ToUserInfoSmallDTOList(post.UserPosts.Select(x=>x.User));
+            Subscribers = UserInfoSmallDTO.ToUserInfoSmallDTOList(post.UserPosts?.Select(x=>x.User));
+            Comments = CommentDTO.ToCommentDTOList(post.Comments);
             Type = post.Type;
             Content = post.Content;
             PostedDate = post.PostedDate;

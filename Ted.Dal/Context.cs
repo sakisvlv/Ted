@@ -20,7 +20,7 @@ namespace Ted.Dal
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<UserPost> UserPost { get; set; }
-        public DbSet<Friends> Friends { get; set; }
+        public DbSet<Friend> Friends { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
@@ -41,7 +41,9 @@ namespace Ted.Dal
             modelBuilder.Entity<Post>().ToTable("Posts").HasOne(x => x.Owner);
             modelBuilder.Entity<Comment>().ToTable("Comment").HasOne(x => x.User);
             modelBuilder.Entity<UserPost>().HasKey(x => new { x.PostId, x.UserId });
-            modelBuilder.Entity<Friends>().HasKey(x => new { x.UserId1, x.UserId2 });
+            modelBuilder.Entity<Friend>().HasKey(x => new { x.FromUserId, x.ToUserId });
+            modelBuilder.Entity<Friend>().HasOne(x => x.FromUser).WithMany(x => x.FriendTo).HasForeignKey(x => x.FromUserId).OnDelete(DeleteBehavior.ClientSetNull);
+            modelBuilder.Entity<Friend>().HasOne(x => x.ToUser).WithMany(x => x.FrendFrom).HasForeignKey(x => x.ToUserId).OnDelete(DeleteBehavior.ClientSetNull);
         }
     }
 }

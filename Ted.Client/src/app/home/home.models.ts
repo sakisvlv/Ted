@@ -22,14 +22,21 @@ export class Post {
 }
 
 export class UserSmall {
-    Id : string;
+    Id: string;
     FirstName: string;
     LastName: string;
     CurrentState: string;
 }
 
 export class Comment {
-    Id : string;
+    Id: string;
     UserId: string;
     Text: string;
+}
+
+export enum PostType {
+    Image,
+    Video,
+    Article,
+    Audio
 }

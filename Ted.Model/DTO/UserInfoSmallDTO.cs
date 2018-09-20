@@ -21,10 +21,13 @@ namespace Ted.Model.DTO
             LastName = user.LastName;
             CurrentState = user.CurrentState;
         }
+        public UserInfoSmallDTO()
+        {
+        }
 
         public static IEnumerable<UserInfoSmallDTO> ToUserInfoSmallDTOList(IEnumerable<User> users)
         {
-            return users.Select(x => new UserInfoSmallDTO(x));
+            return users?.Select(x => new UserInfoSmallDTO(x));
         }
     }
 }

@@ -19,7 +19,8 @@ namespace Ted.Model.Auth
         public string CurrentState { get; set; }
         public Photo Photo { get; set; }
         public IList<UserPost> UserPosts { get; set; }
-        public IList<Friends> Friends { get; set; }
+        public virtual ICollection<Friend> FriendTo { get; set; }
+        public virtual ICollection<Friend> FrendFrom { get; set; }
         public ICollection<Experience> Experiences { get; set; }
         public ICollection<Education> Educations { get; set; }
         public ICollection<PersonalSkill> PersonalSkills { get; set; }

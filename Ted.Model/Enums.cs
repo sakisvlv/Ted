@@ -9,6 +9,6 @@ namespace Ted.Model
         Image,
         Video,
         Article,
-        Title
+        Audio
     }
 }

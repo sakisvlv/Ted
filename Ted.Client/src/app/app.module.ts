@@ -14,19 +14,32 @@ import { TokenInterceptor } from './core/auth/token.interceptor'
 
 import { ProfileDataService } from './profile/profile-data.service';
 import { HomeDataService } from './home/home-data.service';
+import { AdDataService } from './ad/ad-data.service';
+import { ConversationDataService } from './conversation/conversation-data.service';
+import { NetworkDataService } from './network/network-data.service';
+import { NotificationsDataService } from './notifications/notifications-data.service';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
-
-
+import { NetworkComponent } from './network/network.component';
+import { AdComponent } from './ad/ad.component';
+import { ConversationComponent } from './conversation/conversation.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { ViewComponent } from './view/view.component';
+import { ViewDataService } from './view/view-data.service';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+    NetworkComponent,
+    AdComponent,
+    ConversationComponent,
+    NotificationsComponent,
+    ViewComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +56,12 @@ import { ProfileComponent } from './profile/profile.component';
   },
     DatePipe,
     ProfileDataService,
-    HomeDataService
+    HomeDataService,
+    AdDataService,
+    ConversationDataService,
+    NetworkDataService,
+    NotificationsDataService,
+    ViewDataService
   ],
   bootstrap: [AppComponent]
 })

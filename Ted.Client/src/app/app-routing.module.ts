@@ -11,6 +11,11 @@ import { UserListComponent } from './admin/user-list/user-list.component';
 import { UserInfoComponent } from './admin/user-info/user-info.component';
 import { SettingsComponent } from './core/settings/settings.component';
 import { ProfileComponent } from './profile/profile.component';
+import { AdComponent } from './ad/ad.component';
+import { ConversationComponent } from './conversation/conversation.component';
+import { NetworkComponent } from './network/network.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { ViewComponent } from './view/view.component';
 
 
 const routes: Routes = [
@@ -20,6 +25,11 @@ const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
   { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+  { path: 'ads', component: AdComponent, canActivate: [AuthGuard] },
+  { path: 'conversation', component: ConversationComponent, canActivate: [AuthGuard] },
+  { path: 'network', component: NetworkComponent, canActivate: [AuthGuard] },
+  { path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard] },
+  { path: 'view/{id}', component: ViewComponent, canActivate: [AuthGuard] },
   //admin section
   { path: 'dashboard', component: DashboardComponent, canActivate: [RoleGuard] },
   { path: 'user-list', component: UserListComponent, canActivate: [RoleGuard] },

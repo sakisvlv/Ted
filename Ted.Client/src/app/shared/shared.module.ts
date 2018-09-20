@@ -39,7 +39,10 @@ import {
     faUndoAlt,
     faTrashAlt,
     faVideo,
-    faImage
+    faImage,
+    faThumbsUp,
+    faComment,
+    faMusic
 } from '@fortawesome/free-solid-svg-icons';
 
 import { PaginationComponent } from './pagination/pagination.component';
@@ -109,7 +112,10 @@ export class SharedModule {
             faUndoAlt,
             faTrashAlt,
             faVideo,
-            faImage
+            faImage,
+            faThumbsUp,
+            faComment,
+            faMusic
         );
     }
 }

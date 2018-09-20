@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ted.Model.Auth;
+using Ted.Model.Network;
 using Ted.Model.PersonalSkills;
 using Ted.Model.Posts;
 
@@ -105,6 +106,7 @@ namespace Ted.Dal
                         for (int j = 0; j < 5; j++)
                         {
                             var post = new Post();
+                            post.PostedDate = DateTime.Now;
                             post.UserPosts = new List<UserPost>();
                             post.Comments = new List<Comment>();
                             post.Owner = users[i];
@@ -129,8 +131,11 @@ namespace Ted.Dal
                             else
                             {
                                 var comment1 = new Comment();
+                                comment1.CommentDate = DateTime.Now;
                                 var comment2 = new Comment();
+                                comment2.CommentDate = DateTime.Now;
                                 var comment3 = new Comment();
+                                comment3.CommentDate = DateTime.Now;
                                 comment1.User = users[6];
                                 comment1.Text = "It's truly is!";
                                 comment2.User = users[7];
@@ -145,8 +150,26 @@ namespace Ted.Dal
                                 post.Comments.Add(comment3);
                             }
                             post.Title = "A nice day today";
-                            post.Type = Model.PostType.Title;
+                            post.Type = Model.PostType.Article;
                             context.Posts.Add(post);
+                        }
+
+                        var friend1 = new Friend();
+                        friend1.ToUserAccepted = true;
+                        friend1.FromUserAccepted = true;
+                        var friend2 = new Friend();
+                        friend2.ToUserAccepted = true;
+                        friend2.FromUserAccepted = true;
+
+                        users[i].FriendTo = new List<Friend>();
+                        if (i > 5)
+                        {
+                            friend1.FromUser = users[i];
+                            friend1.ToUser = users[1];
+                            friend2.FromUser = users[i];
+                            friend2.ToUser = users[2];
+                            users[i].FriendTo.Add(friend1);
+                            users[i].FriendTo.Add(friend2);
                         }
                     }
                 }

@@ -25,7 +25,7 @@
 
             </div>
             <footer class="card-footer">
-                <p class="card-footer-item">Connections 100</p>
+                <p class="card-footer-item">Connections {{connectionsCount}}</p>
             </footer>
         </div>
     </div>
@@ -53,7 +53,7 @@
                         </div>
                     </label>
                     <div class="control">
-                        <textarea class="textarea" placeholder="Share an article, photo, video or idea"></textarea>
+                        <textarea [(ngModel)]="title" #article class="textarea" placeholder="Share an article, photo, video or idea"></textarea>
                     </div>
                 </div>
             </div>
@@ -62,19 +62,22 @@
                     <div class="columns">
                         <div class="column is-11">
                             <div class="buttons">
-                                <button class="button is-rounded">
+                                <button class="button is-rounded" (click)="focusInput(); postType = PostType.Article">
                                     <fa-icon icon="edit"></fa-icon> &nbsp; Write an article
                                 </button>
-                                <button class="button is-rounded">
+                                <button class="button is-rounded" (click)="postType = PostType.Image">
                                     <fa-icon icon="image"></fa-icon> &nbsp; Images
                                 </button>
-                                <button class="button is-rounded">
+                                <button class="button is-rounded" (click)="postType = PostType.Audio">
+                                    <fa-icon icon="music"></fa-icon> &nbsp; Audio
+                                </button>
+                                <button class="button is-rounded" (click)="postType = PostType.Video">
                                     <fa-icon icon="video"></fa-icon> &nbsp; Video
                                 </button>
                             </div>
                         </div>
                         <div class="column">
-                            <button class="button is-primary">Post</button>
+                            <button class="button is-primary" (click)="post()">Post</button>
                         </div>
                     </div>
                 </div>
@@ -83,102 +86,118 @@
 
         <br>
 
-        <div *ngFor="let post of posts">
-            <article class="media">
-                <figure class="media-left">
-                    <p class="image is-48x48">
-                        <img class="is-rounded" [changed]="changed" profile-image />
-                    </p>
-                </figure>
-                <div class="media-content">
-                    <div class="content">
-                        <p>
-                            <strong>
-                                {{post.User.FirstName + " " + post.User.LastName}}
-                                <p *ngIf="experiance.Title != undefined" class="subtitle is-6 is-size-7">{{post.User.CurrentState}}</p>
-                            </strong>
-                            <br>
-                            {{post.Title}}
-                            <br>
-                            <small><a>{{posts.length}} Likes</a> · <a>Reply</a></small>
-                            <br>
-                            <small><a>Like</a> · <a>Reply</a></small>
-                        </p>
-                    </div>
-                </div>
-            </article>
-            <article class="media">
-                <figure class="media-left">
-                    <p class="image is-32x32">
-                        <img class="is-rounded" [changed]="changed" profile-image />
-                    </p>
-                </figure>
-                <div class="media-content">
-                    <div class="field">
-                        <p class="control">
-                            <textarea class="textarea" rows="1" placeholder="Add a comment..."></textarea>
-                        </p>
-                    </div>
-                    <div class="field">
-                        <p class="control">
-                            <button class="button">Post comment</button>
-                        </p>
-                    </div>
-                </div>
-            </article>
-            <br>
-            <br>
-        </div>
-        <!-- <div class="card" *ngFor="let post of posts">
+        <div *ngFor="let post of posts; let i=index">
 
-            <div class="card-content">
-                <div class="field">
-                    <label class="label">
-                        <div class="columns">
-                            <div class="column is-narrow">
-                                <div class="field">
-                                    <figure class="image is-32x32">
-                                        <img class="is-rounded" [changed]="changed" profile-image />
-                                    </figure>
+            <div class="card">
+                <section class="section">
+                    <article class="media">
+                        <figure class="media-left">
+                            <p class="image is-48x48">
+                                <img class="is-rounded" [changed]="changed" profile-image />
+                            </p>
+                        </figure>
+                        <div class="media-content">
+                            <div class="content">
+                                <div class="columns">
+                                    <div class="column">
+                                        <p>
+                                            <strong>
+                                                {{post.User.FirstName + " " + post.User.LastName}}
+                                                <p *ngIf="experiance.Title != undefined" class="subtitle is-6 is-size-7"><strong>{{post.User.CurrentState}}</strong>
+                                                    <br> {{post.PostedDate
+                                                    | date:'EEEE MMMM d - HH:mm'}}</p>
+                                            </strong>
+                                            <br>
+                                            <span *ngIf="!isBeingEdited[i]">{{post.Title}}</span>
+                                            <span *ngIf="isBeingEdited[i]" class="control">
+                                                <textarea cols="2" [(ngModel)]="post.Title" class="textarea"></textarea>
+                                            </span>
+                                            <br>
+                                            <small><a>{{post.Subscribers?.length}} Subscribers</a> · <a>{{post.Comments?.length}}
+                                                    Comments</a></small>
+                                            <br>
+                                            <br>
+                                            <small><a class="title is-6">
+                                                    <span (click)="doSubscribeAction(post)" [ngClass]="{'has-text-primary has-text-weight-bold': isSubscribed(post)}">
+                                                        <fa-icon icon="thumbs-up"></fa-icon> Subscribe
+                                                    </span>
+                                                </a> &nbsp; · &nbsp; <a (click)="canComment[i] = !canComment[i]" class="title is-6">
+                                                    <fa-icon icon="comment"></fa-icon> Comment
+                                                </a></small>
+                                        </p>
+                                    </div>
+                                    <div class="column is-3">
+                                        <div class="buttons">
+                                            <button *ngIf="!isBeingEdited[i]" (click)="isBeingEdited[i] = !isBeingEdited[i]"
+                                                class="button is-primary is-rounded is-inverted">
+                                                <fa-icon icon="pencil-alt"></fa-icon>
+                                            </button>
+                                            <button *ngIf="isBeingEdited[i]" (click)="isBeingEdited[i] = !isBeingEdited[i];updatePost(post);"
+                                                class="button is-success is-rounded is-inverted">
+                                                <fa-icon icon="save"></fa-icon>
+                                            </button>
+                                            <button *ngIf="isBeingEdited[i]" (click)="isBeingEdited[i] = !isBeingEdited[i]"
+                                                class="button is-warning is-rounded is-inverted">
+                                                <fa-icon icon="undo-alt"></fa-icon>
+                                            </button>
+                                            <button (click)="deletePost(post)" class="button is-danger is-rounded is-inverted">
+                                                <fa-icon icon="trash-alt"></fa-icon>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="column">
-                                <p>{{post.User.FirstName + " " + post.User.LastName}}</p>
-                                <p *ngIf="experiance.Title != undefined" class="subtitle is-6 is-size-7">{{post.User.CurrentState}}</p>
+                            <article class="media" *ngFor="let comment of post.Comments">
+                                <figure class="media-left">
+                                    <p class="image is-48x48">
+                                        <img class="is-rounded" [changed]="changed" profile-image />
+                                    </p>
+                                </figure>
+                                <div class="media-content">
+                                    <div class="content">
+                                        <p>
+                                            <strong>
+                                                {{comment.User.FirstName + " " + comment.User.LastName}}
+                                                <p *ngIf="experiance.Title != undefined" class="subtitle is-6 is-size-7"><strong>{{comment.User.CurrentState}}</strong>
+                                                    <br> {{post.PostedDate
+                                                    | date:'EEEE MMMM d - HH:mm'}}</p>
+                                            </strong>
+                                            <br>
+                                            {{comment.Text}}
+                                            <br>
+                                        </p>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </article>
+                    <article class="media" *ngIf="canComment[i] == true">
+                        <figure class="media-left">
+                            <p class="image is-32x32">
+                                <img class="is-rounded" [changed]="changed" profile-image />
+                            </p>
+                        </figure>
+                        <div class="media-content">
+                            <div class="field">
+                                <p class="control">
+                                    <textarea class="textarea" rows="1" placeholder="Add a comment..."></textarea>
+                                </p>
+                            </div>
+                            <div class="field">
+                                <p class="control">
+                                    <button class="button">Post comment</button>
+                                </p>
                             </div>
                         </div>
-                    </label>
-                    <div class="control" *ngIf="post.Type == 3">
-                        <p>{{post.Title}}</p>
-                    </div>
-                </div>
+                    </article>
+                </section>
             </div>
-            <footer class="card-footer">
-                <div>
-                    <div class="columns">
-                        <div class="column">
-                            <a>
-                                <fa-icon icon="edit"></fa-icon> Write an article
-                            </a>
-                        </div>
-                        <div class="column">
-                            <a>
-                                <fa-icon icon="image"></fa-icon> Images
-                            </a>
-                        </div>
-                        <div class="column">
-                            <a>
-                                <fa-icon icon="video"></fa-icon> Video
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <br>
 
-            </footer>
-            <hr>
-        </div> -->
+        </div>
 
-
-
+        <div>
+            <a (click)="page = page+1;getPosts();">Show More</a>
+        </div>
     </div>
 </div>

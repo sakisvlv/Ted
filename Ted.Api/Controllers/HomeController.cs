@@ -123,13 +123,145 @@ namespace Ted.Api.Controllers
 
         [Authorize]
         [HttpGet]
-        [Route("Posts")]
-        public async Task<IActionResult> GetPosts(string id)
+        [Route("Posts/{page}")]
+        public async Task<IActionResult> GetPosts(int page)
         {
             try
             {
                 var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
-                var result = await _homeService.GetPosts(userId);
+                var result = await _homeService.GetPosts(userId, page);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("ConnectionsCount")]
+        public async Task<IActionResult> GetConnectionsCount()
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.GetConnectionsCount(userId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("InsertArticle")]
+        public async Task<IActionResult> PostArticle(List<string> content)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.InsertArticle(userId, content.FirstOrDefault());
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("DeletePost/{id}")]
+        public async Task<IActionResult> DeletePost(string id)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.DeletePost(userId, id);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("SubscribeToPost/{id}")]
+        public async Task<IActionResult> SubscribeToPost(string id)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.SubscribeToPost(userId, id);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("UnsubscribeFromPost/{id}")]
+        public async Task<IActionResult> UnSubscribeToPost(string id)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.UnsubscribeFromPost(userId, id);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpPut]
+        [Route("UpdatePost")]
+        public async Task<IActionResult> UpdatePost(string id, PostDTO post)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.UpdatePost(userId, post);
                 if (!result.IsSuccess())
                 {
                     return result.ToErrorResponse();

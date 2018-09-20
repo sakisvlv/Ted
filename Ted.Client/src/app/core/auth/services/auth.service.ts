@@ -20,6 +20,7 @@ export class AuthService {
   private apiUrl: string = environment.apiUri + "Account/";
 
   private fullName: string;
+  userId: string;
   isLoggedIn: boolean;
   redirectUrl: string;
 
@@ -33,6 +34,7 @@ export class AuthService {
   ) {
     this.isLoggedIn = this.isAuthenticated();
     this.fullName = this.getFullName(this.isLoggedIn);
+    this.userId = this.getId(this.isLoggedIn);
   }
 
   public login(loginData: LoginData) {
@@ -42,6 +44,7 @@ export class AuthService {
       .subscribe(data => {
         localStorage.setItem('access_token', data.access_token);
         this.setFullName(data.access_token);
+        this.setUserId(data.access_token);
         this.isLoggedIn = true;
         this.loaderService.hide();
         this.getRole() == "User" ? this.router.navigate(['/home']) : this.router.navigate(['/dashboard']);
@@ -58,6 +61,7 @@ export class AuthService {
       .subscribe(data => {
         localStorage.setItem('access_token', data.access_token);
         this.setFullName(data.access_token);
+        this.setUserId(data.access_token);
         this.isLoggedIn = true;
         this.toastrService.success("Congratulations! The registration is complete", "Success");
         this.loaderService.hide();
@@ -96,13 +100,24 @@ export class AuthService {
     this.logout();
   }
 
-  setFullName(token: string) {
+  private setFullName(token: string) {
     this.fullName = this.jwtHelper.decodeToken(token).full_name;
+  }
+
+  private setUserId(token: string) {
+    this.userId = this.jwtHelper.decodeToken(token).id;
   }
 
   private getFullName(isLogedIn: boolean): string {
     if (isLogedIn) {
       return this.jwtHelper.decodeToken(this.getToken()).full_name;
+    }
+    this.logout();
+  }
+
+  private getId(isLogedIn: boolean): string {
+    if (isLogedIn) {
+      return this.jwtHelper.decodeToken(this.getToken()).id;
     }
     this.logout();
   }

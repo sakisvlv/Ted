@@ -14,6 +14,12 @@ namespace Ted.Bll.Interfaces
         Task<Result<string>> InsertVideo(string userId, byte[] videoByteArray);
         Task<Result<string>> AddPostMetadata(string userId, string title, string postId);
         Task<Result<PostDTO>> GetPost(string userId);
-        Task<Result<IEnumerable<PostDTO>>> GetPosts(string userId);
+        Task<Result<IEnumerable<PostDTO>>> GetPosts(string userId, int page);
+        Task<Result<int>> GetConnectionsCount(string userId);
+        Task<Result<PostDTO>> InsertArticle(string userId, string content);
+        Task<Result<bool>> DeletePost(string userId, string id);
+        Task<Result<bool>> SubscribeToPost(string userId, string id);
+        Task<Result<PostDTO>> UpdatePost(string userId, PostDTO postDTO);
+        Task<Result<bool>> UnsubscribeFromPost(string userId, string id);
     }
 }

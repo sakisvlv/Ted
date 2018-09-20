@@ -32,6 +32,7 @@ namespace Ted.Api
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IConversationService, ConversationService>();
             services.AddTransient<INetworkService, NetworkService>();
+            services.AddTransient<IViewService, ViewService>();
 
 
             //Authentication
