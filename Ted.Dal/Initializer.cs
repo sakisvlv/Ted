@@ -132,69 +132,7 @@ namespace Ted.Dal
 
                             if (i > 5)
                             {
-                                var conversation1 = new Conversation();
-                                conversation1.FromUser = users[i];
-                                conversation1.ToUser = users[1];
-                                conversation1.Messages = new List<Message>();
-                                for (int k = 0; k < 15; k++)
-                                {
-                                    var message = new Message();
-                                    message.DateSended = DateTime.Now;
-                                    if (k % 2 == 0)
-                                    {
-                                        message.Sender = conversation1.FromUser;
-                                        message.Text = "Hello friend for the" + k + "time";
-                                    }
-                                    else
-                                    {
-                                        message.Sender = conversation1.ToUser;
-                                        message.Text = "Hi there friend for the" + k + "time";
-                                    }
-                                    conversation1.Messages.Add(message);
-                                }
 
-
-                                var conversation2 = new Conversation();
-                                conversation2.FromUser = users[i];
-                                conversation2.ToUser = users[2];
-                                conversation2.Messages = new List<Message>();
-                                for (int k = 0; k < 15; k++)
-                                {
-                                    var message = new Message();
-                                    message.DateSended = DateTime.Now;
-                                    if (k % 2 == 0)
-                                    {
-                                        message.Sender = conversation2.FromUser;
-                                        message.Text = "Hello friend for the" + k + "time";
-                                    }
-                                    else
-                                    {
-                                        message.Sender = conversation2.ToUser;
-                                        message.Text = "Hi there friend for the" + k + "time";
-                                    }
-                                    conversation2.Messages.Add(message);
-                                }
-
-                                var conversation3 = new Conversation();
-                                conversation3.FromUser = users[i];
-                                conversation3.ToUser = users[3];
-                                conversation3.Messages = new List<Message>();
-                                for (int k = 0; k < 15; k++)
-                                {
-                                    var message = new Message();
-                                    message.DateSended = DateTime.Now;
-                                    if (k % 2 == 0)
-                                    {
-                                        message.Sender = conversation3.FromUser;
-                                        message.Text = "Hello friend for the" + k + "time";
-                                    }
-                                    else
-                                    {
-                                        message.Sender = conversation3.ToUser;
-                                        message.Text = "Hi there friend for the" + k + "time";
-                                    }
-                                    conversation3.Messages.Add(message);
-                                }
 
                                 var comment1 = new Comment();
                                 var comment2 = new Comment();
@@ -236,6 +174,77 @@ namespace Ted.Dal
                             post.Title = "A nice day today";
                             post.Type = Model.PostType.Article;
                             context.Posts.Add(post);
+                        }
+
+                        if (i > 5)
+                        {
+                            var conversation1 = new Conversation();
+                            conversation1.FromUser = users[i];
+                            conversation1.ToUser = users[1];
+                            conversation1.Messages = new List<Message>();
+                            for (int k = 0; k < 15; k++)
+                            {
+                                var message = new Message();
+                                message.DateSended = DateTime.Now;
+                                if (k % 2 == 0)
+                                {
+                                    message.Sender = conversation1.FromUser;
+                                    message.Text = "Hello friend for the" + k + "time";
+                                }
+                                else
+                                {
+                                    message.Sender = conversation1.ToUser;
+                                    message.Text = "Hi there friend for the" + k + "time";
+                                }
+                                conversation1.Messages.Add(message);
+                            }
+
+
+                            var conversation2 = new Conversation();
+                            conversation2.FromUser = users[i];
+                            conversation2.ToUser = users[2];
+                            conversation2.Messages = new List<Message>();
+                            for (int k = 0; k < 15; k++)
+                            {
+                                var message = new Message();
+                                message.DateSended = DateTime.Now;
+                                if (k % 2 == 0)
+                                {
+                                    message.Sender = conversation2.FromUser;
+                                    message.Text = "Hello friend for the" + k + "time";
+                                }
+                                else
+                                {
+                                    message.Sender = conversation2.ToUser;
+                                    message.Text = "Hi there friend for the" + k + "time";
+                                }
+                                conversation2.Messages.Add(message);
+                            }
+
+                            var conversation3 = new Conversation();
+                            conversation3.FromUser = users[i];
+                            conversation3.ToUser = users[3];
+                            conversation3.Messages = new List<Message>();
+                            for (int k = 0; k < 15; k++)
+                            {
+                                var message = new Message();
+                                message.DateSended = DateTime.Now;
+                                if (k % 2 == 0)
+                                {
+                                    message.Sender = conversation3.FromUser;
+                                    message.Text = "Hello friend for the" + k + "time";
+                                }
+                                else
+                                {
+                                    message.Sender = conversation3.ToUser;
+                                    message.Text = "Hi there friend for the" + k + "time";
+                                }
+                                conversation3.Messages.Add(message);
+                            }
+
+                            context.Conversations.Add(conversation1);
+                            context.Conversations.Add(conversation2);
+                            context.Conversations.Add(conversation3);
                         }
 
                         var friend1 = new Friend();

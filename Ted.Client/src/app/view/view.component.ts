@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ViewDataService } from './view-data.service';
 import { UserSmall } from '../home/home.models';
 import { LoaderService } from '../core/loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
 import { Experience, Education, PersonalSkill } from '../profile/profile.models';
+import { AuthService } from '../core/auth/services/auth.service';
 
 @Component({
   selector: 'app-view',
@@ -13,7 +14,7 @@ import { Experience, Education, PersonalSkill } from '../profile/profile.models'
 })
 export class ViewComponent implements OnInit {
 
-  userId: string;
+  userId: string = "";
   user: UserSmall;
   connectionsCount: number;
   isFriend: boolean;
@@ -26,7 +27,9 @@ export class ViewComponent implements OnInit {
     private route: ActivatedRoute,
     private viewDataService: ViewDataService,
     private loaderService: LoaderService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -88,6 +91,10 @@ export class ViewComponent implements OnInit {
 
     });
 
+  }
+
+  message() {
+    this.router.navigate(['/conversation', { id: this.userId }]);
   }
 
 }

@@ -28,7 +28,7 @@ namespace Ted.Api.Controllers
             try
             {
                 var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
-                var result = await _homeService.DeletePost(userId, id);
+                var result = await _conversationService.GetConversations(userId);
                 if (!result.IsSuccess())
                 {
                     return result.ToErrorResponse();
@@ -41,5 +41,72 @@ namespace Ted.Api.Controllers
                 return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
             }
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("GetMessages/{conversationId}/{page}")]
+        public async Task<IActionResult> GetMessages(string conversationId, int page)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _conversationService.GetMessages(userId, conversationId, page);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("SendMessage")]
+        public async Task<IActionResult> GetMessage(List<string> message)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _conversationService.SendMessage(userId, message[0], message[1]);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("StartConversation")]
+        public async Task<IActionResult> StartConversation(List<string> toUser)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _conversationService.StartConversation(userId, toUser.FirstOrDefault());
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
     }
 }

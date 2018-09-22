@@ -3,7 +3,7 @@
     <div class="card-content">
 
       <div class="columns">
-        <div class="column is-3">
+        <div style="z-index:3" class="column is-3">
           <div class="field">
             <br>
             <figure class="image is-256x256 has-image-centered">
@@ -11,23 +11,23 @@
             </figure>
           </div>
           <br>
-          <div *ngIf="!isFriend" class="buttons" style="padding-left: 37px;">
-            <button class="button is-primary">
+          <div *ngIf="!isFriend && userId != authService.userId" class="buttons" style="padding-left: 37px;">
+            <button class="button is-primary" (click)="message()">
               Message
             </button>
             <button class="button is-link">
               Connect
             </button>
           </div>
-          <div *ngIf="isFriend" class="buttons" style="padding-left: 80px;">
-            <button class="button is-primary">
+          <div *ngIf="isFriend && userId != authService.userId" class="buttons" style="padding-left: 80px;">
+            <button class="button is-primary" (click)="message()">
               Message
             </button>
           </div>
 
         </div>
 
-        <div class="column">
+        <div  style="z-index:3" class="column">
           <br>
           <br>
           <br>

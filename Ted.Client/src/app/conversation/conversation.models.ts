@@ -10,3 +10,10 @@ export class UserSmall {
     CurrentState: string;
     IsFriend: boolean;
 }
+
+export class Message {
+    Sender: UserSmall;
+    Id: string;
+    Text: string;
+    DateSended: Date;
+}

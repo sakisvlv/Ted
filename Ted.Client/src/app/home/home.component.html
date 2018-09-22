@@ -4,30 +4,44 @@
         <div class="card half-background">
             <br>
             <div class="field">
-                <figure class="image is-96x96 has-image-centered">
+                <figure style="z-index:3" class="image is-96x96 has-image-centered">
                     <img class="is-rounded image-border" [changed]="changed" profile-image />
                 </figure>
             </div>
+            <br>
             <div class="card-content">
 
                 <div class="media">
-                    <div class="media-content has-text-centered">
+                    <div style="z-index:3" class="media-content has-text-centered">
                         <a routerLink="/settings" class="title is-4">{{authService.fullName}}</a>
                     </div>
                 </div>
 
-                <div class="content  has-text-centered" *ngIf="experiance.Title != undefined">
-                    <h6 class="subtitle is-6  is-size-7">{{experiance.Title}} at {{experiance.Company}}</h6>
+                <div class="media">
+                    <div style="z-index:3" class="media-content has-text-centered">
+                        <div class="content  has-text-centered" *ngIf="experiance.Title != undefined">
+                            <h6 class="subtitle is-5  is-size-6">{{experiance.Title}} at {{experiance.Company}}</h6>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="content  has-text-centered">
-                    <a routerLink="/network">My Network</a>
+                <div class="media">
+                    <div style="z-index:3" class="media-content has-text-centered">
+                        <div class="content  has-text-centered">
+                            <a routerLink="/network">My Network</a>
+                        </div>
+                    </div>
                 </div>
 
             </div>
-            <footer class="card-footer">
-                <p class="card-footer-item">Connections {{connectionsCount}}</p>
-            </footer>
+            <div class="media">
+                <div style="z-index:3" class="media-content has-text-centered">
+                    <footer class="card-footer">
+                        <p class="card-footer-item">Connections {{connectionsCount}}</p>
+                    </footer>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -103,7 +117,7 @@
                                 <div class="columns">
                                     <div class="column">
                                         <p>
-                                            <strong  class="pointer" (click)="navigateToView(authService.userId)">
+                                            <strong class="pointer" (click)="navigateToView(post.User.Id)">
                                                 {{post.User.FirstName + " " + post.User.LastName}}
                                                 <p *ngIf="experiance.Title != undefined" class="subtitle is-6 is-size-7"><strong>{{post.User.CurrentState}}</strong>
                                                     <br> {{post.PostedDate
@@ -147,7 +161,7 @@
                                         </p>
                                     </div>
                                     <div class="column is-3">
-                                        <div class="buttons">
+                                        <div class="buttons" *ngIf="post.User.Id == authService.userId" >
                                             <button *ngIf="!isBeingEdited[i]" (click)="isBeingEdited[i] = !isBeingEdited[i]"
                                                 class="button is-primary is-rounded is-inverted">
                                                 <fa-icon icon="pencil-alt"></fa-icon>

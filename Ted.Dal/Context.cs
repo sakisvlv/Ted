@@ -25,6 +25,7 @@ namespace Ted.Dal
         public DbSet<UserPost> UserPost { get; set; }
         public DbSet<Friend> Friends { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<Message> Messages { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Ad> Ads { get; set; }
 
@@ -53,6 +54,7 @@ namespace Ted.Dal
             modelBuilder.Entity<Conversation>().ToTable("Conversations");
             modelBuilder.Entity<Notification>().ToTable("Notifications");
             modelBuilder.Entity<Ad>().ToTable("Ads");
+            modelBuilder.Entity<Message>().ToTable("Messages");
         }
     }
 }
