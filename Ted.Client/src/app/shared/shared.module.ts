@@ -42,7 +42,8 @@ import {
     faImage,
     faThumbsUp,
     faComment,
-    faMusic
+    faMusic,
+    faPaperPlane
 } from '@fortawesome/free-solid-svg-icons';
 
 import { PaginationComponent } from './pagination/pagination.component';
@@ -115,7 +116,8 @@ export class SharedModule {
             faImage,
             faThumbsUp,
             faComment,
-            faMusic
+            faMusic,
+            faPaperPlane
         );
     }
 }

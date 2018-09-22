@@ -28,7 +28,7 @@ namespace Ted.Api
                     var context = services.GetRequiredService<Context>();
                     var userManager = services.GetService<UserManager<User>>();
                     var roleManager = services.GetService<RoleManager<Role>>();
-                    Initializer.Initialize(context, userManager, roleManager).Wait();
+                    Initializer.Initialize(context, userManager, roleManager, "./files").Wait();
                 }
                 catch (Exception ex)
                 {

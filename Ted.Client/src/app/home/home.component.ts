@@ -1,11 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 
-import { Experience, Post, PostType } from './home.models';
+import { Experience, Post, PostType, Comment, UserSmall, PostMetaData } from './home.models';
+import { environment } from '../../environments/environment'
+import { Router } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
 import { HomeDataService } from './home-data.service';
 import { LoaderService } from '../core/loader/loader.service';
 import { AuthService } from '../core/auth/services/auth.service';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +16,9 @@ import { AuthService } from '../core/auth/services/auth.service';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
+  private filesUrl: string = environment.filesUri;
+
+
 
   @ViewChild("article") inputEl: ElementRef;
   PostType = PostType;
@@ -24,15 +30,18 @@ export class HomeComponent implements OnInit {
   connectionsCount = 0;
   postType = PostType.Article;
   title = "";
+  comment = new Comment();
   page = 0;
 
-
+  selectedFile: File;
 
   constructor(
     private authService: AuthService,
     private homeDataService: HomeDataService,
     private loaderService: LoaderService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    private sanitizer: DomSanitizer,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -78,9 +87,10 @@ export class HomeComponent implements OnInit {
   initPosts() {
     for (let i = 0; i < this.posts.length; i++) {
       this.canComment[i] = false;
-    }
-    for (let i = 0; i < this.posts.length; i++) {
       this.isBeingEdited[i] = false;
+      if (this.posts[i].Type != this.PostType.Article) {
+        this.posts[i].FileUrl = this.filesUrl + this.posts[i].FileName;
+      }
     }
   }
 
@@ -89,28 +99,41 @@ export class HomeComponent implements OnInit {
   }
 
   post() {
-    switch (this.postType) {
 
-      case PostType.Article:
-        this.homeDataService.postArticle(this.title).subscribe(
-          result => {
-            this.posts.unshift(result);
-            this.title = "";
-          },
-          error => {
-            this.toastrService.error(error.error, 'Error');
-          }
-        );
-        break;
-
-      case PostType.Article:
-
-        break;
-
-      case PostType.Article:
-
-        break;
-
+    if (this.postType == PostType.Article) {
+      this.homeDataService.postArticle(this.title).subscribe(
+        result => {
+          this.posts.unshift(result);
+          this.title = "";
+        },
+        error => {
+          this.toastrService.error(error.error, 'Error');
+        }
+      );
+    }
+    else {
+      this.homeDataService.uploadFile(this.selectedFile, this.postType).subscribe(
+        result => {
+          let postMetadata = new PostMetaData();
+          postMetadata.PostId = result;
+          postMetadata.Title = this.title;
+          this.homeDataService.sendPostMetadata(postMetadata).subscribe(
+            res => {
+              if (res.Type != this.PostType.Article) {
+                res.FileUrl = this.filesUrl + res.FileName;
+              }
+              this.posts.unshift(res);
+              this.title = "";
+            },
+            error => {
+              this.toastrService.error(error.error, 'Error');
+            }
+          );
+        },
+        error => {
+          this.toastrService.error(error.error, 'Error');
+        }
+      );
     }
   }
 
@@ -154,7 +177,7 @@ export class HomeComponent implements OnInit {
   }
 
   isSubscribed(post: Post) {
-    if (post.Subscribers.find(x => x.Id == this.authService.userId) != undefined) {
+    if (post.Subscribers != null && post.Subscribers.find(x => x.Id == this.authService.userId) != undefined) {
       return true;
     }
     return false;
@@ -165,7 +188,7 @@ export class HomeComponent implements OnInit {
       this.homeDataService.unsubscribeFromPost(post.Id).subscribe(
         result => {
           let subscriber = post.Subscribers.find(x => x.Id == this.authService.userId);
-          post.Subscribers.splice();
+          post.Subscribers.splice(post.Subscribers.indexOf(subscriber), 1);
           this.loaderService.hide();
         },
         error => {
@@ -177,6 +200,7 @@ export class HomeComponent implements OnInit {
     }
     this.homeDataService.subscribeToPost(post.Id).subscribe(
       result => {
+        post.Subscribers.push(result);
         this.loaderService.hide();
       },
       error => {
@@ -185,6 +209,60 @@ export class HomeComponent implements OnInit {
       }
     );
 
+  }
+
+  addComment(index: number) {
+    for (let i = 0; i < this.posts.length; i++) {
+      if (i == index) {
+        this.canComment[i] = true;
+        continue;
+      }
+      this.canComment[i] = false;
+    }
+    this.comment = new Comment()
+    this.comment.User = new UserSmall();
+    this.comment.User.Id = this.authService.userId;
+  }
+
+  postComment(post: Post) {
+    this.homeDataService.postComment(this.comment, post.Id).subscribe(
+      result => {
+        post.Comments.push(result);
+        for (let i = 0; i < this.posts.length; i++) {
+          this.canComment[i] = false;
+        }
+        this.loaderService.hide();
+      },
+      error => {
+        this.loaderService.hide();
+        this.toastrService.error(error.error, 'Error');
+      }
+    );
+  }
+
+  deleteComment(post: Post, commentId: string) {
+    this.homeDataService.deleteComment(commentId).subscribe(
+      result => {
+        let commnet = post.Comments.find(x => x.Id == commentId);
+        post.Comments.splice(post.Comments.indexOf(commnet), 1);
+        for (let i = 0; i < this.posts.length; i++) {
+          this.canComment[i] = false;
+        }
+        this.loaderService.hide();
+      },
+      error => {
+        this.loaderService.hide();
+        this.toastrService.error(error.error, 'Error');
+      }
+    );
+  }
+
+  onFileChanged(event) {
+    this.selectedFile = event.target.files[0]
+  }
+
+  navigateToView(id: string) {
+    this.router.navigate(['/view', { id: id }]);
   }
 
 }

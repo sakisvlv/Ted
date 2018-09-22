@@ -54,11 +54,30 @@ namespace Ted.Api.Controllers
             {
                 var file = Request.Form.Files.FirstOrDefault();
                 var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
-                MemoryStream memoryStream = new MemoryStream();
-                file.OpenReadStream().CopyTo(memoryStream);
-                var byteArray = new byte[file.Length];
-                byteArray = memoryStream.ToArray();
-                var result = await _homeService.InsertImage(userId, byteArray);
+                var result = await _homeService.InsertImage(userId, file, Path.GetExtension(file.FileName));
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("UploadAudio")]
+        public async Task<IActionResult> UploadAudio()
+        {
+            try
+            {
+                var file = Request.Form.Files.FirstOrDefault();
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.InsertAudio(userId, file, Path.GetExtension(file.FileName));
                 if (!result.IsSuccess())
                 {
                     return result.ToErrorResponse();
@@ -81,11 +100,7 @@ namespace Ted.Api.Controllers
             {
                 var file = Request.Form.Files.FirstOrDefault();
                 var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
-                MemoryStream memoryStream = new MemoryStream();
-                file.OpenReadStream().CopyTo(memoryStream);
-                var byteArray = new byte[file.Length];
-                byteArray = memoryStream.ToArray();
-                var result = await _homeService.InsertVideo(userId, byteArray);
+                var result = await _homeService.InsertVideo(userId, file, Path.GetExtension(file.FileName));
                 if (!result.IsSuccess())
                 {
                     return result.ToErrorResponse();
@@ -108,6 +123,28 @@ namespace Ted.Api.Controllers
             {
                 var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
                 var result = await _homeService.AddPostMetadata(userId, postMetadata.Title, postMetadata.PostId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Post/{postId}")]
+        public async Task<IActionResult> GetPost(string postId)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.GetPost(userId, postId);
                 if (!result.IsSuccess())
                 {
                     return result.ToErrorResponse();
@@ -210,7 +247,7 @@ namespace Ted.Api.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpGet]
         [Route("SubscribeToPost/{id}")]
         public async Task<IActionResult> SubscribeToPost(string id)
         {
@@ -232,7 +269,7 @@ namespace Ted.Api.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpGet]
         [Route("UnsubscribeFromPost/{id}")]
         public async Task<IActionResult> UnSubscribeToPost(string id)
         {
@@ -273,6 +310,94 @@ namespace Ted.Api.Controllers
             {
                 return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
             }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("PostComment/{postId}")]
+        public async Task<IActionResult> PostComment(string postId, CommentDTO comment)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.PostComment(userId, postId, comment);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("DeleteComment/{commentId}")]
+        public async Task<IActionResult> DeleteComment(string commentId)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.DeleteComment(userId, commentId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("DownloadPhoto/{userToGetId}")]
+        public async Task<IActionResult> DownloadPhoto(string userToGetId)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.GetPhoto(userId, userToGetId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("GetContent/{contentId}")]
+        public async Task<IActionResult> GetContent(string contentId)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _homeService.GetContent(userId, contentId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+
         }
 
     }

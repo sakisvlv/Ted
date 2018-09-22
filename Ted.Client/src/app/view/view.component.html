@@ -1,3 +1,197 @@
-<p>
-  view works!
-</p>
+<div class="card half-background">
+  <section class="section">
+    <div class="card-content">
+
+      <div class="columns">
+        <div class="column is-3">
+          <div class="field">
+            <br>
+            <figure class="image is-256x256 has-image-centered">
+              <img class="is-rounded image-border" [id]="userId" [changed]="changed" profile-image />
+            </figure>
+          </div>
+          <br>
+          <div *ngIf="!isFriend" class="buttons" style="padding-left: 37px;">
+            <button class="button is-primary">
+              Message
+            </button>
+            <button class="button is-link">
+              Connect
+            </button>
+          </div>
+          <div *ngIf="isFriend" class="buttons" style="padding-left: 80px;">
+            <button class="button is-primary">
+              Message
+            </button>
+          </div>
+
+        </div>
+
+        <div class="column">
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <br>
+          <div class="media">
+            <div class="media-content" *ngIf="user != undefined">
+              <h6 class="title is-3 has-text-weight-bold is-size-3">{{user.FirstName + " " + user.LastName}}</h6>
+            </div>
+          </div>
+
+          <div class="content" *ngIf="user != undefined">
+            <h6 class="subtitle is-4  is-size-4">{{user.CurrentState}}</h6>
+          </div>
+
+          <div class="content" *ngIf="user != undefined">
+            <h6 class="subtitle is-size-5">
+              <fa-icon icon="users"></fa-icon> &nbsp; Connections {{connectionsCount}}
+            </h6>
+          </div>
+
+
+        </div>
+
+      </div>
+
+    </div>
+    <!-- <footer class="card-footer">
+        <p class="card-footer-item">Connections {{connectionsCount}}</p>
+    </footer> -->
+  </section>
+</div>
+
+<br>
+
+<div class="card">
+  <header class="card-header title-max-height" style="background-color:#2780e3;">
+    <p class="card-header-title title is-4 title-padding has-text-white">
+      Experience
+    </p>
+  </header>
+  <div class="card-content">
+    <div class="content">
+      <div *ngFor="let experience of experiences">
+        <div class="card" *ngIf="experience.IsPublic || isFriend">
+          <header class="card-header title-max-height">
+            <p class="card-header-title title is-6 title-padding">
+              {{experience.Title}}
+            </p>
+          </header>
+          <div class="card-content">
+            <div class="columns">
+              <div class="column">
+                <div class="content">
+                  <p>
+                    {{experience.Description}}
+                  </p>
+                  <p>
+                    {{experience.Company}}
+                  </p>
+                  <p>
+                    {{experience.StartDate | date:'MMMM , y' }} - <span *ngIf="!experience.StillThere">{{experience.EndDate
+                      | date:'MMMM , y' : ""}}</span>
+                    <span *ngIf="experience.StillThere">Now</span>
+                  </p>
+                  <p>
+                    {{experience.Link}}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="card">
+  <header class="card-header title-max-height" style="background-color:#2780e3;">
+    <p class="card-header-title title is-4 title-padding has-text-white">
+      Education
+    </p>
+  </header>
+  <div class="card-content">
+    <div class="columns">
+      <div class="column">
+        <div class="content">
+          <div *ngFor="let education of educations">
+            <div class="card" *ngIf="education.IsPublic || isFriend">
+              <header class="card-header title-max-height">
+                <p class="card-header-title title is-6 title-padding">
+                  {{education.Title}}
+                </p>
+              </header>
+              <div class="card-content">
+                <div class="columns">
+                  <div class="column">
+                    <div class="content">
+                      <p>
+                        {{education.Description}}
+                      </p>
+                      <p>
+                        {{education.Degree}} in {{education.Field}}
+                      </p>
+                      <p>
+                        {{education.StartDate | date:'MMMM , y' }} - <span *ngIf="!education.StillThere">{{education.EndDate
+                          | date:'MMMM , y' : ""}}</span>
+                        <span *ngIf="education.StillThere">Now</span>
+                      </p>
+                      <p>
+                        {{education.Link}}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <hr>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="card">
+  <header class="card-header title-max-height" style="background-color:#2780e3;">
+    <p class="card-header-title title is-4 title-padding has-text-white">
+      Skills
+    </p>
+  </header>
+  <div class="card-content">
+    <div class="content">
+      <div *ngFor="let personalSkill of personalSkills">
+        <div class="card" *ngIf="personalSkill.IsPublic || isFriend">
+          <header class="card-header title-max-height">
+            <p class="card-header-title title is-6 title-padding">
+              {{personalSkill.Title}}
+            </p>
+          </header>
+          <div class="card-content">
+            <div class="columns">
+              <div class="column">
+                <div class="content">
+                  <p>
+                    {{personalSkill.Description}}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>

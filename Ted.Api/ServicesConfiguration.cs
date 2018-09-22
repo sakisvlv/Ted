@@ -52,9 +52,9 @@ namespace Ted.Api
 
             services.AddIdentity<User, Role>().AddEntityFrameworkStores<Context>().AddDefaultTokenProviders();
 
-
             var jwtSettings = Configuration.GetSection("JwtSettings");
             services.Configure<JwtSettings>(jwtSettings);
+            
             var key = Encoding.ASCII.GetBytes(jwtSettings.Get<JwtSettings>().SecretKey);
             services.AddAuthentication(x =>
             {

@@ -2,6 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { DatePipe } from '@angular/common'
+import { ImageUploadModule } from "angular2-image-upload";
+
+import { VgCoreModule } from 'videogular2/core';
+import { VgControlsModule } from 'videogular2/controls';
+import { VgOverlayPlayModule } from 'videogular2/overlay-play';
+import { VgBufferingModule } from 'videogular2/buffering';
 
 import { CoreModule } from './core/core.module';
 import { AdminModule } from './admin/admin.module';
@@ -47,7 +53,12 @@ import { ViewDataService } from './view/view-data.service';
     CoreModule,
     AdminModule,
     SharedModule,
-    RouterModule
+    RouterModule,
+    ImageUploadModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

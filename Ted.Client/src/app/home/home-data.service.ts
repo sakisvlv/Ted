@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 
 import { environment } from '../../environments/environment'
 import { HttpClient } from '@angular/common/http';
-import { Experience, Post } from './home.models';
+import { Experience, Post, UserSmall, Comment, PostType, PostMetaData } from './home.models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class HomeDataService {
-
+  PostType = PostType;
   private apiUrl: string = environment.apiUri + "Home/";
 
   constructor(private http: HttpClient) { }
@@ -38,11 +38,44 @@ export class HomeDataService {
   }
 
   subscribeToPost(id: string) {
-    return this.http.get<boolean>(this.apiUrl + "SubscribeToPost/" + id);
+    return this.http.get<UserSmall>(this.apiUrl + "SubscribeToPost/" + id);
   }
 
   unsubscribeFromPost(id: string) {
-    return this.http.get<boolean>(this.apiUrl + "UnsubscribeToPost/" + id);
+    return this.http.get<boolean>(this.apiUrl + "UnsubscribeFromPost/" + id);
+  }
+
+  postComment(comment: Comment, postId: string) {
+    return this.http.post<Comment>(this.apiUrl + "PostComment/" + postId, comment);
+  }
+
+  deleteComment(commentId: string) {
+    return this.http.delete<boolean>(this.apiUrl + "DeleteComment/" + commentId);
+  }
+
+  uploadFile(selectedFile: File, postType: PostType) {
+    const uploadData = new FormData();
+    uploadData.append('Image', selectedFile, selectedFile.name);
+    switch (postType) {
+      case PostType.Image:
+        return this.http.post<string>(this.apiUrl + "UploadImage", uploadData);
+      case PostType.Audio:
+        return this.http.post<string>(this.apiUrl + "UploadAudio", uploadData);
+      case PostType.Video:
+        return this.http.post<string>(this.apiUrl + "UploadVideo", uploadData);
+    }
+  }
+
+  getPost(id: string) {
+    return this.http.get<Post>(this.apiUrl + "Post/" + id);
+  }
+
+  sendPostMetadata(postMetaData: PostMetaData) {
+    return this.http.post<Post>(this.apiUrl + "PostMetadata", postMetaData);
+  }
+
+  getContent(id: string) {
+    return this.http.get<string>(this.apiUrl + "GetContent/" + id);
   }
 
 

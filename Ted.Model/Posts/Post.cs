@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 using Ted.Model.Auth;
 
@@ -12,14 +13,14 @@ namespace Ted.Model.Posts
         public IList<UserPost> UserPosts { get; set; }
         public ICollection<Comment> Comments { get; set; }
         public PostType Type { get; set; }
-        public byte[] Content { get; set; }
+        public string FileName { get; set; }
         public DateTime PostedDate { get; set; }
 
-        public Post(User owner, PostType type, byte[] content, DateTime postedDate)
+        public Post(User owner, PostType type, string fileName, DateTime postedDate)
         {
             Owner = owner;
             Type = type;
-            Content = content;
+            FileName = fileName;
             PostedDate = postedDate;
         }
 

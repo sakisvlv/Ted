@@ -5,8 +5,13 @@ using Ted.Model.Auth;
 
 namespace Ted.Model.Notifications
 {
-    public class Notification
+    public class Notification : Entity
     {
-        public User Reciever { get; set; }
+        public Guid? FromUserId { set; get; }
+        public virtual User FromUser { set; get; }
+        public Guid? ToUserId { set; get; }
+        public virtual User ToUser { set; get; }
+        public NotificationType Type { get; set; }
+        public Guid? PostId { set; get; }
     }
 }

@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUri: 'http://localhost:44433/api/'
+  apiUri: 'http://localhost:44433/api/',
+  filesUri: 'http://localhost:44433/files/'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as

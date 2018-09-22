@@ -29,7 +29,7 @@ const routes: Routes = [
   { path: 'conversation', component: ConversationComponent, canActivate: [AuthGuard] },
   { path: 'network', component: NetworkComponent, canActivate: [AuthGuard] },
   { path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard] },
-  { path: 'view/{id}', component: ViewComponent, canActivate: [AuthGuard] },
+  { path: 'view', component: ViewComponent, canActivate: [AuthGuard] },
   //admin section
   { path: 'dashboard', component: DashboardComponent, canActivate: [RoleGuard] },
   { path: 'user-list', component: UserListComponent, canActivate: [RoleGuard] },

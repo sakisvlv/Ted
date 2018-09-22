@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -19,9 +22,11 @@ namespace Ted.Bll.Services
     {
         private readonly Context _context;
         private readonly UserManager<User> _userManager;
+        private readonly string _filePath;
 
-        public HomeService(Context context, UserManager<User> userManager)
+        public HomeService(IConfiguration configuration, Context context, UserManager<User> userManager)
         {
+            _filePath = configuration.GetSection("filePath").Value;
             _context = context;
             _userManager = userManager;
         }
@@ -71,17 +76,23 @@ namespace Ted.Bll.Services
             return Result<PostDTO>.CreateSuccessful(new PostDTO(post));
         }
 
-        public async Task<Result<string>> InsertImage(string userId, byte[] imageByteArray)
+        public async Task<Result<Guid>> InsertImage(string userId, IFormFile file, string format)
         {
             var user = await _context.Users.Include(t => t.Photo).SingleOrDefaultAsync(x => x.Id == Guid.Parse(userId));
             if (user == null)
             {
-                return Result<string>.CreateFailed(
+                return Result<Guid>.CreateFailed(
                     HttpStatusCode.NotFound, "User Does Not Exit");
             }
 
-            Post post = new Post(user, PostType.Image, imageByteArray, DateTime.Now);
+            Post post = new Post(user, PostType.Image, Guid.NewGuid().ToString() + format, DateTime.Now);
             await _context.Posts.AddAsync(post);
+
+            var filePath = Path.Combine(_filePath, post.FileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
 
             try
             {
@@ -89,23 +100,57 @@ namespace Ted.Bll.Services
             }
             catch (Exception)
             {
-                return Result<string>.CreateFailed(
+                return Result<Guid>.CreateFailed(
                     HttpStatusCode.InternalServerError, "Cound't save the photo");
             }
-            return Result<string>.CreateSuccessful(post.Id.ToString());
+            return Result<Guid>.CreateSuccessful(post.Id);
         }
 
-        public async Task<Result<string>> InsertVideo(string userId, byte[] videoByteArray)
+        public async Task<Result<Guid>> InsertAudio(string userId, IFormFile file, string format)
         {
             var user = await _context.Users.Include(t => t.Photo).SingleOrDefaultAsync(x => x.Id == Guid.Parse(userId));
             if (user == null)
             {
-                return Result<string>.CreateFailed(
+                return Result<Guid>.CreateFailed(
+                    HttpStatusCode.NotFound, "User Does Not Exit");
+            }
+            Post post = new Post(user, PostType.Audio, Guid.NewGuid().ToString() + format, DateTime.Now);
+            await _context.Posts.AddAsync(post);
+
+            var filePath = Path.Combine(_filePath, post.FileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return Result<Guid>.CreateFailed(
+                    HttpStatusCode.InternalServerError, "Cound't save the photo");
+            }
+            return Result<Guid>.CreateSuccessful(post.Id);
+        }
+
+        public async Task<Result<Guid>> InsertVideo(string userId, IFormFile file, string format)
+        {
+            var user = await _context.Users.Include(t => t.Photo).SingleOrDefaultAsync(x => x.Id == Guid.Parse(userId));
+            if (user == null)
+            {
+                return Result<Guid>.CreateFailed(
                     HttpStatusCode.NotFound, "User Does Not Exit");
             }
 
-            Post post = new Post(user, PostType.Video, videoByteArray, DateTime.Now);
+            Post post = new Post(user, PostType.Video, Guid.NewGuid().ToString() + format, DateTime.Now);
             await _context.Posts.AddAsync(post);
+
+            var filePath = Path.Combine(_filePath, post.FileName);
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(fileStream);
+            }
 
             try
             {
@@ -113,25 +158,28 @@ namespace Ted.Bll.Services
             }
             catch (Exception)
             {
-                return Result<string>.CreateFailed(
+                return Result<Guid>.CreateFailed(
                     HttpStatusCode.InternalServerError, "Cound't save the video");
             }
-            return Result<string>.CreateSuccessful(post.Id.ToString());
+            return Result<Guid>.CreateSuccessful(post.Id);
         }
 
-        public async Task<Result<string>> AddPostMetadata(string userId, string title, string postId)
+        public async Task<Result<PostDTO>> AddPostMetadata(string userId, string title, string postId)
         {
             var user = await _context.Users.Include(t => t.Photo).SingleOrDefaultAsync(x => x.Id == Guid.Parse(userId));
             if (user == null)
             {
-                return Result<string>.CreateFailed(
+                return Result<PostDTO>.CreateFailed(
                     HttpStatusCode.NotFound, "User Does Not Exit");
             }
 
-            Post post = await _context.Posts.FindAsync(Guid.Parse(postId));
+            Post post = await _context.Posts
+                .Where(x => x.Id == Guid.Parse(postId))
+                .Include(x => x.Owner).FirstOrDefaultAsync();
+
             if (post == null)
             {
-                return Result<string>.CreateFailed(
+                return Result<PostDTO>.CreateFailed(
                     HttpStatusCode.NotFound, "Post Does Not Exit");
             }
             post.Title = title;
@@ -142,14 +190,13 @@ namespace Ted.Bll.Services
             }
             catch (Exception)
             {
-                return Result<string>.CreateFailed(
+                return Result<PostDTO>.CreateFailed(
                     HttpStatusCode.InternalServerError, "Cound't save the video");
             }
-            return Result<string>.CreateSuccessful(post.Id.ToString());
+            return Result<PostDTO>.CreateSuccessful(new PostDTO(post));
         }
 
-
-        public async Task<Result<PostDTO>> GetPost(string userId)
+        public async Task<Result<PostDTO>> GetPost(string userId, string postId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
@@ -162,7 +209,7 @@ namespace Ted.Bll.Services
                 .Include(x => x.Owner)
                 .Include(x => x.UserPosts)
                 .Include("UserPosts.User")
-                .SingleOrDefaultAsync(x => x.Owner.Id == Guid.Parse(userId));
+                .SingleOrDefaultAsync(x => x.Owner.Id == Guid.Parse(postId));
 
             if (post == null)
             {
@@ -183,12 +230,48 @@ namespace Ted.Bll.Services
             }
             var posts = new List<Post>();
 
+            var friendlist = await _context.Friends
+                .Where(x => (x.FromUser == user || x.ToUser == user) && (x.FromUserAccepted && x.ToUserAccepted))
+                .Include(x => x.FromUser)
+                .Include("FromUser.UserPosts")
+                .Include(x => x.ToUser)
+                .Include("ToUser.UserPosts")
+                .ToListAsync();
+
+            if (friendlist == null)
+            {
+                return Result<IEnumerable<PostDTO>>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            var friends = new List<User>();
+            foreach (var friend in friendlist)
+            {
+                if (friend.ToUser == user)
+                {
+                    friends.Add(friend.FromUser);
+                    continue;
+                }
+                friends.Add(friend.ToUser);
+            }
+
+            var friendsIds = friends.Select(x => x.Id);
+
+            var postIds = new List<Guid>();
+            foreach (var fr in friends)
+            {
+                postIds.AddRange(fr.UserPosts.Select(x => x.PostId).ToList());
+            }
+
+
+
             posts = await _context.Posts
             .Include(x => x.Owner)
             .Include(x => x.UserPosts)
             .Include("UserPosts.User")
             .Include(x => x.Comments)
-            .Where(x => x.Owner.Id == user.Id)
+            .Where(x => x.Owner.Id == user.Id || friendsIds.Contains(x.Owner.Id) || postIds.Contains(x.Id))
+            .Distinct()
             .OrderByDescending(x => x.PostedDate)
             .Skip(page * 10)
             .Take(10)
@@ -254,7 +337,15 @@ namespace Ted.Bll.Services
                    HttpStatusCode.NotFound, "Cound't delete the post");
             }
 
+            var filePath = Path.Combine(_filePath, post.FileName);
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
             _context.Posts.Remove(post);
+
+
 
             try
             {
@@ -269,26 +360,27 @@ namespace Ted.Bll.Services
             return Result<bool>.CreateSuccessful(true);
         }
 
-        public async Task<Result<bool>> SubscribeToPost(string userId, string id)
+        public async Task<Result<UserInfoSmallDTO>> SubscribeToPost(string userId, string id)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
             {
-                return Result<bool>.CreateFailed(
+                return Result<UserInfoSmallDTO>.CreateFailed(
                    HttpStatusCode.NotFound, "User not found");
             }
 
             var post = await _context.Posts.Where(x => x.Id == Guid.Parse(id)).FirstOrDefaultAsync();
             if (post == null)
             {
-                return Result<bool>.CreateFailed(
+                return Result<UserInfoSmallDTO>.CreateFailed(
                    HttpStatusCode.NotFound, "Cound't delete the post");
             }
 
             var userPost = new UserPost();
             userPost.Post = post;
             userPost.User = user;
-            post.UserPosts.Add(userPost);
+            var posts = _context.UserPost;
+            posts.Add(userPost);
 
             try
             {
@@ -296,11 +388,11 @@ namespace Ted.Bll.Services
             }
             catch (Exception)
             {
-                return Result<bool>.CreateFailed(
+                return Result<UserInfoSmallDTO>.CreateFailed(
                     HttpStatusCode.InternalServerError, "Cound't save the video");
             }
 
-            return Result<bool>.CreateSuccessful(true);
+            return Result<UserInfoSmallDTO>.CreateSuccessful(new UserInfoSmallDTO(user));
         }
 
         public async Task<Result<bool>> UnsubscribeFromPost(string userId, string id)
@@ -372,5 +464,124 @@ namespace Ted.Bll.Services
 
             return Result<PostDTO>.CreateSuccessful(postDTO);
         }
+
+        public async Task<Result<CommentDTO>> PostComment(string userId, string postId, CommentDTO commentDTO)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<CommentDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            var post = await _context.Posts
+                .Where(x => x.Id == Guid.Parse(postId))
+                .Include(x => x.Comments)
+                .FirstOrDefaultAsync();
+            if (post == null)
+            {
+                return Result<CommentDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "Cound't post comment");
+            }
+
+            var comment = new Comment();
+            comment.Text = commentDTO.Text;
+            comment.User = user;
+            post.Comments.Add(comment);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return Result<CommentDTO>.CreateFailed(
+                    HttpStatusCode.InternalServerError, "Cound't post comment");
+            }
+
+            return Result<CommentDTO>.CreateSuccessful(new CommentDTO(comment));
+        }
+
+        public async Task<Result<bool>> DeleteComment(string userId, string commnetId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<bool>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            var comment = await _context.Comments
+                .Where(x => x.Id == Guid.Parse(commnetId))
+                .Include(x => x.User)
+                .FirstOrDefaultAsync();
+            if (comment == null)
+            {
+                return Result<bool>.CreateFailed(
+                   HttpStatusCode.NotFound, "Cound't delete the comment");
+            }
+
+            if (comment.User != user)
+            {
+                return Result<bool>.CreateFailed(
+                   HttpStatusCode.NotFound, "Cound't delete the comment");
+            }
+
+            _context.Comments.Remove(comment);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return Result<bool>.CreateFailed(
+                    HttpStatusCode.InternalServerError, "Cound't delete the comment");
+            }
+
+            return Result<bool>.CreateSuccessful(true);
+        }
+
+        public async Task<Result<byte[]>> GetPhoto(string userId, string userToGetId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<byte[]>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            var userToGet = await _userManager.FindByIdAsync(userToGetId);
+            if (user == null)
+            {
+                return Result<byte[]>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            var photo = await _context.Photos.SingleOrDefaultAsync(x => x.UserId == Guid.Parse(userToGetId));
+            if (photo == null)
+            {
+                return Result<byte[]>.CreateSuccessful(null);
+            }
+            return Result<byte[]>.CreateSuccessful(photo.File);
+        }
+
+        public async Task<Result<string>> GetContent(string userId, string contentId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<string>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            if (user == null)
+            {
+                return Result<string>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+            return Result<string>.CreateSuccessful("");
+        }
+
     }
 }

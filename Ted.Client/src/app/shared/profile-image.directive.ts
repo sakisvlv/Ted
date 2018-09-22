@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ɵBROWSER_SANITIZATION_PROVIDERS, DomSanitizer } from '@angular/platform-browser';
 
 import { environment } from '../../environments/environment';
+import { AuthService } from '../core/auth/services/auth.service';
 
 @Directive({
   selector: '[profile-image]',
@@ -15,6 +16,7 @@ export class ProfileImageDirective implements OnInit {
 
   private apiUrl: string = environment.apiUri + "User/";
   private adminApiUrl: string = environment.apiUri + "Admin/";
+  private homeApiUrl: string = environment.apiUri + "Home/";
 
   @Input() changed;
   @Input() id: string = "";
@@ -24,7 +26,8 @@ export class ProfileImageDirective implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private authService: AuthService
   ) {
   }
 
@@ -55,6 +58,23 @@ export class ProfileImageDirective implements OnInit {
           this.imageData = 'data:image/png;base64,' + data;
           this.sanitizedImageData = this.sanitizer.bypassSecurityTrustUrl(this.imageData);
           localStorage.setItem('profileImage', this.imageData);
+        },
+        error => {
+          this.sanitizedImageData = "assets/default-user.png";
+        }
+      );
+    }
+    else if (this.id != "" && this.authService.getRole() == "User") {
+      this.http.get(this.homeApiUrl + "DownloadPhoto/" + this.id).subscribe(
+        data => {
+          if (data != null) {
+            this.imageData = 'data:image/png;base64,' + data;
+            this.sanitizedImageData = this.sanitizer.bypassSecurityTrustUrl(this.imageData);
+          }
+          else {
+            this.sanitizedImageData = "assets/default-user.png";
+          }
+
         },
         error => {
           this.sanitizedImageData = "assets/default-user.png";

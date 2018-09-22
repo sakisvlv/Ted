@@ -76,6 +76,7 @@ export class AuthService {
     this.isLoggedIn = false;
     if (localStorage.getItem("access_token")) {
       localStorage.removeItem("access_token");
+      localStorage.removeItem("profileImage");
     }
     this.router.navigate(['/register']);
 

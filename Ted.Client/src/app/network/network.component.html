@@ -1,131 +1,149 @@
-<div class="field has-addons">
-    <div class="control is-expanded">
-      <input class="input" type="text" placeholder="Find people">
-    </div>
+<!-- <div class="field has-addons">
+  <div class="control is-expanded">
+    <input class="input" type="text" placeholder="Find people">
+  </div>
+  <div class="control">
+    <a class="button is-link">
+      Search
+    </a>
+  </div>
+</div>
+
+<br> -->
+<div class="columns" (keypress)="onSubmit($event)">
+  <div class="column">
     <div class="control">
-      <a class="button is-link">
+      <input [(ngModel)]="searchString" class="input" type="text" placeholder="Find a connection">
+    </div>
+  </div>
+  <div class="column">
+    <div class="control">
+      <a class="button is-primary" (click)="search()">
         Search
       </a>
     </div>
   </div>
-  
-  <br>
-  
-  <h1>People you may know</h1>
-   
-  <br>
-  
-  <div class="tile is-ancestor">
-      <div class="tile is-3 is-vertical">
-        <div class="tile">
-            <div class="card">
-                <div class="card-content">
-                  <div class="media">
-                    <div class="media-left">
-                      <figure class="image is-88x88">
-                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                      </figure>
-                    </div>
-                    <div class="media-content">
-                      <a routerLink="/userinfo" class= "title is-4">ονομα και επωνυμο</a>
-                      <p class="tittle is-2">επαγγελματικη θεση</p>
-                      <p class="tittle is-2">φορεας απασχολησης</p>
-                    </div>  
-                  </div>
-                </div>
+</div>
+
+<p class="title is-4 has-text-centered" *ngIf="searchFriends != undefined">
+  {{found}} Found
+</p>
+
+<div class="tile is-ancestor" *ngIf="searchFriends != undefined">
+  <div class="tile is-vertical">
+    <div class="tile is-parent" *ngFor="let friendArray of searchFriends">
+      <div class="tile is-parent" *ngFor="let friend of friendArray">
+        <article class="tile is-child notification">
+          <br>
+          <figure class="image is-128x128  has-image-centered">
+            <img class="is-rounded" [id]="friend.Id" [changed]="changed" profile-image />
+          </figure>
+          <span class="has-text-centered">
+            <span (click)="navigateToView(friend.Id)" class="pointer">
+              <h1 class="title is-3">{{friend.FirstName + " " + friend.LastName}}</h1>
+              <h1 class="subtitle is-4">{{friend.CurrentState}}</h1>
+            </span>
+            <br>
+            <div class="buttons is-centered">
+              <button (click)="addFriend(friend)" class="button is-primary" *ngIf="!friend.IsFriend">
+                Connect
+              </button>
             </div>
-        </div>
-        <div class="tile">
-            <div class="card">
-                <div class="card-content">
-                  <div class="media">
-                    <div class="media-left">
-                      <figure class="image is-88x88">
-                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                      </figure>
-                    </div>
-                    <div class="media-content">
-                      <a routerLink="/userinfo" class= "title is-4">ονομα και επωνυμο</a>
-                      <p class="tittle is-2">επαγγελματικη θεση</p>
-                      <p class="tittle is-2">φορεας απασχολησης</p>
-                    </div>  
-                  </div>
-                </div>
-            </div>
-        </div>
-        <div class="tile">
-            <div class="card">
-                <div class="card-content">
-                  <div class="media">
-                    <div class="media-left">
-                      <figure class="image is-88x88">
-                        <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                      </figure>
-                    </div>
-                    <div class="media-content">
-                      <a routerLink="/userinfo" class= "title is-4">ονομα και επωνυμο</a>
-                      <p class="tittle is-2">επαγγελματικη θεση</p>
-                      <p class="tittle is-2">φορεας απασχολησης</p>
-                    </div>  
-                  </div>
-                </div>
-            </div>
-        </div>
+          </span>
+        </article>
       </div>
-      <div class="tile is-3 is-vertical">
-          <div class="tile">
-              <div class="card">
-                  <div class="card-content">
-                    <div class="media">
-                      <div class="media-left">
-                        <figure class="image is-88x88">
-                          <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                        </figure>
-                      </div>
-                      <div class="media-content">
-                        <a routerLink="/userinfo" class= "title is-4">ονομα και επωνυμο</a>
-                        <p class="tittle is-2">επαγγελματικη θεση</p>
-                        <p class="tittle is-2">φορεας απασχολησης</p>
-                      </div>  
-                    </div>
-                  </div>
-              </div>
-          </div>
-          <div class="tile">
-              <div class="card">
-                  <div class="card-content">
-                    <div class="media">
-                      <div class="media-left">
-                        <figure class="image is-88x88">
-                          <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                        </figure>
-                      </div>
-                      <div class="media-content">
-                        <a routerLink="/userinfo" class= "title is-4">ονομα και επωνυμο</a>
-                        <p class="tittle is-2">επαγγελματικη θεση</p>
-                        <p class="tittle is-2">φορεας απασχολησης</p>
-                      </div>  
-                    </div>
-                  </div>
-              </div>
-          </div>
-          <div class="tile">
-              <div class="card">
-                  <div class="card-content">
-                    <div class="media">
-                      <div class="media-left">
-                        <figure class="image is-88x88">
-                          <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-                        </figure>
-                      </div>
-                      <div class="media-content">
-                        <a routerLink="/userinfo" class= "title is-4">ονομα και επωνυμο</a>
-                        <p class="tittle is-2">επαγγελματικη θεση</p>
-                        <p class="tittle is-2">φορεας απασχολησης</p>
-                      </div>  
-                    </div>
-                  </div>
-              </div>
-          </div> 
-        </div>    
-   </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+<!-- 
+
+<p class="title is-4 has-text-centered">
+  People you may know
+</p>
+
+<div class="tile is-ancestor">
+  <div class="tile is-vertical">
+    <div class="tile is-parent" *ngFor="let friendArray of allFriends">
+      <div class="tile is-parent" *ngFor="let friend of friendArray">
+        <article class="tile is-child notification">
+          <br>
+          <figure class="image is-128x128  has-image-centered">
+            <img class="is-rounded" [id]="friend.Id" [changed]="changed" profile-image />
+          </figure>
+          <span class="has-text-centered pointer" (click)="navigateToView(friend.Id)">
+            <h1 class="title is-3">{{friend.FirstName + " " + friend.LastName}}</h1>
+            <h1 class="subtitle is-4">{{friend.CurrentState}}</h1>
+            <div class="buttons is-centered">
+              <button class="button is-primary">
+                Connect
+              </button>
+            </div>
+          </span>
+        </article>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+<p class="title is-4 has-text-centered" *ngIf="pending != 0">
+  {{pending}} Pending
+</p>
+
+<div class="tile is-ancestor" *ngIf="pending != 0">
+  <div class="tile is-vertical">
+    <div class="tile is-parent" *ngFor="let friendArray of pendingFriends">
+      <div class="tile is-parent" *ngFor="let friend of friendArray">
+        <article class="tile is-child notification">
+          <br>
+          <figure class="image is-128x128  has-image-centered">
+            <img class="is-rounded" [id]="friend.Id" [changed]="changed" profile-image />
+          </figure>
+          <span class="has-text-centered">
+            <span class="pointer" (click)="navigateToView(friend.Id)">
+              <h1 class="title is-3">{{friend.FirstName + " " + friend.LastName}}</h1>
+              <h1 class="subtitle is-4">{{friend.CurrentState}}</h1>
+            </span>
+            <br>
+            <div class="buttons is-centered">
+              <button (click)="acceptFriend(friend)" class="button is-primary">
+                Accept
+              </button>
+              <button (click)="rejectFriend(friend)" class="button is-danger">
+                Reject
+              </button>
+            </div>
+          </span>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr *ngIf="pending != 0">
+
+<p class="title is-4 has-text-centered">
+  {{all}} All Connections
+</p>
+
+<div class="tile is-ancestor">
+  <div class="tile is-vertical">
+    <div class="tile is-parent" *ngFor="let friendArray of allFriends">
+      <div class="tile is-parent" *ngFor="let friend of friendArray">
+        <article class="tile is-child notification">
+          <br>
+          <figure class="image is-128x128  has-image-centered">
+            <img class="is-rounded" [id]="friend.Id" [changed]="changed" profile-image />
+          </figure>
+          <span class="has-text-centered pointer" (click)="navigateToView(friend.Id)">
+            <h1 class="title is-3">{{friend.FirstName + " " + friend.LastName}}</h1>
+            <h1 class="subtitle is-4">{{friend.CurrentState}}</h1>
+            <div class="buttons is-centered">
+            </div>
+          </span>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>

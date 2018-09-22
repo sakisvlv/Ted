@@ -54,6 +54,7 @@ export class SettingsComponent implements OnInit {
   }
 
   onUploadFinished(event) {
+    localStorage.removeItem("profileImage");
     this.showUploader = !this.showUploader;
     this.changed = !this.changed;
   }

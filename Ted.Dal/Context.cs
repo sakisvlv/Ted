@@ -4,8 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 using Ted.Model;
+using Ted.Model.Ads;
 using Ted.Model.Auth;
+using Ted.Model.Conversations;
 using Ted.Model.Network;
+using Ted.Model.Notifications;
 using Ted.Model.PersonalSkills;
 using Ted.Model.Posts;
 
@@ -21,6 +24,9 @@ namespace Ted.Dal
         public DbSet<Comment> Comments { get; set; }
         public DbSet<UserPost> UserPost { get; set; }
         public DbSet<Friend> Friends { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Ad> Ads { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
@@ -44,6 +50,9 @@ namespace Ted.Dal
             modelBuilder.Entity<Friend>().HasKey(x => new { x.FromUserId, x.ToUserId });
             modelBuilder.Entity<Friend>().HasOne(x => x.FromUser).WithMany(x => x.FriendTo).HasForeignKey(x => x.FromUserId).OnDelete(DeleteBehavior.ClientSetNull);
             modelBuilder.Entity<Friend>().HasOne(x => x.ToUser).WithMany(x => x.FrendFrom).HasForeignKey(x => x.ToUserId).OnDelete(DeleteBehavior.ClientSetNull);
+            modelBuilder.Entity<Conversation>().ToTable("Conversations");
+            modelBuilder.Entity<Notification>().ToTable("Notifications");
+            modelBuilder.Entity<Ad>().ToTable("Ads");
         }
     }
 }

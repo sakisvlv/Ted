@@ -17,8 +17,10 @@ export class Post {
     IsPublic: boolean;
     Subscribers: UserSmall[];
     Comments: Comment[];
-    Content: any;
+    FileName: string;
+    FileUrl: string;
     PostedDate: Date;
+    Type: PostType;
 }
 
 export class UserSmall {
@@ -26,12 +28,14 @@ export class UserSmall {
     FirstName: string;
     LastName: string;
     CurrentState: string;
+    IsFriend:boolean;
 }
 
 export class Comment {
     Id: string;
-    UserId: string;
+    User: UserSmall;
     Text: string;
+    CommentDate: Date
 }
 
 export enum PostType {
@@ -39,4 +43,9 @@ export enum PostType {
     Video,
     Article,
     Audio
+}
+
+export class PostMetaData {
+    PostId: string;
+    Title: string;
 }

@@ -146,6 +146,10 @@ namespace Ted.Bll.Services
             }
 
             var expirience = await _context.Experiences.Where(x => x.User == user && x.Id == experienceDTO.Id).FirstOrDefaultAsync();
+            if (expirience.StillThere == true)
+            {
+                user.CurrentState = expirience.Description + " at " + expirience.Company;
+            }
             if (expirience != null)
             {
                 expirience.Update(experienceDTO);
@@ -249,7 +253,7 @@ namespace Ted.Bll.Services
                 return Result<bool>.CreateFailed(
                    HttpStatusCode.NotFound, "User not found");
             }
-            
+
             switch (type)
             {
                 case "experience":

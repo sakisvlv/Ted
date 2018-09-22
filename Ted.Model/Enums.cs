@@ -11,4 +11,11 @@ namespace Ted.Model
         Article,
         Audio
     }
+
+    public enum NotificationType
+    {
+        FriendRequest,
+        Subscribe,
+        Comment
+    }
 }
