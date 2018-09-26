@@ -1,6 +1,7 @@
 export class Conversation {
     ToUser: UserSmall;
     Id: string;
+    HasNewMessagees: boolean;
 }
 
 export class UserSmall {

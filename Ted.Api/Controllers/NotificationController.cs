@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ted.Bll.Interfaces;
@@ -17,6 +18,28 @@ namespace Ted.Api.Controllers
         public NotificationController(INotificationService notificationService)
         {
             _notificationService = notificationService;
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Notifications/{page}")]
+        public async Task<IActionResult> GetNotifications(int page)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _notificationService.GetNotifications(userId, page);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
         }
     }
 }

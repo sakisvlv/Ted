@@ -12,6 +12,8 @@ namespace Ted.Model.Conversations
         public Guid? ToUserId { set; get; }
         public virtual User ToUser { set; get; }
         public List<Message> Messages { get; set; }
+        public bool FromUserHasNewMessages { get; set; }
+        public bool ToUserHasNewMessages { get; set; }
 
         public Conversation(User fromUser, User toUser)
         {

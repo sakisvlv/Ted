@@ -11,6 +11,7 @@ namespace Ted.Model.DTO
     {
         public Guid Id { get; set; }
         public UserInfoSmallDTO ToUser { get; set; }
+        public bool HasNewMessagees { get; set; }
 
         public ConversationDTO()
         {

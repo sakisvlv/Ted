@@ -1,10 +1,16 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using Ted.Bll.Interfaces;
 using Ted.Dal;
+using Ted.Model;
 using Ted.Model.Auth;
+using Ted.Model.DTO;
 
 namespace Ted.Bll.Services
 {
@@ -17,6 +23,30 @@ namespace Ted.Bll.Services
         {
             _context = context;
             _userManager = userManager;
+        }
+
+        public async Task<Result<IEnumerable<NotificationDTO>>> GetNotifications(string userId, int page)
+        {
+            var user = await _context.Users.Include(t => t.Photo).SingleOrDefaultAsync(x => x.Id == Guid.Parse(userId));
+            if (user == null)
+            {
+                return Result<IEnumerable<NotificationDTO>>.CreateFailed(
+                    HttpStatusCode.NotFound, "User Does Not Exit");
+            }
+
+            var notifications = await _context.Notifications
+                .Where(x => x.ToUser.Id == Guid.Parse(userId))
+                .Skip(page * 20)
+                .Take(20)
+                .ToListAsync();
+
+            if (notifications == null)
+            {
+                return Result<IEnumerable<NotificationDTO>>.CreateFailed(
+                    HttpStatusCode.NotFound, "Notifications Not Found");
+            }
+
+            return Result<IEnumerable<NotificationDTO>>.CreateSuccessful(NotificationDTO.ToNotificationDTOList(notifications));
         }
     }
 }

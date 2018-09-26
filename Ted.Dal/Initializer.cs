@@ -180,7 +180,9 @@ namespace Ted.Dal
                         {
                             var conversation1 = new Conversation();
                             conversation1.FromUser = users[i];
+                            conversation1.FromUserHasNewMessages = false;
                             conversation1.ToUser = users[1];
+                            conversation1.ToUserHasNewMessages = false;
                             conversation1.Messages = new List<Message>();
                             for (int k = 0; k < 15; k++)
                             {
@@ -204,6 +206,8 @@ namespace Ted.Dal
                             conversation2.FromUser = users[i];
                             conversation2.ToUser = users[2];
                             conversation2.Messages = new List<Message>();
+                            conversation2.FromUserHasNewMessages = false;
+                            conversation2.ToUserHasNewMessages = false;
                             for (int k = 0; k < 15; k++)
                             {
                                 var message = new Message();
@@ -225,6 +229,8 @@ namespace Ted.Dal
                             conversation3.FromUser = users[i];
                             conversation3.ToUser = users[3];
                             conversation3.Messages = new List<Message>();
+                            conversation3.FromUserHasNewMessages = false;
+                            conversation3.ToUserHasNewMessages = false;
                             for (int k = 0; k < 15; k++)
                             {
                                 var message = new Message();
@@ -264,6 +270,9 @@ namespace Ted.Dal
                             users[i].FriendTo.Add(friend1);
                             users[i].FriendTo.Add(friend2);
                         }
+
+
+
                     }
                 }
                 context.SaveChanges();

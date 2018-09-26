@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Ted.Model.Network;
+using Ted.Model.Notifications;
 using Ted.Model.PersonalSkills;
 using Ted.Model.Posts;
 
@@ -24,5 +25,6 @@ namespace Ted.Model.Auth
         public ICollection<Experience> Experiences { get; set; }
         public ICollection<Education> Educations { get; set; }
         public ICollection<PersonalSkill> PersonalSkills { get; set; }
+        public ICollection<Notification> Notifications { get; set; }
     }
 }
