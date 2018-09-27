@@ -14,8 +14,12 @@ export class NotificationsDataService {
     private http: HttpClient
   ) { }
 
-  getLastExperiance() {
-    return this.http.get<Notification[]>(this.apiUrl + "Notifications");
+  getNotifications(page: number) {
+    return this.http.get<Notification[]>(this.apiUrl + "Notifications/" + page);
+  }
+
+  acknowledgeNotifications(id: number) {
+    return this.http.get<boolean>(this.apiUrl + "AcknowledgeNotification/" + id);
   }
 
 }
