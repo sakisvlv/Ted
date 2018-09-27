@@ -12,6 +12,7 @@ using Ted.Model.Auth;
 using Ted.Model.DTO;
 using Microsoft.EntityFrameworkCore;
 using Ted.Model.Network;
+using Ted.Model.Notifications;
 
 namespace Ted.Bll.Services
 {
@@ -136,6 +137,18 @@ namespace Ted.Bll.Services
             friends.ToUserAccepted = false;
 
             _context.Friends.Add(friends);
+
+            var notification = new Notification
+            {
+                IsAcknowledged = false,
+                PostId = null,
+                Sender = user.FirstName + " " + user.LastName,
+                SenderId = user.Id,
+                ToUser = friend,
+                Type = NotificationType.FriendRequest,
+                DateAdded = DateTime.Now
+            };
+            _context.Notifications.Add(notification);
 
             try
             {

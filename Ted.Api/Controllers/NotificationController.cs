@@ -41,5 +41,27 @@ namespace Ted.Api.Controllers
                 return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
             }
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("AcknowledgeNotification/{id}")]
+        public async Task<IActionResult> AcknowledgeNotification(string id)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _notificationService.AcknowledgeNotification(userId, id);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
     }
 }

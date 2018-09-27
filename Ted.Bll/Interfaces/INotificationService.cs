@@ -10,5 +10,6 @@ namespace Ted.Bll.Interfaces
     public interface INotificationService
     {
         Task<Result<IEnumerable<NotificationDTO>>> GetNotifications(string userId, int page);
+        Task<Result<bool>> AcknowledgeNotification(string userId, string notificationId);
     }
 }

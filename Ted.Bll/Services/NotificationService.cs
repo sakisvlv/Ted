@@ -48,5 +48,37 @@ namespace Ted.Bll.Services
 
             return Result<IEnumerable<NotificationDTO>>.CreateSuccessful(NotificationDTO.ToNotificationDTOList(notifications));
         }
+
+        public async Task<Result<bool>> AcknowledgeNotification(string userId, string notificationId)
+        {
+            var user = await _context.Users.Include(t => t.Photo).SingleOrDefaultAsync(x => x.Id == Guid.Parse(userId));
+            if (user == null)
+            {
+                return Result<bool>.CreateFailed(
+                    HttpStatusCode.NotFound, "User Does Not Exit");
+            }
+
+            var notification = await _context.Notifications.Where(x => x.Id == Guid.Parse(notificationId)).FirstOrDefaultAsync();
+
+            if (notification == null)
+            {
+                return Result<bool>.CreateFailed(
+                    HttpStatusCode.NotFound, "Notifications Not Found");
+            }
+
+            notification.IsAcknowledged = true;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return Result<bool>.CreateFailed(
+                    HttpStatusCode.InternalServerError, "Cound't set acknoledged");
+            }
+
+            return Result<bool>.CreateSuccessful(true);
+        }
     }
 }

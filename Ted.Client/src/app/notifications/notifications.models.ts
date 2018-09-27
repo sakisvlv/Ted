@@ -13,6 +13,7 @@ export class Notification {
     Type: NotificationType;
     PostId: string;
     IsAcknowledged: boolean;
+    DateAdded: Date;
 }
 
 

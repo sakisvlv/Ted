@@ -13,6 +13,7 @@ namespace Ted.Model.DTO
         public NotificationType Type { get; set; }
         public Guid? PostId { set; get; }
         public bool IsAcknowledged { set; get; }
+        public DateTime DateAdded { set; get; }
 
         public NotificationDTO(Notification notification)
         {
@@ -21,6 +22,7 @@ namespace Ted.Model.DTO
             Type = notification.Type;
             PostId = notification.PostId;
             IsAcknowledged = notification.IsAcknowledged;
+            DateAdded = notification.DateAdded;
         }
 
         public NotificationDTO()

@@ -14,6 +14,7 @@ using Ted.Dal;
 using Ted.Model;
 using Ted.Model.Auth;
 using Ted.Model.DTO;
+using Ted.Model.Notifications;
 using Ted.Model.Posts;
 
 namespace Ted.Bll.Services
@@ -284,6 +285,12 @@ namespace Ted.Bll.Services
                    HttpStatusCode.NotFound, "Cound't get the post");
             }
 
+            if (posts.Count == 0)
+            {
+                return Result<IEnumerable<PostDTO>>.CreateFailed(
+                   HttpStatusCode.NotFound, "There is no more posts");
+            }
+
             return Result<IEnumerable<PostDTO>>.CreateSuccessful(PostDTO.ToPostDTOList(posts));
         }
 
@@ -369,7 +376,13 @@ namespace Ted.Bll.Services
                    HttpStatusCode.NotFound, "User not found");
             }
 
-            var post = await _context.Posts.Where(x => x.Id == Guid.Parse(id)).FirstOrDefaultAsync();
+            var post = await _context.Posts
+                .Where(x => x.Id == Guid.Parse(id))
+                .Include(x => x.Owner)
+                .Include(x => x.UserPosts)
+                .Include(x => x.Comments)
+                .Include("UserPosts.User")
+                .FirstOrDefaultAsync();
             if (post == null)
             {
                 return Result<UserInfoSmallDTO>.CreateFailed(
@@ -381,6 +394,44 @@ namespace Ted.Bll.Services
             userPost.User = user;
             var posts = _context.UserPost;
             posts.Add(userPost);
+
+            var subscribers = post.UserPosts.Select(x => x.User);
+            var comentants = post.Comments.Select(x => x.User);
+            var intersect = subscribers.Union(comentants);
+
+            foreach (var subscriber in intersect)
+            {
+                if (subscriber != user)
+                {
+                    var notification = new Notification
+                    {
+                        IsAcknowledged = false,
+                        PostId = post.Id,
+                        Sender = user.FirstName + " " + user.LastName,
+                        SenderId = user.Id,
+                        ToUser = subscriber,
+                        Type = NotificationType.Subscribe,
+                        DateAdded = DateTime.Now
+                    };
+                    _context.Notifications.Add(notification);
+                }
+            }
+
+            if (post.Owner != user)
+            {
+                var notification = new Notification
+                {
+                    IsAcknowledged = false,
+                    PostId = post.Id,
+                    Sender = user.FirstName + " " + user.LastName,
+                    SenderId = user.Id,
+                    ToUser = post.Owner,
+                    Type = NotificationType.Subscribe,
+                    DateAdded = DateTime.Now
+                };
+                _context.Notifications.Add(notification);
+            }
+
 
             try
             {
@@ -476,8 +527,12 @@ namespace Ted.Bll.Services
 
             var post = await _context.Posts
                 .Where(x => x.Id == Guid.Parse(postId))
+                .Include(x => x.Owner)
+                .Include(x => x.UserPosts)
                 .Include(x => x.Comments)
+                .Include("UserPosts.User")
                 .FirstOrDefaultAsync();
+
             if (post == null)
             {
                 return Result<CommentDTO>.CreateFailed(
@@ -488,6 +543,44 @@ namespace Ted.Bll.Services
             comment.Text = commentDTO.Text;
             comment.User = user;
             post.Comments.Add(comment);
+
+
+            var subscribers = post.UserPosts.Select(x => x.User);
+            var comentants = post.Comments.Select(x => x.User);
+            var intersect = subscribers.Union(comentants);
+
+            foreach (var subscriber in intersect)
+            {
+                if (subscriber != user)
+                {
+                    var notification = new Notification
+                    {
+                        IsAcknowledged = false,
+                        PostId = post.Id,
+                        Sender = user.FirstName + " " + user.LastName,
+                        SenderId = user.Id,
+                        ToUser = subscriber,
+                        Type = NotificationType.Comment,
+                        DateAdded = DateTime.Now
+                    };
+                    _context.Notifications.Add(notification);
+                }
+            }
+
+            if (post.Owner != user)
+            {
+                var notification = new Notification
+                {
+                    IsAcknowledged = false,
+                    PostId = post.Id,
+                    Sender = user.FirstName + " " + user.LastName,
+                    SenderId = user.Id,
+                    ToUser = post.Owner,
+                    Type = NotificationType.Comment,
+                    DateAdded = DateTime.Now
+                };
+                _context.Notifications.Add(notification);
+            }
 
             try
             {

@@ -11,7 +11,7 @@ import { Notification } from './notifications.models';
 })
 export class NotificationsComponent implements OnInit {
 
-  page = 1;
+  page = 0;
   notifications: Notification[];
 
   constructor(

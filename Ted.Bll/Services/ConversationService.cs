@@ -97,7 +97,7 @@ namespace Ted.Bll.Services
             var messages = await _context.Messages
                 .Where(x => x.Conversation.Id == Guid.Parse(conversationId))
                 .Include(x => x.Sender)
-                .OrderByDescending(x=>x.DateSended)
+                .OrderByDescending(x => x.DateSended)
                 .Skip(page * 10)
                 .Take(10)
                 .ToListAsync();
@@ -107,7 +107,7 @@ namespace Ted.Bll.Services
                 return Result<IEnumerable<MessageDTO>>.CreateFailed(
                    HttpStatusCode.NotFound, "Messages not found");
             }
-            
+
             return Result<IEnumerable<MessageDTO>>.CreateSuccessful(MessageDTO.ToMessageDTOList(messages.OrderBy(x => x.DateSended)));
         }
 
@@ -120,7 +120,13 @@ namespace Ted.Bll.Services
                    HttpStatusCode.NotFound, "User not found");
             }
 
-            var conversation = await _context.Conversations.Where(x => x.Id == Guid.Parse(conversationId)).Include(x => x.Messages).FirstOrDefaultAsync();
+            var conversation = await _context.Conversations
+                .Where(x => x.Id == Guid.Parse(conversationId))
+                .Include(x => x.Messages)
+                .Include(x => x.FromUser)
+                .Include(x => x.ToUser)
+                .FirstOrDefaultAsync();
+
             if (conversation == null)
             {
                 return Result<MessageDTO>.CreateFailed(
@@ -132,6 +138,15 @@ namespace Ted.Bll.Services
             message.Text = text;
             message.DateSended = DateTime.Now;
             conversation.Messages.Add(message);
+
+            if (user.Id == conversation.ToUser.Id)
+            {
+                conversation.FromUserHasNewMessages = true;
+            }
+            else
+            {
+                conversation.ToUserHasNewMessages = true;
+            }
 
             try
             {

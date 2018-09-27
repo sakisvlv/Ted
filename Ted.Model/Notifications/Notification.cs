@@ -13,5 +13,6 @@ namespace Ted.Model.Notifications
         public NotificationType Type { get; set; }
         public Guid? PostId { set; get; }
         public bool IsAcknowledged { set; get; }
+        public DateTime DateAdded { set; get; }
     }
 }
