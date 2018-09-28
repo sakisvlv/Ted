@@ -3,23 +3,37 @@
 <div *ngFor="let notification of notifications">
 
   <div class="card">
-    <div class="card-content">
-      <div class="media">
-        <div class="media-left">
-          <figure class="image is-64x64">
-            <img class="is-rounded" [id]="notification.SenderId" [changed]="changed" profile-image />
-          </figure>
-        </div>
-        <div class="media-content">
-          <a routerLink="/userinfo" class="title is-4">{{notification.Sender}}</a>
-          <p class="tittle is-2">το νοτιφικασιο</p>
-          <br>
-          <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
+    <a (click)="onClick(notification)">
+      <div class="card-content" [ngClass]="{'unacknoledged': !notification.IsAcknowledged}">
+        <div class="media">
+          <div class="media-left">
+            <figure class="image is-96x96">
+              <img class="is-rounded" [id]="notification.SenderId" [changed]="changed" profile-image />
+            </figure>
+          </div>
+          <div class="media-content">
+            <p class="title is-4">{{notification.Sender}}</p>
+            <p *ngIf="notificationType.FriendRequest == notification.Type" class="subtitle is-6">
+              <fa-icon icon="users"></fa-icon> &nbsp; Sent you a friend
+              request
+            </p>
+            <p *ngIf="notificationType.Subscribe == notification.Type" class="subtitle is-6">
+              <fa-icon icon="thumbs-up"></fa-icon> &nbsp; Subscribed to a post you
+              participate
+            </p>
+            <p *ngIf="notificationType.Comment == notification.Type" class="subtitle is-6">
+              <fa-icon icon="comment"></fa-icon> &nbsp;Commented on a post you
+              participate
+            </p>
+            <p class="subtitle is-7">{{notification.DateAdded | date}}</p>
+          </div>
         </div>
       </div>
-    </div>
+    </a>
   </div>
 
   <br>
 
 </div>
+
+<a (click)="onShowMore()" class="level-item has-text-centered">Show more</a>

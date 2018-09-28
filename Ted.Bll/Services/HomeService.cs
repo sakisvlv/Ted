@@ -48,7 +48,7 @@ namespace Ted.Bll.Services
             return Result<ExperienceDTO>.CreateSuccessful(new ExperienceDTO(experience));
         }
 
-        public async Task<Result<PostDTO>> InsertArticle(string userId, string content)
+        public async Task<Result<PostDTO>> InsertArticle(string userId, string content, string description)
         {
             var user = await _context.Users.Include(t => t.Photo).SingleOrDefaultAsync(x => x.Id == Guid.Parse(userId));
             if (user == null)
@@ -59,6 +59,7 @@ namespace Ted.Bll.Services
 
             var post = new Post();
             post.Owner = user;
+            post.Description = description;
             post.Title = content;
             post.PostedDate = DateTime.Now;
             post.Type = PostType.Article;
@@ -184,7 +185,6 @@ namespace Ted.Bll.Services
                     HttpStatusCode.NotFound, "Post Does Not Exit");
             }
             post.Title = title;
-
             try
             {
                 await _context.SaveChangesAsync();
@@ -210,7 +210,9 @@ namespace Ted.Bll.Services
                 .Include(x => x.Owner)
                 .Include(x => x.UserPosts)
                 .Include("UserPosts.User")
-                .SingleOrDefaultAsync(x => x.Owner.Id == Guid.Parse(postId));
+                .Include(x => x.Comments)
+                .Where(x => x.Id == Guid.Parse(postId))
+                .FirstOrDefaultAsync();
 
             if (post == null)
             {

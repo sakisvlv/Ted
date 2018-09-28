@@ -9,6 +9,7 @@ namespace Ted.Model.Posts
     public class Post : Entity
     {
         public string Title { get; set; }
+        public string Description { get; set; }
         public User Owner { get; set; }
         public IList<UserPost> UserPosts { get; set; }
         public ICollection<Comment> Comments { get; set; }

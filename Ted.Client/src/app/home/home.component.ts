@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 
 import { Experience, Post, PostType, Comment, UserSmall, PostMetaData } from './home.models';
 import { environment } from '../../environments/environment'
-import { Router } from '@angular/router';
+import { Router, Route, ActivatedRoute } from '@angular/router';
 
 import { ToastrService } from 'ngx-toastr';
 import { HomeDataService } from './home-data.service';
@@ -30,8 +30,11 @@ export class HomeComponent implements OnInit {
   connectionsCount = 0;
   postType = PostType.Article;
   title = "";
+  description = "";
   comment = new Comment();
   page = 0;
+  postId: string;
+  showTitle: boolean = false;
 
   selectedFile: File;
 
@@ -41,10 +44,12 @@ export class HomeComponent implements OnInit {
     private loaderService: LoaderService,
     private toastrService: ToastrService,
     private sanitizer: DomSanitizer,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit() {
+
     this.homeDataService.getLastExperiance().subscribe(
       result => {
         this.experiance = result;
@@ -56,8 +61,6 @@ export class HomeComponent implements OnInit {
       }
     );
 
-    this.getPosts();
-
     this.homeDataService.getConnectionsCount().subscribe(
       result => {
         this.connectionsCount = result;
@@ -66,6 +69,28 @@ export class HomeComponent implements OnInit {
         this.toastrService.error(error.error, 'Error');
       }
     );
+
+    this.route.params.subscribe(params => {
+      this.loaderService.show();
+      this.postId = params['id'];
+
+      if (this.postId != undefined) {
+        this.homeDataService.getPost(this.postId).subscribe(
+          result => {
+            this.posts.push(result);
+            this.loaderService.hide();
+          },
+          error => {
+            this.loaderService.hide();
+            this.toastrService.error(error.error, 'Error');
+          }
+        );
+      }
+      else {
+        this.getPosts();
+      }
+
+    });
 
   }
 
@@ -101,7 +126,7 @@ export class HomeComponent implements OnInit {
   post() {
 
     if (this.postType == PostType.Article) {
-      this.homeDataService.postArticle(this.title).subscribe(
+      this.homeDataService.postArticle(this.title, this.description).subscribe(
         result => {
           this.posts.unshift(result);
           this.title = "";
@@ -124,6 +149,8 @@ export class HomeComponent implements OnInit {
               }
               this.posts.unshift(res);
               this.title = "";
+              this.description = "";
+              this.showTitle = false;
             },
             error => {
               this.toastrService.error(error.error, 'Error');

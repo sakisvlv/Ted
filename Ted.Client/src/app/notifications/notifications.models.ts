@@ -8,6 +8,7 @@ export class UserSmall {
 
 
 export class Notification {
+    Id: string;
     Sender: string;
     SenderId: string;
     Type: NotificationType;

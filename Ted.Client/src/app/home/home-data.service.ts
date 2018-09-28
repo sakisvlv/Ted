@@ -25,8 +25,8 @@ export class HomeDataService {
     return this.http.get<number>(this.apiUrl + "ConnectionsCount");
   }
 
-  postArticle(article: string) {
-    return this.http.post<Post>(this.apiUrl + "InsertArticle", [article]);
+  postArticle(title: string, description: string) {
+    return this.http.post<Post>(this.apiUrl + "InsertArticle", [title, description]);
   }
 
   deletePost(id: string) {

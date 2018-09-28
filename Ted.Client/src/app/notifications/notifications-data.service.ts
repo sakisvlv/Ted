@@ -18,7 +18,7 @@ export class NotificationsDataService {
     return this.http.get<Notification[]>(this.apiUrl + "Notifications/" + page);
   }
 
-  acknowledgeNotifications(id: number) {
+  acknowledgeNotification(id: string) {
     return this.http.get<boolean>(this.apiUrl + "AcknowledgeNotification/" + id);
   }
 

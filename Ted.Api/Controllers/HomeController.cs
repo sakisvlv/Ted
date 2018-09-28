@@ -210,7 +210,7 @@ namespace Ted.Api.Controllers
             try
             {
                 var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
-                var result = await _homeService.InsertArticle(userId, content.FirstOrDefault());
+                var result = await _homeService.InsertArticle(userId, content[0], content[1]);
                 if (!result.IsSuccess())
                 {
                     return result.ToErrorResponse();

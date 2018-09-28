@@ -172,6 +172,7 @@ namespace Ted.Dal
                                 post.Comments.Add(comment3);
                             }
                             post.Title = "A nice day today";
+                            post.Description = "I think this day is a very good day guys!";
                             post.Type = Model.PostType.Article;
                             context.Posts.Add(post);
                         }

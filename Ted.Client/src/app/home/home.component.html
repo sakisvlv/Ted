@@ -67,8 +67,19 @@
                             </div>
                         </div>
                     </label>
-                    <div class="control">
-                        <textarea [(ngModel)]="title" #article class="textarea" placeholder="Share an article, photo, video or idea"></textarea>
+                    <div *ngIf="!showTitle">
+                        <div class="control">
+                            <textarea [(ngModel)]="title" #article class="textarea" placeholder="Share an article, photo, video or idea"></textarea>
+                        </div>
+                    </div>
+                    <div *ngIf="showTitle">
+                        <div class="control">
+                            <input [(ngModel)]="title" #article class="input" type="text" placeholder="Title...">
+                        </div>
+                        <br>
+                        <div class="control">
+                            <textarea [(ngModel)]="description" class="textarea" placeholder="Content..."></textarea>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,7 +88,7 @@
                     <div class="columns">
                         <div class="column is-11">
                             <div class="buttons">
-                                <button class="button is-rounded" (click)="focusInput(); postType = PostType.Article">
+                                <button class="button is-rounded" (click)="focusInput(); postType = PostType.Article; showTitle = !showTitle">
                                     <fa-icon icon="edit"></fa-icon> &nbsp; Write an article
                                 </button>
                                 <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
@@ -124,7 +135,10 @@
                                                     | date:'EEEE MMMM d - HH:mm'}}</p>
                                             </strong>
                                             <br>
-                                            <span *ngIf="!isBeingEdited[i]">{{post.Title}}</span>
+                                            <strong>
+                                                <p *ngIf="!isBeingEdited[i]">{{post.Title}}</p>
+                                            </strong>
+                                            <span *ngIf="post.Type == PostType.Article">{{post.Description}}</span>
                                             <span *ngIf="isBeingEdited[i]" class="control">
                                                 <textarea cols="2" [(ngModel)]="post.Title" class="textarea"></textarea>
                                             </span>
@@ -161,8 +175,8 @@
                                         </p>
                                     </div>
                                     <div class="column is-3">
-                                        <div class="buttons" *ngIf="post.User.Id == authService.userId" >
-                                            <button *ngIf="!isBeingEdited[i]" (click)="isBeingEdited[i] = !isBeingEdited[i]"
+                                        <div class="buttons" *ngIf="post.User.Id == authService.userId">
+                                            <button *ngIf="!isBeingEdited[i] && post.Type != PostType.Article" (click)="isBeingEdited[i] = !isBeingEdited[i]"
                                                 class="button is-primary is-rounded is-inverted">
                                                 <fa-icon icon="pencil-alt"></fa-icon>
                                             </button>
@@ -241,7 +255,7 @@
 
         </div>
 
-        <div>
+        <div *ngIf="postId == undefined">
             <a (click)="page = page+1;getPosts();">Show More</a>
         </div>
     </div>

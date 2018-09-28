@@ -8,6 +8,7 @@ namespace Ted.Model.DTO
 {
     public class NotificationDTO
     {
+        public Guid Id { set; get; }
         public string Sender { set; get; }
         public Guid SenderId { set; get; }
         public NotificationType Type { get; set; }
@@ -23,6 +24,7 @@ namespace Ted.Model.DTO
             PostId = notification.PostId;
             IsAcknowledged = notification.IsAcknowledged;
             DateAdded = notification.DateAdded;
+            Id = notification.Id;
         }
 
         public NotificationDTO()

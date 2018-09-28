@@ -21,6 +21,7 @@ export class Post {
     FileUrl: string;
     PostedDate: Date;
     Type: PostType;
+    Description: string;
 }
 
 export class UserSmall {
@@ -28,7 +29,7 @@ export class UserSmall {
     FirstName: string;
     LastName: string;
     CurrentState: string;
-    IsFriend:boolean;
+    IsFriend: boolean;
 }
 
 export class Comment {

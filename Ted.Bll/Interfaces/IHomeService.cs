@@ -19,7 +19,7 @@ namespace Ted.Bll.Interfaces
         Task<Result<PostDTO>> GetPost(string userId, string postId);
         Task<Result<IEnumerable<PostDTO>>> GetPosts(string userId, int page);
         Task<Result<int>> GetConnectionsCount(string userId);
-        Task<Result<PostDTO>> InsertArticle(string userId, string content);
+        Task<Result<PostDTO>> InsertArticle(string userId, string content, string description);
         Task<Result<bool>> DeletePost(string userId, string id);
         Task<Result<UserInfoSmallDTO>> SubscribeToPost(string userId, string id);
         Task<Result<PostDTO>> UpdatePost(string userId, PostDTO postDTO);

@@ -12,6 +12,7 @@ namespace Ted.Model.DTO
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
+        public string Description { get; set; }
         public UserInfoSmallDTO User { get; set; }
         public IEnumerable<UserInfoSmallDTO> Subscribers { get; set; }
         public PostType Type { get; set; }
@@ -33,6 +34,7 @@ namespace Ted.Model.DTO
             Comments = CommentDTO.ToCommentDTOList(post.Comments);
             Type = post.Type;
             PostedDate = post.PostedDate;
+            Description = post.Description;
         }
 
         public static IEnumerable<PostDTO> ToPostDTOList(List<Post> posts)
