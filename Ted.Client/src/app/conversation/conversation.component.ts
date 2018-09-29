@@ -1,10 +1,16 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@aspnet/signalr';
+
 import { ConversationDataService } from './conversation-data.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../core/loader/loader.service';
-import { Message, Conversation } from './conversation.models';
 import { AuthService } from '../core/auth/services/auth.service';
+
+import { Message, Conversation } from './conversation.models';
+import { environment } from '../../environments/environment';
+import { BudgiesService } from '../core/navbar/budgies.service';
+
 
 
 @Component({
@@ -13,6 +19,9 @@ import { AuthService } from '../core/auth/services/auth.service';
   styleUrls: ['./conversation.component.scss']
 })
 export class ConversationComponent implements OnInit, AfterViewChecked {
+
+  private signalR: string = environment.signalR + "messages";
+  private hubConnection: HubConnection;
 
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
 
@@ -28,10 +37,29 @@ export class ConversationComponent implements OnInit, AfterViewChecked {
     private toastrService: ToastrService,
     private loaderService: LoaderService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private budgiesService: BudgiesService
   ) { }
 
   ngOnInit() {
+    this.hubConnection = new HubConnectionBuilder()
+      .withUrl(this.signalR, { accessTokenFactory: () => { return this.authService.getToken() } })
+      .build();
+    this.hubConnection.start().catch(err => console.error(err.toString()));
+
+    this.hubConnection.on('ReceiveMessage', (message: string, conversationId: string) => {
+      if (this.selectedConversation.Id == conversationId) {
+        let mes = new Message();
+        mes.Sender = this.messages.find(x => x.Sender.Id != this.authService.userId).Sender;
+        mes.DateSended = new Date(Date.now());
+        mes.Text = message;
+        this.messages.push(mes);
+      }
+      else {
+        let con = this.convaersations.find(x => x.Id == conversationId);
+        con.HasNewMessagees = true;
+      }
+    });
 
     this.route.params.subscribe(params => {
       this.userId = params['id'];
@@ -98,6 +126,17 @@ export class ConversationComponent implements OnInit, AfterViewChecked {
 
 
   getMessages() {
+    this.conversationDataService.ackConversation(this.selectedConversation.Id).subscribe(
+      result => {
+        this.selectedConversation.HasNewMessagees = false;
+        this.loaderService.hide();
+        this.budgiesService.getBudgies();
+      },
+      error => {
+        this.loaderService.hide();
+        this.toastrService.error(error.error, 'Error');
+      }
+    );
     this.conversationDataService.getMessages(this.selectedConversation.Id, this.page).subscribe(
       result => {
         this.messages = result.concat(this.messages);
@@ -119,8 +158,6 @@ export class ConversationComponent implements OnInit, AfterViewChecked {
   }
 
   showMore() {
-    console.log("got");
-
     this.page++;
     this.getMessages();
   }

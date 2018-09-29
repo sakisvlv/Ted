@@ -14,6 +14,7 @@ namespace Ted.Model.Conversations
         public List<Message> Messages { get; set; }
         public bool FromUserHasNewMessages { get; set; }
         public bool ToUserHasNewMessages { get; set; }
+        public DateTime LastMessageDate { get; set; }
 
         public Conversation(User fromUser, User toUser)
         {

@@ -7,7 +7,7 @@
           Conversations
         </p>
         <div class="panel-block"></div>
-        <a class="panel-block" *ngFor="let convaersation of convaersations" (click)="changeConversation(convaersation)"
+        <a class="panel-block" *ngFor="let convaersation of convaersations" (click)="changeConversation(convaersation)" [ngClass]="{'unacknoledged': convaersation.HasNewMessagees}"
           [ngClass]="{'is-active': selectedConversation == convaersation}">
           <div class="media-left">
             <p class="image is-48x48">

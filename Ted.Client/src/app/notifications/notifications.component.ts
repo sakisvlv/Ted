@@ -4,6 +4,7 @@ import { LoaderService } from '../core/loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
 import { Notification, NotificationType } from './notifications.models';
 import { Router } from '@angular/router';
+import { BudgiesService } from '../core/navbar/budgies.service';
 
 @Component({
     selector: 'app-notifications',
@@ -20,7 +21,8 @@ export class NotificationsComponent implements OnInit {
         private notificationsDataService: NotificationsDataService,
         private loaderService: LoaderService,
         private toastrService: ToastrService,
-        private router: Router
+        private router: Router,
+        private budgiesService: BudgiesService
     ) { }
 
     ngOnInit() {
@@ -42,6 +44,7 @@ export class NotificationsComponent implements OnInit {
             result => {
                 this.notifications = result;
                 this.loaderService.hide();
+                this.budgiesService.getBudgies();
             },
             error => {
                 this.loaderService.hide();

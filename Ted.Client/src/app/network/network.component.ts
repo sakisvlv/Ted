@@ -6,6 +6,7 @@ import { UserSmall } from '../home/home.models';
 import { NetworkDataService } from './network-data.service';
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../core/loader/loader.service';
+import { BudgiesService } from '../core/navbar/budgies.service';
 
 @Component({
   selector: 'app-network',
@@ -26,7 +27,8 @@ export class NetworkComponent implements OnInit {
     private networkDataService: NetworkDataService,
     private toastrService: ToastrService,
     private loaderService: LoaderService,
-    private router: Router
+    private router: Router,
+    private budgiesService: BudgiesService
   ) { }
 
   ngOnInit() {
@@ -150,6 +152,7 @@ export class NetworkComponent implements OnInit {
         this.pending = 0;
         this.allFriends[0].unshift(friend);
         this.loaderService.hide();
+        this.budgiesService.getBudgies();
       },
       error => {
         this.loaderService.hide();
@@ -164,6 +167,7 @@ export class NetworkComponent implements OnInit {
         friend.IsFriend = false;
         this.pending = 0;
         this.loaderService.hide();
+        this.budgiesService.getBudgies();
       },
       error => {
         this.loaderService.hide();

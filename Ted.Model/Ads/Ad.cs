@@ -11,5 +11,7 @@ namespace Ted.Model.Ads
         public ICollection<User> Applicants { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public string Company { get; set; }
+        public ICollection<AdKnn> AdKnns { get; set; }
     }
 }

@@ -19,12 +19,15 @@ namespace Ted.Bll.Services
     {
         private readonly Context _context;
         private readonly UserManager<User> _userManager;
+        private readonly IKnnService _knnService;
 
-        public UserService(Context context, UserManager<User> userManager)
+        public UserService(Context context, UserManager<User> userManager, IKnnService knnService)
         {
             _context = context;
             _userManager = userManager;
+            _knnService = knnService;
         }
+
         public async Task<Result<string>> InsertPhoto(string userId, byte[] PhotoByteArray)
         {
             var user = await _context.Users.Include(t => t.Photo).SingleOrDefaultAsync(x => x.Id == Guid.Parse(userId));
@@ -153,6 +156,7 @@ namespace Ted.Bll.Services
             if (expirience != null)
             {
                 expirience.Update(experienceDTO);
+                await _knnService.RemoveSkill(expirience, user);
             }
             else
             {
@@ -161,6 +165,9 @@ namespace Ted.Bll.Services
                 expirience.User = user;
                 await _context.Experiences.AddAsync(expirience);
             }
+
+            await _knnService.ManageSkill(expirience, user);
+
 
             try
             {
@@ -188,6 +195,7 @@ namespace Ted.Bll.Services
             if (education != null)
             {
                 education.Update(educationDTO);
+                await _knnService.RemoveSkill(education, user);
             }
             else
             {
@@ -196,6 +204,8 @@ namespace Ted.Bll.Services
                 education.User = user;
                 await _context.Educations.AddAsync(education);
             }
+
+            await _knnService.ManageSkill(education, user);
 
             try
             {
@@ -223,6 +233,7 @@ namespace Ted.Bll.Services
             if (personalSkill != null)
             {
                 personalSkill.Update(personalSkillDTO);
+                await _knnService.RemoveSkill(personalSkill, user);
             }
             else
             {
@@ -231,6 +242,8 @@ namespace Ted.Bll.Services
                 personalSkill.User = user;
                 await _context.PersonalSkills.AddAsync(personalSkill);
             }
+
+            await _knnService.ManageSkill(personalSkill, user);
 
             try
             {
@@ -281,6 +294,52 @@ namespace Ted.Bll.Services
             }
 
             return Result<bool>.CreateSuccessful(true);
+        }
+
+        public async Task<Result<BudgiesDTO>> GetBudgies(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<BudgiesDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            int friendRequests, notifications, messages;
+
+            var friendlist = await _context.Friends
+                .Where(x => (x.FromUser == user && !x.FromUserAccepted) || (x.ToUser == user && !x.ToUserAccepted))
+                .Include(x => x.FromUser)
+                .Include(x => x.ToUser)
+                .ToListAsync();
+
+            if (friendlist == null)
+            {
+                return Result<BudgiesDTO>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            var friends = new List<User>();
+            foreach (var friend in friendlist)
+            {
+                if (friend.ToUser == user)
+                {
+                    friends.Add(friend.FromUser);
+                    continue;
+                }
+                friends.Add(friend.ToUser);
+            }
+            friendRequests = friends.Count();
+
+            notifications = await _context.Notifications
+                .Where(x => x.ToUser.Id == Guid.Parse(userId) && x.IsAcknowledged == false).CountAsync();
+
+            messages = await _context.Conversations
+                .Where(x => (x.FromUser == user && x.FromUserHasNewMessages == true) || (x.ToUser == user && x.ToUserHasNewMessages == true))
+                .CountAsync();
+
+            
+            return Result<BudgiesDTO>.CreateSuccessful(new BudgiesDTO(friendRequests, notifications, messages));
         }
     }
 }

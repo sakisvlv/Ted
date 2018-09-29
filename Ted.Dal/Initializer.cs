@@ -184,6 +184,7 @@ namespace Ted.Dal
                             conversation1.FromUserHasNewMessages = false;
                             conversation1.ToUser = users[1];
                             conversation1.ToUserHasNewMessages = false;
+                            conversation1.LastMessageDate = DateTime.Now;
                             conversation1.Messages = new List<Message>();
                             for (int k = 0; k < 15; k++)
                             {
@@ -209,6 +210,7 @@ namespace Ted.Dal
                             conversation2.Messages = new List<Message>();
                             conversation2.FromUserHasNewMessages = false;
                             conversation2.ToUserHasNewMessages = false;
+                            conversation2.LastMessageDate = DateTime.Now;
                             for (int k = 0; k < 15; k++)
                             {
                                 var message = new Message();
@@ -232,6 +234,7 @@ namespace Ted.Dal
                             conversation3.Messages = new List<Message>();
                             conversation3.FromUserHasNewMessages = false;
                             conversation3.ToUserHasNewMessages = false;
+                            conversation3.LastMessageDate = DateTime.Now;
                             for (int k = 0; k < 15; k++)
                             {
                                 var message = new Message();

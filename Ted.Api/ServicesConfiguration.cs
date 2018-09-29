@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,8 +34,8 @@ namespace Ted.Api
             services.AddTransient<IConversationService, ConversationService>();
             services.AddTransient<INetworkService, NetworkService>();
             services.AddTransient<IViewService, ViewService>();
-
-
+            services.AddTransient<IKnnService, KnnService>();
+            
             //Authentication
             services.Configure<IdentityOptions>(options =>
             {
@@ -76,6 +77,8 @@ namespace Ted.Api
 
             services.AddCors();
             services.AddMvc().AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+            services.AddSignalR();
+            services.AddSingleton<IUserIdProvider, NameUserIdProvider>();
         }
 
         private static PasswordOptions GetPasswordOptions()

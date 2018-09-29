@@ -30,4 +30,8 @@ export class ConversationDataService {
     return this.http.post<Conversation>(this.apiUrl + "StartConversation", [userId]);
   }
 
+  ackConversation(conversationId: string) {
+    return this.http.get<boolean>(this.apiUrl + "AckConversation/"+ conversationId);
+  }
+
 }

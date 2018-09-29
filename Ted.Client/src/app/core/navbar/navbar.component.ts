@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../auth/services/auth.service';
 
 import { LoginData } from '../auth/auth.model';
+import { BudgiesService } from './budgies.service';
 
 @Component({
   selector: 'app-navbar',
@@ -13,7 +14,10 @@ export class NavbarComponent implements OnInit {
 
   burgerOpen = false;
   loginData = new LoginData();
-  constructor(public authService: AuthService) { }
+  constructor(
+    public authService: AuthService,
+    public budgiesService: BudgiesService
+  ) { }
 
   ngOnInit() {
   }
@@ -23,5 +27,7 @@ export class NavbarComponent implements OnInit {
       this.authService.login(this.loginData);
     }
   }
+
+
 
 }

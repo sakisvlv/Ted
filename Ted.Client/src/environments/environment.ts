@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   apiUri: 'http://localhost:44433/api/',
-  filesUri: 'http://localhost:44433/files/'
+  filesUri: 'http://localhost:44433/files/',
+  signalR : 'http://localhost:44433/'
 };
 /*
  * In development mode, to ignore zone related error stack frames such as

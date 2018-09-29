@@ -246,5 +246,27 @@ namespace Ted.Api.Controllers
             }
 
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Budgies")]
+        public async Task<IActionResult> GetBudgies()
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _userService.GetBudgies(userId);
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
     }
 }

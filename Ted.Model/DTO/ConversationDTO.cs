@@ -21,6 +21,7 @@ namespace Ted.Model.DTO
         {
             Id = conversation.Id;
             ToUser = new UserInfoSmallDTO(conversation.ToUser == user ? conversation.FromUser : conversation.ToUser);
+            HasNewMessagees = conversation.ToUser == user ? conversation.FromUserHasNewMessages : conversation.ToUserHasNewMessages;
         }
 
         public static IEnumerable<ConversationDTO> ToConversationDTOList(IEnumerable<Conversation> conversation, User user)

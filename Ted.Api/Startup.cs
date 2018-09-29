@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Newtonsoft.Json.Serialization;
+using Ted.Bll.SignalR;
 using Ted.Dal;
 using Ted.Model.Auth;
 
@@ -52,8 +53,15 @@ namespace Ted.Api
             });
 
             app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
+            
             app.UseAuthentication();
+            app.UseWebSockets();
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<MessagesHub>("/messages");
+            });
             app.UseMvc();
+            
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ted.Bll.Interfaces;
+using Ted.Bll.SignalR;
 
 namespace Ted.Api.Controllers
 {
@@ -95,6 +96,28 @@ namespace Ted.Api.Controllers
             {
                 var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
                 var result = await _conversationService.StartConversation(userId, toUser.FirstOrDefault());
+                if (!result.IsSuccess())
+                {
+                    return result.ToErrorResponse();
+                }
+                return Ok(result.Data);
+
+            }
+            catch (Exception)
+            {
+                return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("AckConversation/{conversationId}")]
+        public async Task<IActionResult> AckConversation(string conversationId)
+        {
+            try
+            {
+                var userId = User.Claims.Where(x => x.Type == "id").FirstOrDefault().Value;
+                var result = await _conversationService.AckConversation(userId, conversationId);
                 if (!result.IsSuccess())
                 {
                     return result.ToErrorResponse();

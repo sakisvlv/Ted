@@ -28,6 +28,10 @@ namespace Ted.Dal
         public DbSet<Message> Messages { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Ad> Ads { get; set; }
+        public DbSet<GlobalString> GlobalStrings { get; set; }
+        public DbSet<AdKnn> AdKnns { get; set; }
+        public DbSet<SkillKnn> SkillKnns { get; set; }
+        public DbSet<PostKnn> PostKnns { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
@@ -55,6 +59,10 @@ namespace Ted.Dal
             modelBuilder.Entity<Notification>().ToTable("Notifications");
             modelBuilder.Entity<Ad>().ToTable("Ads");
             modelBuilder.Entity<Message>().ToTable("Messages");
+            modelBuilder.Entity<GlobalString>().ToTable("GlobalStrings");
+            modelBuilder.Entity<AdKnn>().ToTable("AdKnns");
+            modelBuilder.Entity<SkillKnn>().ToTable("SkillKnns");
+            modelBuilder.Entity<PostKnn>().ToTable("PostKnns");
         }
     }
 }

@@ -20,16 +20,20 @@
           <fa-icon icon="home"></fa-icon> &nbsp; Home
         </a>
         <a class="navbar-item" routerLink="/network" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
-          <fa-icon icon="users"></fa-icon> &nbsp; Network
+          <fa-icon icon="users" [ngClass]="{'is-badge-danger badge is-badge-left': budgiesService.friendRequests!=0}"
+            [attr.data-badge]="budgiesService.friendRequests"></fa-icon>
+          &nbsp; Network
         </a>
         <a class="navbar-item" routerLink="/ads" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
           <fa-icon icon="table"></fa-icon> &nbsp; Ads
         </a>
         <a class="navbar-item" routerLink="/conversation" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
-          <fa-icon icon="comments"></fa-icon> &nbsp; Conversations
+          <fa-icon icon="comments" [ngClass]="{'is-badge-danger badge is-badge-left': budgiesService.messages!=0}"
+            [attr.data-badge]="budgiesService.messages"></fa-icon> &nbsp; Conversations
         </a>
         <a class="navbar-item" routerLink="/notifications" routerLinkActive="is-active" *ngIf="authService.isAuthenticated() && authService.getRole() == 'User'">
-          <fa-icon icon="bell"></fa-icon> &nbsp; Notifications
+          <fa-icon icon="bell" [ngClass]="{'is-badge-danger badge is-badge-left': budgiesService.notifications!=0}"
+            [attr.data-badge]="budgiesService.notifications"></fa-icon> &nbsp; Notifications
         </a>
 
         <!-- Admin section -->

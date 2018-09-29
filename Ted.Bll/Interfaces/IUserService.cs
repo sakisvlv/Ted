@@ -19,5 +19,6 @@ namespace Ted.Bll.Interfaces
         Task<Result<EducationDTO>> SaveEducation(string userId, EducationDTO educationDTO);
         Task<Result<PersonalSkillDTO>> SavePersonalSkill(string userId, PersonalSkillDTO personalSkillDTO);
         Task<Result<bool>> DeleteSkill(string userId, string type, string id);
+        Task<Result<BudgiesDTO>> GetBudgies(string userId);
     }
 }

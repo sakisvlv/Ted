@@ -13,5 +13,6 @@ namespace Ted.Bll.Interfaces
         Task<Result<IEnumerable<MessageDTO>>> GetMessages(string userId, string conversationId, int page);
         Task<Result<MessageDTO>> SendMessage(string userId, string text, string conversationId);
         Task<Result<ConversationDTO>> StartConversation(string userId, string toUserId);
+        Task<Result<bool>> AckConversation(string userId, string conversationId);
     }
 }

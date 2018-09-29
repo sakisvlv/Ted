@@ -393,7 +393,7 @@ namespace Ted.Api.Controllers
                 }
                 return Ok(result.Data);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return BadRequest("Σφάλμα, Επικοινωνήστε με τον διαχειριστή");
             }

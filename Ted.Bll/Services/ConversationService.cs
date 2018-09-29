@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Ted.Bll.Interfaces;
+using Ted.Bll.SignalR;
 using Ted.Dal;
 using Ted.Model;
 using Ted.Model.Auth;
@@ -19,11 +21,14 @@ namespace Ted.Bll.Services
     {
         private readonly Context _context;
         private readonly UserManager<User> _userManager;
+        private readonly IHubContext<MessagesHub> _hubContext;
 
-        public ConversationService(Context context, UserManager<User> userManager)
+
+        public ConversationService(Context context, UserManager<User> userManager, IHubContext<MessagesHub> hubContext)
         {
             _context = context;
             _userManager = userManager;
+            _hubContext = hubContext;
         }
 
         public async Task<Result<IEnumerable<ConversationDTO>>> GetConversations(string userId)
@@ -39,6 +44,7 @@ namespace Ted.Bll.Services
                 .Where(x => x.FromUser == user || x.ToUser == user)
                 .Include(x => x.ToUser)
                 .Include(x => x.FromUser)
+                .OrderByDescending(x=>x.LastMessageDate)
                 .Distinct()
                 .ToListAsync();
 
@@ -69,6 +75,7 @@ namespace Ted.Bll.Services
             var conversation = new Conversation();
             conversation.FromUser = user;
             conversation.ToUser = toUser;
+            conversation.LastMessageDate = DateTime.Now;
             await _context.Conversations.AddAsync(conversation);
 
             try
@@ -133,6 +140,15 @@ namespace Ted.Bll.Services
                    HttpStatusCode.NotFound, "User not found");
             }
 
+            if (conversation.ToUser == user)
+            {
+                conversation.ToUserHasNewMessages = true;
+            }
+            else
+            {
+                conversation.FromUserHasNewMessages = true;
+            }
+            conversation.LastMessageDate = DateTime.Now;
             var message = new Message();
             message.Sender = user;
             message.Text = text;
@@ -158,7 +174,53 @@ namespace Ted.Bll.Services
                     HttpStatusCode.InternalServerError, "Cound't send the message");
             }
 
+            await _hubContext.Clients.User(conversation.ToUser == user ? conversation.FromUser.Id.ToString() : conversation.ToUser.Id.ToString()).SendAsync("ReceiveMessage", message.Text, conversation.Id.ToString());
+
             return Result<MessageDTO>.CreateSuccessful(new MessageDTO(message));
+        }
+
+        public async Task<Result<bool>> AckConversation(string userId, string conversationId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return Result<bool>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            var conversation = await _context.Conversations
+                .Where(x => x.Id == Guid.Parse(conversationId))
+                .Include(x => x.FromUser)
+                .Include(x => x.ToUser)
+                .FirstOrDefaultAsync();
+
+            if (conversation == null)
+            {
+                return Result<bool>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+
+            if (conversation.ToUser == user)
+            {
+                conversation.ToUserHasNewMessages = false;
+            }
+            else
+            {
+                conversation.FromUserHasNewMessages = false;
+            }
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception)
+            {
+                return Result<bool>.CreateFailed(
+                    HttpStatusCode.InternalServerError, "Cound't send the message");
+            }
+
+
+            return Result<bool>.CreateSuccessful(true);
         }
 
     }

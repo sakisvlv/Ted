@@ -12,6 +12,7 @@ import { LoaderService } from './loader/loader.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { LoaderComponent } from './loader/loader.component';
 import { SettingsComponent } from './settings/settings.component';
+import { BudgiesService } from './navbar/budgies.service';
 
 
 @NgModule({
@@ -49,7 +50,8 @@ export class CoreModule {
     return {
       ngModule: CoreModule,
       providers: [
-        LoaderService
+        LoaderService,
+        BudgiesService
       ]
     }
   }

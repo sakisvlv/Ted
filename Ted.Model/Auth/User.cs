@@ -26,5 +26,7 @@ namespace Ted.Model.Auth
         public ICollection<Education> Educations { get; set; }
         public ICollection<PersonalSkill> PersonalSkills { get; set; }
         public ICollection<Notification> Notifications { get; set; }
+        public ICollection<SkillKnn> SkillKnns { get; set; }
+        public ICollection<PostKnn> PostKnns { get; set; }
     }
 }
