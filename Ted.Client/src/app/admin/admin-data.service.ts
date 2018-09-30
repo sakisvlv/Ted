@@ -27,4 +27,10 @@ export class AdminDataService {
     return this.http.get<Counts>(this.apiUrl + "Counts");
   }
 
+  getXml(ids: string[]) {
+    return this.http.post<string>(this.apiUrl + "GetXml", ids);
+  }
+
+
+
 }

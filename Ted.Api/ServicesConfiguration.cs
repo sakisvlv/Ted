@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using Ted.Bll.Interfaces;
 using Ted.Bll.Services;
 using Ted.Dal;
+using Ted.Knn;
 using Ted.Model.Auth;
 
 namespace Ted.Api

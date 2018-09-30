@@ -23,6 +23,7 @@ namespace Ted.Dal
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<UserPost> UserPost { get; set; }
+        public DbSet<UserPost> UserAd { get; set; }
         public DbSet<Friend> Friends { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
         public DbSet<Message> Messages { get; set; }
@@ -32,6 +33,7 @@ namespace Ted.Dal
         public DbSet<AdKnn> AdKnns { get; set; }
         public DbSet<SkillKnn> SkillKnns { get; set; }
         public DbSet<PostKnn> PostKnns { get; set; }
+        public DbSet<Pknn> PKnns { get; set; }
 
         public Context(DbContextOptions<Context> options) : base(options)
         {
@@ -57,12 +59,14 @@ namespace Ted.Dal
             modelBuilder.Entity<Friend>().HasOne(x => x.ToUser).WithMany(x => x.FrendFrom).HasForeignKey(x => x.ToUserId).OnDelete(DeleteBehavior.ClientSetNull);
             modelBuilder.Entity<Conversation>().ToTable("Conversations");
             modelBuilder.Entity<Notification>().ToTable("Notifications");
-            modelBuilder.Entity<Ad>().ToTable("Ads");
+            modelBuilder.Entity<Ad>().ToTable("Ads").HasOne(x => x.Owner);
+            modelBuilder.Entity<UserAd>().HasKey(x => new { x.AdId, x.UserId });
             modelBuilder.Entity<Message>().ToTable("Messages");
             modelBuilder.Entity<GlobalString>().ToTable("GlobalStrings");
             modelBuilder.Entity<AdKnn>().ToTable("AdKnns");
             modelBuilder.Entity<SkillKnn>().ToTable("SkillKnns");
             modelBuilder.Entity<PostKnn>().ToTable("PostKnns");
+            modelBuilder.Entity<Pknn>().ToTable("PKnns");
         }
     }
 }

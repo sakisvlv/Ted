@@ -9,7 +9,7 @@
             <button class="button is-primary is-small" *ngIf="!showUploader" (click)="showUploader = !showUploader">Change
                 Profile Photo
             </button>
-            <image-upload *ngIf="showUploader" [preview]="false" [url]="uploadUrl" [headers]="myHeaders" [max]="1" [extensions]="['jpg','png','gif']"
+            <image-upload *ngIf="showUploader" [preview]="false" [url]="uploadUrl" [headers]="myHeaders" [max]="1" [extensions]="['jpeg','png']"
                 (uploadFinished)="onUploadFinished($event)" [style]="customStyle"></image-upload>
         </div>
     </div>

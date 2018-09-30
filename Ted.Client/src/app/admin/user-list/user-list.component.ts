@@ -6,6 +6,7 @@ import { UserListItem } from '../admin.models';
 import { AdminDataService } from '../admin-data.service';
 import { LoaderService } from '../../core/loader/loader.service';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-user-list',
@@ -13,6 +14,7 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./user-list.component.scss']
 })
 export class UserListComponent implements OnInit {
+  private filesUrl: string = environment.filesUri;
 
   constructor(
     private adminDataService: AdminDataService,
@@ -20,7 +22,6 @@ export class UserListComponent implements OnInit {
     private toastrService: ToastrService,
     private router: Router
   ) { }
-
   users: UserListItem[] = [];
   checkedIds: string[] = [];
 
@@ -35,7 +36,7 @@ export class UserListComponent implements OnInit {
         this.loaderService.hide();
         this.toastrService.error(error.error, "Error");
       }
-    )
+    );
   }
 
   onCheck(id: string) {
@@ -56,4 +57,20 @@ export class UserListComponent implements OnInit {
   redirect(id: string) {
     this.router.navigate([`/user-info`], { queryParams: { id: id } });
   }
+
+  getXml() {
+    this.adminDataService.getXml(this.checkedIds).subscribe(
+      result => {
+        console.log(this.filesUrl + result + ".xml");
+        
+        window.open(this.filesUrl  + result + ".xml");
+        this.loaderService.hide();
+      },
+      error => {
+        this.loaderService.hide();
+        this.toastrService.error(error.error, "Error");
+      }
+    );
+  }
+
 }

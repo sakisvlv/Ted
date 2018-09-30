@@ -11,6 +11,8 @@ using Ted.Model;
 using Ted.Model.Auth;
 using Ted.Model.DTO;
 using Microsoft.EntityFrameworkCore;
+using System.Xml.Serialization;
+using Microsoft.Extensions.Configuration;
 
 namespace Ted.Bll.Services
 {
@@ -18,6 +20,7 @@ namespace Ted.Bll.Services
     {
         private readonly Context _context;
         private readonly UserManager<User> _userManager;
+        
 
         public AdminService(Context context, UserManager<User> userManager)
         {
@@ -122,6 +125,56 @@ namespace Ted.Bll.Services
             var roles = await _userManager.GetRolesAsync(user);
             var role = roles.ToList().LastOrDefault();
             return Result<UserListItemDTO>.CreateSuccessful(new UserListItemDTO(user, role));
+        }
+
+        public async Task<Result<string>> GetXml(string adminId, List<string> userIds)
+        {
+            var admin = await _userManager.FindByIdAsync(adminId);
+            if (admin == null)
+            {
+                return Result<string>.CreateFailed(
+                   HttpStatusCode.NotFound, "User not found");
+            }
+            var adminRoles = await _userManager.GetRolesAsync(admin);
+            if (!adminRoles.Contains("Admin"))
+            {
+                return Result<string>.CreateFailed(
+                   HttpStatusCode.NotFound, "Has not Admin Role");
+            }
+
+            string finalXml = "";
+            var xmls = new XMLS();
+            xmls.XMLs = new List<XML>();
+            foreach (var userId in userIds)
+            {
+                var user = await _context.Users
+                    .Where(x => x.Id == Guid.Parse(userId))
+                    .Include(x => x.Educations)
+                    .Include(x => x.Educations)
+                    .Include(x => x.Experiences)
+                    .Include(x => x.FrendFrom)
+                    .Include(x => x.FriendTo)
+                    .Include(x => x.Notifications)
+                    .Include("UserAds.Ad")
+                    .Include(x => x.UserPosts)
+                    .Include("UserPosts.Post").FirstOrDefaultAsync();
+                if (user == null)
+                {
+                    return Result<string>.CreateFailed(
+                       HttpStatusCode.NotFound, "User not found");
+                }
+                var xml = new XML();
+                xml.User = user;
+                xml.Comments = await _context.Comments.Where(x => x.User == user).ToListAsync();
+                xml.Expiriances = await _context.Experiences.Where(x => x.User == user).ToListAsync();
+                xml.Educations = await _context.Educations.Where(x => x.User == user).ToListAsync();
+                xml.Personalskills = await _context.PersonalSkills.Where(x => x.User == user).ToListAsync();
+                xml.Posts = await _context.Posts.Where(x => x.Owner == user).ToListAsync();
+                xml.Ads = await _context.Ads.Where(x => x.Owner == user).ToListAsync();
+                xmls.XMLs.Add(xml);
+            }
+            finalXml = xmls.ToXML();
+            return Result<string>.CreateSuccessful(finalXml);
         }
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-16"?>
+<User xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Id>f6b11d45-294c-4fae-9e4a-08d626e89d9e</Id>
+  <UserName>user5@gmail.com</UserName>
+  <NormalizedUserName>USER5@GMAIL.COM</NormalizedUserName>
+  <Email>user5@gmail.com</Email>
+  <NormalizedEmail>USER5@GMAIL.COM</NormalizedEmail>
+  <EmailConfirmed>false</EmailConfirmed>
+  <PasswordHash>AQAAAAEAACcQAAAAEJhZxFrFN56LNbRvD6Vu4oruHNbpLkCg1rfC+txsVXGr/fyEGUN5Ogeb1qgLmCQylg==</PasswordHash>
+  <SecurityStamp>LHW6SXHN3RRX2OTNWGVYVT2CNPWDYLMN</SecurityStamp>
+  <ConcurrencyStamp>947a81ae-b877-42de-b9a6-5d291380e73c</ConcurrencyStamp>
+  <PhoneNumber>6981234567</PhoneNumber>
+  <PhoneNumberConfirmed>false</PhoneNumberConfirmed>
+  <TwoFactorEnabled>false</TwoFactorEnabled>
+  <LockoutEnd xsi:nil="true" />
+  <LockoutEnabled>true</LockoutEnabled>
+  <AccessFailedCount>0</AccessFailedCount>
+  <FirstName>Peter</FirstName>
+  <LastName>Parker</LastName>
+  <CurrentState>Assistant at X-men</CurrentState>
+</User><?xml version="1.0" encoding="utf-16"?>
+<User xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Id>7a313ea9-9169-4b55-9e49-08d626e89d9e</Id>
+  <UserName>user4@gmail.com</UserName>
+  <NormalizedUserName>USER4@GMAIL.COM</NormalizedUserName>
+  <Email>user4@gmail.com</Email>
+  <NormalizedEmail>USER4@GMAIL.COM</NormalizedEmail>
+  <EmailConfirmed>false</EmailConfirmed>
+  <PasswordHash>AQAAAAEAACcQAAAAEFQLhQtn+CkDWJd72dFDC6LcGcDezRxHir9Wzl/RWxc0k1r9kirbJ+/ErLs4o5gLRw==</PasswordHash>
+  <SecurityStamp>CGALSV6ADXGPRRW6TH2WKXRQY3M3ZY5E</SecurityStamp>
+  <ConcurrencyStamp>bf9aee9b-0205-49e9-b04b-cf482783373f</ConcurrencyStamp>
+  <PhoneNumber>6981234567</PhoneNumber>
+  <PhoneNumberConfirmed>false</PhoneNumberConfirmed>
+  <TwoFactorEnabled>false</TwoFactorEnabled>
+  <LockoutEnd xsi:nil="true" />
+  <LockoutEnabled>true</LockoutEnabled>
+  <AccessFailedCount>0</AccessFailedCount>
+  <FirstName>Tony</FirstName>
+  <LastName>Stark</LastName>
+  <CurrentState>President at X-men</CurrentState>
+</User>

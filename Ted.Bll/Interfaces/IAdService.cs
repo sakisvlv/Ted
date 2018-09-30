@@ -11,5 +11,8 @@ namespace Ted.Bll.Interfaces
     {
         Task<Result<bool>> AddAd(string userId, AdDTO adDTO);
         Task<Result<IEnumerable<AdDTO>>> GetAds(string userId);
+        Task<Result<IEnumerable<AdDTO>>> GetMyAds(string userId);
+        Task<Result<bool>> ApplyToAd(string userId, string adId);
+        Task<Result<bool>> DeleteAd(string userId, string adId);
     }
 }

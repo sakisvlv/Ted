@@ -1,26 +1,158 @@
-<!-- <div class="tile is-ancestor" *ngIf="searchFriends != undefined">
-    <div class="tile is-vertical">
-      <div class="tile is-parent" *ngFor="let friendArray of searchFriends">
-        <div class="tile is-parent" *ngFor="let friend of friendArray">
-          <article class="tile is-child notification">
-            <br>
-            <figure class="image is-128x128  has-image-centered">
-              <img class="is-rounded" [id]="friend.Id" [changed]="changed" profile-image />
-            </figure>
-            <span class="has-text-centered">
-              <span (click)="navigateToView(friend.Id)" class="pointer">
-                <h1 class="title is-3">{{friend.FirstName + " " + friend.LastName}}</h1>
-                <h1 class="subtitle is-4">{{friend.CurrentState}}</h1>
-              </span>
-              <br>
-              <div class="buttons is-centered">
-                <button (click)="addFriend(friend)" class="button is-primary" *ngIf="!friend.IsFriend">
-                  Connect
-                </button>
-              </div>
-            </span>
-          </article>
-        </div>
+<button class="button is-success" (click)="modal = 'opened'">
+  <fa-icon icon="plus"></fa-icon> &nbsp; Add Ad
+</button>
+
+<br>
+<br>
+
+<h1 class="title is-3">Suggested</h1>
+
+<div class="tile is-ancestor">
+  <div class="tile is-vertical">
+    <div class="tile is-parent" *ngFor="let adArray of ads">
+      <div class="tile is-parent" *ngFor="let ad of adArray">
+        <article class="tile is-child notification">
+          <br>
+          <!-- <figure class="image is-128x128  has-image-centered">
+            <img class="is-rounded" [id]="friend.Id" [changed]="changed" profile-image />
+          </figure> -->
+          <span class="has-text-centered">
+            <h1 class="title is-3">{{ad.Title}}</h1>
+            <h1 class="subtitle is-4">{{ad.Company}}</h1>
+            <h1 class="subtitle is-6">{{ad.Description}}</h1>
+            <div class="buttons is-centered">
+            </div>
+          </span>
+          <div class="buttons is-centered">
+            <button class="button is-link" *ngIf="authService.userId != ad.Owner.Id" (click)="applyToAd(ad)">
+              Apply
+            </button>
+          </div>
+        </article>
       </div>
     </div>
-  </div> -->
+  </div>
+</div>
+
+<h1 class="title is-3">Yours Ads</h1>
+
+<div class="tile is-ancestor">
+  <div class="tile is-vertical">
+    <div class="tile is-parent" *ngFor="let adArray of myAds">
+      <div class="tile is-parent" *ngFor="let ad of adArray">
+        <article class="tile is-child notification">
+          <br>
+          <!-- <figure class="image is-128x128  has-image-centered">
+            <img class="is-rounded" [id]="friend.Id" [changed]="changed" profile-image />
+          </figure> -->
+          <span class="has-text-centered">
+            <h1 class="title is-3">{{ad.Title}}</h1>
+            <h1 class="subtitle is-4">{{ad.Company}}</h1>
+            <h1 class="subtitle is-6">{{ad.Description}}</h1>
+            <div class="buttons is-centered">
+            </div>
+          </span>
+          <div class="buttons is-centered">
+            <button class="button is-info" (click)="showApplicants(ad)">
+              Show Applicants
+            </button>
+            <button class="button is-danger" (click)="deleteAd(ad)">
+              Delete Ad
+            </button>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" [ngClass]="{'is-active': modal != 'closed'}">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">New Ad</p>
+      <button class="delete" aria-label="close" (click)="modal = 'closed'"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+      <div class="columns">
+        <div class="column">
+
+          <div class="field">
+            <label class="label">Title</label>
+            <div class="control">
+              <input [(ngModel)]="ad.Title" class="input" type="text" placeholder="Title of skill">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Company</label>
+            <div class="control">
+              <input [(ngModel)]="ad.Company" class="input" type="text" placeholder="Title of skill">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Description</label>
+            <div class="control">
+              <textarea [(ngModel)]="ad.Description" class="textarea" type="text" placeholder="Describe it"></textarea>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+    <footer class="modal-card-foot">
+      <button class="button is-success" (click)="adAdd()">
+        <fa-icon icon="save"></fa-icon> &nbsp; Save changes
+      </button>
+      <button class="button is-warning" (click)="modal = 'closed'">
+        <fa-icon icon="undo-alt"></fa-icon>
+        &nbsp;Cancel
+      </button>
+      <button class="button is-danger is-pulled-right" (click)="deleteSkill(personalSkill.Id,'personalSkill')">
+        <fa-icon icon="trash-alt"></fa-icon>
+        &nbsp;Delete
+      </button>
+    </footer>
+  </div>
+</div>
+
+<div class="modal" [ngClass]="{'is-active': applicantsModal != 'closed'}">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Applicants</p>
+      <button class="delete" aria-label="close" (click)="applicantsModal = 'closed'"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+      <div class="columns">
+        <div class="column">
+
+          <div class="card" *ngFor="let applicant of applicants">
+            <a (click)="navigateToView(applicant.Id)">
+              <div class="card-content">
+                <div class="media">
+                  <div class="media-left">
+                    <figure class="image is-96x96">
+                      <img class="is-rounded" [id]="applicant.Id" [changed]="changed" profile-image />
+                    </figure>
+                  </div>
+                  <div class="media-content">
+                    <p class="title is-4">{{applicant.FirstName + " " + applicant.LastName}}</p>
+                    <p class="subtitle is-6">
+                      <fa-icon icon="users"></fa-icon> &nbsp; {{applicant.CurrentState}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <p *ngIf="applicants.length == 0" class="title is-4">None</p>
+
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

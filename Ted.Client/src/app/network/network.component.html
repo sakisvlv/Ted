@@ -1,15 +1,3 @@
-<!-- <div class="field has-addons">
-  <div class="control is-expanded">
-    <input class="input" type="text" placeholder="Find people">
-  </div>
-  <div class="control">
-    <a class="button is-link">
-      Search
-    </a>
-  </div>
-</div>
-
-<br> -->
 <div class="columns" (keypress)="onSubmit($event)">
   <div class="column">
     <div class="control">
@@ -57,35 +45,6 @@
 </div>
 
 <hr>
-<!-- 
-
-<p class="title is-4 has-text-centered">
-  People you may know
-</p>
-
-<div class="tile is-ancestor">
-  <div class="tile is-vertical">
-    <div class="tile is-parent" *ngFor="let friendArray of allFriends">
-      <div class="tile is-parent" *ngFor="let friend of friendArray">
-        <article class="tile is-child notification">
-          <br>
-          <figure class="image is-128x128  has-image-centered">
-            <img class="is-rounded" [id]="friend.Id" [changed]="changed" profile-image />
-          </figure>
-          <span class="has-text-centered pointer" (click)="navigateToView(friend.Id)">
-            <h1 class="title is-3">{{friend.FirstName + " " + friend.LastName}}</h1>
-            <h1 class="subtitle is-4">{{friend.CurrentState}}</h1>
-            <div class="buttons is-centered">
-              <button class="button is-primary">
-                Connect
-              </button>
-            </div>
-          </span>
-        </article>
-      </div>
-    </div>
-  </div>
-</div> -->
 
 <p class="title is-4 has-text-centered" *ngIf="pending != 0">
   {{pending}} Pending

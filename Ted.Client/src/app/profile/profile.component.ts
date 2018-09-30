@@ -34,6 +34,10 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.onInit();
+  }
+
+  onInit() {
     this.init();
     this.loaderService.show();
     this.profileDataService.getUserSkills().subscribe(
@@ -113,6 +117,7 @@ export class ProfileComponent implements OnInit {
         this.experiences.push(result);
         this.experienceModalState = 'closed';
         this.loaderService.hide();
+        this.onInit();
       },
       error => {
         this.loaderService.hide();
@@ -131,6 +136,7 @@ export class ProfileComponent implements OnInit {
         }
         this.educations.push(result);
         this.educationModalState = 'closed';
+        this.onInit();
         this.loaderService.hide();
       },
       error => {
@@ -148,6 +154,7 @@ export class ProfileComponent implements OnInit {
         }
         this.personalSkills.push(result);
         this.personalSkillsModalState = 'closed';
+        this.onInit();
         this.loaderService.hide();
       },
       error => {

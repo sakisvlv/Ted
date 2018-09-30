@@ -28,7 +28,6 @@ export class BudgiesService {
     public toastrService: ToastrService,
     public authService: AuthService
   ) {
-console.log("ygjiuyg");
 
     this.hubConnection = new HubConnectionBuilder()
       .withUrl(this.signalR, { accessTokenFactory: () => { return this.authService.getToken() } })
@@ -37,8 +36,6 @@ console.log("ygjiuyg");
 
     this.hubConnection.on('CheckBudgies', (message: string) => {
       this.getBudgies();
-      console.log("gasfd");
-      
     });
 
     this.getBudgies();
@@ -56,7 +53,6 @@ console.log("ygjiuyg");
       },
       error => {
         this.loaderService.hide();
-        this.toastrService.error(error.error, 'Error');
       }
     );
   }

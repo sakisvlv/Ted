@@ -9,6 +9,7 @@ import { LoginData, RegisterData } from '../auth.model';
 
 import { ToastrService } from 'ngx-toastr';
 import { LoaderService } from '../../loader/loader.service';
+import { BudgiesService } from '../../navbar/budgies.service';
 
 
 @Injectable({

@@ -165,7 +165,29 @@ export class NetworkComponent implements OnInit {
     this.networkDataService.RejectFriend(friend.Id).subscribe(
       result => {
         friend.IsFriend = false;
-        this.pending = 0;
+        this.networkDataService.getPendingFriends().subscribe(
+          result => {
+            this.pending = result.length;
+            let current = 0;
+            let fives = 0;
+            for (let i = 0; i < result.length; i++) {
+              if (current == 0) {
+                this.pendingFriends[fives] = [];
+              }
+              this.pendingFriends[fives][current] = result[i];
+              current++;
+              if (current == 5) {
+                current = 0;
+                fives++;
+              }
+            }
+            this.loaderService.hide();
+          },
+          error => {
+            this.loaderService.hide();
+            this.toastrService.error(error.error, 'Error');
+          }
+        );
         this.loaderService.hide();
         this.budgiesService.getBudgies();
       },

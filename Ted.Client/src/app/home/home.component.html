@@ -91,14 +91,16 @@
                                 <button class="button is-rounded" (click)="focusInput(); postType = PostType.Article; showTitle = !showTitle">
                                     <fa-icon icon="edit"></fa-icon> &nbsp; Write an article
                                 </button>
-                                <input style="display: none" type="file" (change)="onFileChanged($event)" #fileInput>
-                                <button class="button is-rounded" (click)="postType = PostType.Image;fileInput.click();">
+                                <input style="display: none" type="file" accept=".jpeg,.png,.jpg" (change)="onFileChanged($event)" #fileInput1>
+                                <input style="display: none" type="file" accept=".mp3" (change)="onFileChanged($event)" #fileInput2>
+                                <input style="display: none" type="file" accept=".mp4" (change)="onFileChanged($event)" #fileInput3>
+                                <button class="button is-rounded" (click)="postType = PostType.Image;fileInput1.click();">
                                     <fa-icon icon="image"></fa-icon> &nbsp; Images
                                 </button>
-                                <button class="button is-rounded" (click)="postType = PostType.Audio;fileInput.click();">
+                                <button class="button is-rounded" (click)="postType = PostType.Audio;fileInput2.click();">
                                     <fa-icon icon="music"></fa-icon> &nbsp; Audio
                                 </button>
-                                <button class="button is-rounded" (click)="postType = PostType.Video;fileInput.click();">
+                                <button class="button is-rounded" (click)="postType = PostType.Video;fileInput3.click();">
                                     <fa-icon icon="video"></fa-icon> &nbsp; Video
                                 </button>
                             </div>
@@ -150,6 +152,7 @@
                                             </span>
                                             <span *ngIf="post.Type == PostType.Audio && post.FileUrl != null">
                                                 <br>
+                                                <br>
                                                 <audio controls>
                                                     <source [src]="post.FileUrl" type="audio/mp3">
                                                 </audio>
@@ -161,7 +164,8 @@
                                                 </video>
                                             </span>
                                             <br>
-                                            <small><a>{{post.Subscribers?.length}} Subscribers</a> · <a>{{post.Comments?.length}}
+                                            <small><a (click)="showSubscribers(post)">{{post.Subscribers?.length}}
+                                                    Subscribers</a> · <a>{{post.Comments?.length}}
                                                     Comments</a></small>
                                             <br>
                                             <br>
@@ -258,5 +262,46 @@
         <div *ngIf="postId == undefined">
             <a (click)="page = page+1;getPosts();">Show More</a>
         </div>
+    </div>
+</div>
+
+
+<div class="modal" [ngClass]="{'is-active': modal != 'closed'}">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Applicants</p>
+            <button class="delete" aria-label="close" (click)="modal = 'closed'"></button>
+        </header>
+        <section class="modal-card-body">
+            <!-- Content ... -->
+            <div class="columns">
+                <div class="column">
+
+                    <div class="card" *ngFor="let subscriber of subscribers">
+                        <a (click)="navigateToView(subscriber.Id)">
+                            <div class="card-content">
+                                <div class="media">
+                                    <div class="media-left">
+                                        <figure class="image is-96x96">
+                                            <img class="is-rounded" [id]="subscriber.Id" [changed]="changed"
+                                                profile-image />
+                                        </figure>
+                                    </div>
+                                    <div class="media-content">
+                                        <p class="title is-4">{{subscriber.FirstName + " " + subscriber.LastName }}</p>
+                                        <p class="subtitle is-6">
+                                            <fa-icon icon="users"></fa-icon> &nbsp; {{subscriber.CurrentState}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <p *ngIf="subscribers.length == 0" class="title is-4">None</p>
+
+                </div>
+            </div>
+        </section>
     </div>
 </div>

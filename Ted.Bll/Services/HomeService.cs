@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ted.Bll.Interfaces;
 using Ted.Dal;
+using Ted.Knn;
 using Ted.Model;
 using Ted.Model.Auth;
 using Ted.Model.DTO;
@@ -24,12 +25,14 @@ namespace Ted.Bll.Services
         private readonly Context _context;
         private readonly UserManager<User> _userManager;
         private readonly string _filePath;
+        private readonly IKnnService _knnService;
 
-        public HomeService(IConfiguration configuration, Context context, UserManager<User> userManager)
+        public HomeService(IConfiguration configuration, Context context, UserManager<User> userManager, IKnnService knnService)
         {
             _filePath = configuration.GetSection("filePath").Value;
             _context = context;
             _userManager = userManager;
+            _knnService = knnService;
         }
 
         public async Task<Result<ExperienceDTO>> GetLastExperience(string userId)
@@ -225,7 +228,10 @@ namespace Ted.Bll.Services
 
         public async Task<Result<IEnumerable<PostDTO>>> GetPosts(string userId, int page)
         {
-            var user = await _userManager.FindByIdAsync(userId);
+            var user = await _context.Users.Where(x => x.Id == Guid.Parse(userId))
+                .Include(x => x.PostKnns)
+                .Include("PostKnns.GlobalString")
+                .FirstOrDefaultAsync();
             if (user == null)
             {
                 return Result<IEnumerable<PostDTO>>.CreateFailed(
@@ -271,6 +277,8 @@ namespace Ted.Bll.Services
             posts = await _context.Posts
             .Include(x => x.Owner)
             .Include(x => x.UserPosts)
+            .Include(x => x.Pknns)
+            .Include("Pknns.GlobalString")
             .Include("UserPosts.User")
             .Include(x => x.Comments)
             .Where(x => x.Owner.Id == user.Id || friendsIds.Contains(x.Owner.Id) || postIds.Contains(x.Id))
@@ -292,6 +300,29 @@ namespace Ted.Bll.Services
                 return Result<IEnumerable<PostDTO>>.CreateFailed(
                    HttpStatusCode.NotFound, "There is no more posts");
             }
+
+            //double distance;
+            //var topDistances = new List<Tuple<double, Post>>();
+
+            //foreach (var post in posts)
+            //{
+            //    distance = _knnService.GetDistance(post, user);
+            //    if (topDistances.Count < 10)
+            //    {
+            //        topDistances.Add(new Tuple<double, Post>(distance, post));
+            //    }
+            //    else
+            //    {
+            //        var max = topDistances.Max(x => x.Item1);
+            //        var maxItem = topDistances.Where(x => x.Item1 == max).FirstOrDefault();
+            //        if (max > distance)
+            //        {
+            //            topDistances[topDistances.IndexOf(maxItem)] = new Tuple<double, Post>(distance, post);
+            //        }
+            //    }
+            //}
+
+            //var result = topDistances.Select(x => x.Item2);
 
             return Result<IEnumerable<PostDTO>>.CreateSuccessful(PostDTO.ToPostDTOList(posts));
         }
@@ -346,11 +377,15 @@ namespace Ted.Bll.Services
                    HttpStatusCode.NotFound, "Cound't delete the post");
             }
 
-            var filePath = Path.Combine(_filePath, post.FileName);
-            if (File.Exists(filePath))
+            if (post.FileName != null)
             {
-                File.Delete(filePath);
+                var filePath = Path.Combine(_filePath, post.FileName);
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
             }
+
 
             _context.Posts.Remove(post);
 

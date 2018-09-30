@@ -8,18 +8,30 @@ import { Ad } from './ad.models';
 })
 export class AdDataService {
 
-  private apiUrl: string = environment.apiUri + "Ad/";
+  private apiUrl: string = environment.apiUri + "Job/";
 
   constructor(
     private http: HttpClient
   ) { }
 
   AddAd(ad: Ad) {
-    return this.http.post<Ad>(this.apiUrl + "AddAd", ad);
+    return this.http.post<Ad>(this.apiUrl + "AddJob", ad);
   }
 
   GetAds() {
-    return this.http.get<Ad[]>(this.apiUrl + "GetAds");
+    return this.http.get<Ad[]>(this.apiUrl + "GetJobs");
+  }
+
+  GetMyAds() {
+    return this.http.get<Ad[]>(this.apiUrl + "GetMyJobs");
+  }
+
+  applyToAd(id: string) {
+    return this.http.get<boolean>(this.apiUrl + "applyToAd/" + id);
+  }
+
+  deleteAd(id: string) {
+    return this.http.get<boolean>(this.apiUrl + "deleteJob/" + id);
   }
 
 }

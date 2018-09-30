@@ -12,6 +12,7 @@ using Ted.Model;
 using Ted.Model.Auth;
 using Ted.Model.DTO;
 using Ted.Model.PersonalSkills;
+using Ted.Knn;
 
 namespace Ted.Bll.Services
 {
@@ -149,10 +150,7 @@ namespace Ted.Bll.Services
             }
 
             var expirience = await _context.Experiences.Where(x => x.User == user && x.Id == experienceDTO.Id).FirstOrDefaultAsync();
-            if (expirience.StillThere == true)
-            {
-                user.CurrentState = expirience.Description + " at " + expirience.Company;
-            }
+            
             if (expirience != null)
             {
                 expirience.Update(experienceDTO);
@@ -164,6 +162,11 @@ namespace Ted.Bll.Services
                 expirience.Update(experienceDTO);
                 expirience.User = user;
                 await _context.Experiences.AddAsync(expirience);
+            }
+
+            if (expirience.StillThere == true)
+            {
+                user.CurrentState = expirience.Description + " at " + expirience.Company;
             }
 
             await _knnService.ManageSkill(expirience, user);

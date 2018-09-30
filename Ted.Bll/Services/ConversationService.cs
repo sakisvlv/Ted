@@ -144,11 +144,11 @@ namespace Ted.Bll.Services
 
             if (conversation.ToUser == user)
             {
-                conversation.ToUserHasNewMessages = true;
+                conversation.FromUserHasNewMessages = true;
             }
             else
             {
-                conversation.FromUserHasNewMessages = true;
+                conversation.ToUserHasNewMessages = true;
             }
             conversation.LastMessageDate = DateTime.Now;
             var message = new Message();
@@ -156,15 +156,6 @@ namespace Ted.Bll.Services
             message.Text = text;
             message.DateSended = DateTime.Now;
             conversation.Messages.Add(message);
-
-            if (user.Id == conversation.ToUser.Id)
-            {
-                conversation.FromUserHasNewMessages = true;
-            }
-            else
-            {
-                conversation.ToUserHasNewMessages = true;
-            }
 
             try
             {

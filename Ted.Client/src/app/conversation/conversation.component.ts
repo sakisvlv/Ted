@@ -164,7 +164,7 @@ export class ConversationComponent implements OnInit, AfterViewChecked {
 
   onSubmit(event) {
     if (event.key == "Enter") {
-      if (this.messageToSend == "") {
+      if (this.messageToSend.trim() == "") {
         return;
       }
       this.sendMessage();
@@ -173,6 +173,9 @@ export class ConversationComponent implements OnInit, AfterViewChecked {
   }
 
   sendMessage() {
+    if (this.messageToSend.trim() == "") {
+      return;
+    }
     this.conversationDataService.sendMessage(this.messageToSend, this.selectedConversation.Id).subscribe(
       result => {
         this.messages.push(result);

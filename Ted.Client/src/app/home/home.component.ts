@@ -9,6 +9,7 @@ import { HomeDataService } from './home-data.service';
 import { LoaderService } from '../core/loader/loader.service';
 import { AuthService } from '../core/auth/services/auth.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { BudgiesService } from '../core/navbar/budgies.service';
 
 @Component({
   selector: 'app-home',
@@ -18,7 +19,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class HomeComponent implements OnInit {
   private filesUrl: string = environment.filesUri;
 
-
+  modal = "closed";
 
   @ViewChild("article") inputEl: ElementRef;
   PostType = PostType;
@@ -36,6 +37,8 @@ export class HomeComponent implements OnInit {
   postId: string;
   showTitle: boolean = false;
 
+  subscribers: UserSmall[] = [];
+
   selectedFile: File;
 
   constructor(
@@ -45,11 +48,12 @@ export class HomeComponent implements OnInit {
     private toastrService: ToastrService,
     private sanitizer: DomSanitizer,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private budgiesService: BudgiesService
   ) { }
 
   ngOnInit() {
-
+    this.budgiesService.getBudgies();
     this.homeDataService.getLastExperiance().subscribe(
       result => {
         this.experiance = result;
@@ -57,7 +61,6 @@ export class HomeComponent implements OnInit {
       },
       error => {
         this.loaderService.hide();
-        this.toastrService.error(error.error, 'Error');
       }
     );
 
@@ -66,7 +69,6 @@ export class HomeComponent implements OnInit {
         this.connectionsCount = result;
       },
       error => {
-        this.toastrService.error(error.error, 'Error');
       }
     );
 
@@ -82,7 +84,6 @@ export class HomeComponent implements OnInit {
           },
           error => {
             this.loaderService.hide();
-            this.toastrService.error(error.error, 'Error');
           }
         );
       }
@@ -104,7 +105,6 @@ export class HomeComponent implements OnInit {
       },
       error => {
         this.loaderService.hide();
-        this.toastrService.error(error.error, 'Error');
       }
     );
   }
@@ -290,6 +290,11 @@ export class HomeComponent implements OnInit {
 
   navigateToView(id: string) {
     this.router.navigate(['/view', { id: id }]);
+  }
+
+  showSubscribers(post: Post) {
+    this.subscribers = post.Subscribers;
+    this.modal = 'open';
   }
 
 }

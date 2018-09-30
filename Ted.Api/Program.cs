@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Ted.Dal;
+using Ted.Knn;
 using Ted.Model.Auth;
 
 namespace Ted.Api
@@ -28,7 +29,8 @@ namespace Ted.Api
                     var context = services.GetRequiredService<Context>();
                     var userManager = services.GetService<UserManager<User>>();
                     var roleManager = services.GetService<RoleManager<Role>>();
-                    Initializer.Initialize(context, userManager, roleManager, "./files").Wait();
+                    var knnManager = services.GetService<IKnnService>();
+                    Initializer.Initialize(context, userManager, roleManager, "./files", knnManager).Wait();
                 }
                 catch (Exception ex)
                 {
