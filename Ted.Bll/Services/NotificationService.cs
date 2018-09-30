@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -7,6 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Ted.Bll.Interfaces;
+using Ted.Bll.SignalR;
 using Ted.Dal;
 using Ted.Model;
 using Ted.Model.Auth;
@@ -18,11 +20,13 @@ namespace Ted.Bll.Services
     {
         private readonly Context _context;
         private readonly UserManager<User> _userManager;
+        private readonly IHubContext<BudgiesHub> _hubContext;
 
-        public NotificationService(Context context, UserManager<User> userManager)
+        public NotificationService(Context context, UserManager<User> userManager, IHubContext<BudgiesHub> hubContext)
         {
             _context = context;
             _userManager = userManager;
+            _hubContext = hubContext;
         }
 
         public async Task<Result<IEnumerable<NotificationDTO>>> GetNotifications(string userId, int page)
@@ -77,7 +81,7 @@ namespace Ted.Bll.Services
                 return Result<bool>.CreateFailed(
                     HttpStatusCode.InternalServerError, "Cound't set acknoledged");
             }
-
+            await _hubContext.Clients.User(user.Id.ToString()).SendAsync("CheckBudgies", "FriendRequest");
             return Result<bool>.CreateSuccessful(true);
         }
     }

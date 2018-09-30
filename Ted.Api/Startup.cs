@@ -59,6 +59,7 @@ namespace Ted.Api
             app.UseSignalR(routes =>
             {
                 routes.MapHub<MessagesHub>("/messages");
+                routes.MapHub<BudgiesHub>("/budgies");
             });
             app.UseMvc();
             

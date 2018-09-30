@@ -22,13 +22,15 @@ namespace Ted.Bll.Services
         private readonly Context _context;
         private readonly UserManager<User> _userManager;
         private readonly IHubContext<MessagesHub> _hubContext;
+        private readonly IHubContext<BudgiesHub> _BudgiesHubContext;
 
 
-        public ConversationService(Context context, UserManager<User> userManager, IHubContext<MessagesHub> hubContext)
+        public ConversationService(Context context, UserManager<User> userManager, IHubContext<MessagesHub> hubContext, IHubContext<BudgiesHub> BudgiesHubContext)
         {
             _context = context;
             _userManager = userManager;
             _hubContext = hubContext;
+            _BudgiesHubContext = BudgiesHubContext;
         }
 
         public async Task<Result<IEnumerable<ConversationDTO>>> GetConversations(string userId)
@@ -44,7 +46,7 @@ namespace Ted.Bll.Services
                 .Where(x => x.FromUser == user || x.ToUser == user)
                 .Include(x => x.ToUser)
                 .Include(x => x.FromUser)
-                .OrderByDescending(x=>x.LastMessageDate)
+                .OrderByDescending(x => x.LastMessageDate)
                 .Distinct()
                 .ToListAsync();
 
@@ -114,7 +116,7 @@ namespace Ted.Bll.Services
                 return Result<IEnumerable<MessageDTO>>.CreateFailed(
                    HttpStatusCode.NotFound, "Messages not found");
             }
-
+            await _BudgiesHubContext.Clients.User(user.Id.ToString()).SendAsync("CheckBudgies", "FriendRequest");
             return Result<IEnumerable<MessageDTO>>.CreateSuccessful(MessageDTO.ToMessageDTOList(messages.OrderBy(x => x.DateSended)));
         }
 
@@ -175,6 +177,8 @@ namespace Ted.Bll.Services
             }
 
             await _hubContext.Clients.User(conversation.ToUser == user ? conversation.FromUser.Id.ToString() : conversation.ToUser.Id.ToString()).SendAsync("ReceiveMessage", message.Text, conversation.Id.ToString());
+            await _BudgiesHubContext.Clients.User(conversation.ToUser == user ? conversation.FromUser.Id.ToString() : conversation.ToUser.Id.ToString()).SendAsync("CheckBudgies", "FriendRequest");
+
 
             return Result<MessageDTO>.CreateSuccessful(new MessageDTO(message));
         }
@@ -219,6 +223,7 @@ namespace Ted.Bll.Services
                     HttpStatusCode.InternalServerError, "Cound't send the message");
             }
 
+            await _BudgiesHubContext.Clients.User(user.Id.ToString()).SendAsync("CheckBudgies", "FriendRequest");
 
             return Result<bool>.CreateSuccessful(true);
         }
