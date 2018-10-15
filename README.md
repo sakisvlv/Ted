@@ -1,4 +1,5 @@
-Linked In Alike project for Technologies of Internet Applications lesson.
+Linked In Alike project for Technologies of Internet Applications class
+of National and Kapodistrian University of Athens - Department of Informatics & Telecommunications
 
 5 layers architecture
 
